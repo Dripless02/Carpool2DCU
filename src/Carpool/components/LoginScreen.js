@@ -8,31 +8,40 @@ const LoginScreen = () => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.view}>
+            <View style={{width: "80%"}}>
                 <TextInput
                     mode="outlined"
-                    style={styles.inliner}
+                    style={{marginBottom: 5}}
                     label={"Email"}
                     keyboardType="email-address"
                     onChangeText={text => setEmail(text)}
-                    />
+                />
                 <TextInput
-                    mode="outlined"  
-                    style={styles.inliner}
+                    mode="outlined"
+                    style={{marginBottom: 5}}
                     label="Password"
                     secureTextEntry={true}
                     onChangeText={text => setPassword(text)}
-                    />
-                <Button
-                    style= {{marginTop: 10}}
-                    mode="contained"
-                    onPress={() => console.log("Logged in")}
+                />
+                <View style={{alignItems: "center"}}>
+                    <Button
+                        style= {{marginTop: 10, width: 200}}
+                        mode="contained"
+                        onPress={() => console.log("Login Button Pressed")}
                     >
-                    Login
-                </Button>
+                        Login
+                    </Button>
+                    <Button
+                        style= {{marginTop: 10, width: 200}}
+                        mode="contained-tonal"
+                        onPress={() => console.log("Register Button Pressed")}
+                    >
+                        Register
+                    </Button>
+                </View>
 
             </View>
-            
+
         </SafeAreaView>
     );
 };
@@ -43,15 +52,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
-        
-    },
-    view : {
-        width: "80%",
-    },
-
-    inliner : {
-        marginBottom: 5,
-    },
+    }
 })
 
 export default LoginScreen;
