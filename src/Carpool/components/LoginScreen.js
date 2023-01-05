@@ -33,15 +33,14 @@ const LoginScreen = () => {
                     </Button>
                     <Button
                         style= {{marginTop: 10, width: 200}}
-                        mode="contained-tonal"
+                        mode="text"
+                        textColor="#1d1a29"
                         onPress={() => console.log("Register Button Pressed")}
                     >
                         Register
                     </Button>
                 </View>
-
             </View>
-
         </SafeAreaView>
     );
 };
@@ -49,9 +48,9 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container : {
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        width: "100%",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#E7DCEB',
     }
 })
 
