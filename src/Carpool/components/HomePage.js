@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Appbar, BottomNavigation, Divider, Menu } from "react-native-paper";
+import TransitionScreen from "./TransitionScreen";
+import Passenger from "./Passenger";
 
-const HomeRoute = () => <></>;
+const HomeRoute = () => <TransitionScreen/>;
 const SecondRoute = () => <></>;
-const ThirdRoute = () => <></>;
+const ThirdRoute = () => <Passenger />;
 
 const HomePage = ({ setLoggedIn }) => {
     const [menuVisibility, setMenuVisibility] = useState(false);
