@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 
-const LoginScreen = () => {
+const LoginScreen = ({ setLoggedIn }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -27,7 +27,7 @@ const LoginScreen = () => {
                     <Button
                         style= {{marginTop: 10, width: 200}}
                         mode="contained"
-                        onPress={() => console.log("Login Button Pressed")}
+                        onPress={() => setLoggedIn(true)}
                     >
                         Login
                     </Button>

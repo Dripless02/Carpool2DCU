@@ -1,16 +1,16 @@
 import React, { useState } from "react";
-import { Appbar, BottomNavigation } from "react-native-paper";
-import LoginScreen from "./LoginScreen";
+import { Appbar, BottomNavigation, Divider, Menu } from "react-native-paper";
 
-const HomeRoute = () => <LoginScreen />;
+const HomeRoute = () => <></>;
 const SecondRoute = () => <></>;
 const ThirdRoute = () => <></>;
 
-const HomePage = () => {
+const HomePage = ({ setLoggedIn }) => {
+    const [menuVisibility, setMenuVisibility] = useState(false);
     const [index, setIndex] = useState(0);
     const [routes] = useState([
         { key: "home", title: "Home", focusedIcon: "home", unfocusedIcon: "home-outline" },
-        { key: "second", title: "Driver", focusedIcon: "car" },
+        { key: "second", title: "Driver", focusedIcon: "car", unfocusedIcon: "car-outline" },
         { key: "third", title: "Passenger", focusedIcon: "seat-passenger" },
     ]);
 
@@ -20,12 +20,26 @@ const HomePage = () => {
         third: ThirdRoute,
     })
 
+    const openMenu = () => setMenuVisibility(true);
+    const closeMenu = () => setMenuVisibility(false);
+
     return (
         <>
             <Appbar.Header>
                 <Appbar.Content icon="home" title="Home" />
                 <Appbar.Action icon="magnify" onPress={() => console.log("Search Pressed")} />
-                <Appbar.Action icon="cog" onPress={() => console.log("More Pressed")} />
+
+                <Menu
+                    visible={menuVisibility}
+                    onDismiss={closeMenu}
+                    anchor={
+                        <Appbar.Action icon="cog" onPress={openMenu} />
+                    }
+                >
+                    <Menu.Item onPress={() => {}} title="Settings" />
+                    <Divider style={{ marginVertical: 5 }} />
+                    <Menu.Item leadingIcon="exit-to-app" onPress={() => setLoggedIn(false)} title="Log Out"/>
+                </Menu>
             </Appbar.Header>
             <BottomNavigation
                 navigationState={{ index, routes }}
@@ -35,5 +49,6 @@ const HomePage = () => {
         </>
     );
 }
+
 
 export default HomePage;

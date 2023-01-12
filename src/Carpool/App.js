@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, SafeAreaView } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import HomePage from './components/HomePage';
+import LoginScreen from './components/LoginScreen';
 
 export default function App() {
-  return (
-    <PaperProvider>
-          <StatusBar style="auto" />
-          <HomePage />
-    </PaperProvider>
-  );
-}
+    const [loggedIn, setLoggedIn] = useState(false);
 
-const styles = StyleSheet.create({});
+    return (
+        <PaperProvider>
+            <StatusBar style="auto" />
+            {loggedIn ? <HomePage setLoggedIn={setLoggedIn} /> : <LoginScreen setLoggedIn={setLoggedIn} />}
+        </PaperProvider>
+    );
+}
