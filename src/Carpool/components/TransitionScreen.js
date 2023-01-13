@@ -2,17 +2,17 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import TransitionCard from './TransitionCard';
 
-const TransitionScreen = () => {
+const TransitionScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <TransitionCard title="Driver" />
-            <TransitionCard title="Passenger" />
+            <TransitionCard title="Driver" navigation={navigation}/>
+            <TransitionCard title="Passenger" navigation={navigation}/>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex: 1,
         margin: 20,
     }
