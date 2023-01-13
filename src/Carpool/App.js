@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './components/LoginScreen';
 import Passenger from './components/Passenger';
 import TransitionScreen from './components/TransitionScreen';
-
+import Driver from './components/Driver';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -23,7 +23,7 @@ export default function App() {
                     }}>
                     {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
                     <Stack.Screen name="Home" component={TransitionScreen} />
-                    <Stack.Screen name="Driver" component={TransitionScreen} />
+                    <Stack.Screen name="Driver" component={Driver} />
                     <Stack.Screen name="Passenger" component={Passenger} />
                 </Stack.Navigator>
             </PaperProvider>
