@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button, TextInput } from "react-native-paper";
+import { LoginContext } from "./Context";
 
-const LoginScreen = ({ setLoggedIn }) => {
+const LoginScreen = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loggedIn, setLoggedIn] = useContext(LoginContext);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -27,7 +29,7 @@ const LoginScreen = ({ setLoggedIn }) => {
                     <Button
                         style= {{marginTop: 10, width: 200}}
                         mode="contained"
-                        onPress={() => setLoggedIn(true)}
+                        onPress={() => {setLoggedIn(true);}}
                     >
                         Login
                     </Button>
