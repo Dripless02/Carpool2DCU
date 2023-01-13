@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { Provider as PaperProvider } from 'react-native-paper';
+import { IconButton, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './components/LoginScreen';
 import Passenger from './components/Passenger';
 import TransitionScreen from './components/TransitionScreen';
+import { LoginContext } from './components/Context';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,20 +14,38 @@ export default function App() {
     const [loggedIn, setLoggedIn] = useState(false);
 
     return (
-        <NavigationContainer>
-            <PaperProvider>
-                <StatusBar style="auto" />
-                {/* {loggedIn ? <HomePage setLoggedIn={setLoggedIn} /> : <LoginScreen setLoggedIn={setLoggedIn} />} */}
-                <Stack.Navigator initialRouteName="Transition" screenOptions={{
-                        headerShown: true,
-                        headerTitleAlign: "center",
-                    }}>
-                    {/* <Stack.Screen name="Login" component={LoginScreen} /> */}
-                    <Stack.Screen name="Home" component={TransitionScreen} />
-                    <Stack.Screen name="Driver" component={TransitionScreen} />
-                    <Stack.Screen name="Passenger" component={Passenger} />
-                </Stack.Navigator>
-            </PaperProvider>
-        </NavigationContainer>
+        <LoginContext.Provider value={[loggedIn, setLoggedIn]}>
+            <NavigationContainer>
+                <PaperProvider>
+                    <StatusBar style="auto" />
+                    <Stack.Navigator
+                        initialRouteName={loggedIn ? "Home" : "Login"}
+                        screenOptions={{
+                            headerShown: true,
+                            headerTitleAlign: "center",
+                            headerRight: () => (
+                                <IconButton
+                                    icon="exit-to-app"
+                                    size={25}
+                                    onPress={() => setLoggedIn(false)}
+                                />
+                            ),
+                        }}
+                    >
+                    {loggedIn ?
+                        <>
+                            <Stack.Screen name="Home" component={TransitionScreen} />
+                            <Stack.Screen name="Driver" component={TransitionScreen} />
+                            <Stack.Screen name="Passenger" component={Passenger} />
+                        </>
+                        :
+                        <>
+                            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+                        </>
+                    }
+                    </Stack.Navigator>
+                </PaperProvider>
+            </NavigationContainer>
+        </LoginContext.Provider>
     );
 }
