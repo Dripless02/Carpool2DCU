@@ -4,10 +4,11 @@ import { IconButton, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './components/LoginScreen';
-import Passenger from './components/Passenger';
+import Passenger from './components/Passenger/Passenger';
 import TransitionScreen from './components/TransitionScreen';
-import Driver from './components/Driver';
+import PassengerList from './components/Driver/PassengerList';
 import { LoginContext } from './components/Context';
+import DriverHomePage from './components/Driver/HomePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +37,8 @@ export default function App() {
                     {loggedIn ?
                         <>
                             <Stack.Screen name="Home" component={TransitionScreen} />
-                            <Stack.Screen name="Driver" component={Driver} />
+                            <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
+                            <Stack.Screen name="PassengerList" component={PassengerList} />
                             <Stack.Screen name="Passenger" component={Passenger} />
                         </>
                         :

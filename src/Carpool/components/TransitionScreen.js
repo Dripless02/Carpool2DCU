@@ -5,8 +5,8 @@ import TransitionCard from './TransitionCard';
 const TransitionScreen = ({ navigation }) => {
     return (
         <View style={styles.container}>
-            <TransitionCard title="Driver" navigation={navigation}/>
-            <TransitionCard title="Passenger" navigation={navigation}/>
+            <TransitionCard title="Driver" description="DriverHomePage" navigation={navigation}/>
+            <TransitionCard title="Passenger" description= "Passenger" navigation={navigation}/>
         </View>
     );
 };

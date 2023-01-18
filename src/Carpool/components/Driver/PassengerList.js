@@ -4,7 +4,8 @@ import { Platform, RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 
 
-const Driver = () => {
+const PassengerList = () => {
+    // console.log(BACKEND_URL);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
@@ -71,4 +72,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Driver;
+export default PassengerList;
