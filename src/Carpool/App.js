@@ -9,7 +9,8 @@ import TransitionScreen from './components/TransitionScreen';
 import PassengerList from './components/Driver/PassengerList';
 import { LoginContext } from './components/Context';
 import DriverHomePage from './components/Driver/HomePage';
-import PassengerInfo from './components/Driver/PassengerInfo';
+import RegisterScreen from './components/RegisterScreen';
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,27 +26,35 @@ export default function App() {
                         screenOptions={{
                             headerShown: true,
                             headerTitleAlign: "center",
-                            headerRight: () => (
-                                <IconButton
-                                    icon="exit-to-app"
-                                    size={25}
-                                    onPress={() => setLoggedIn(false)}
-                                />
-                            ),
                         }}
                     >
                     {loggedIn ?
-                        <>
+                        <Stack.Group
+                            screenOptions={{
+                                headerRight: () => (
+                                    <IconButton
+                                        icon="exit-to-app"
+                                        size={25}
+                                        onPress={() => setLoggedIn(false)}
+                                    />
+                                )
+                            }}
+                        >
                             <Stack.Screen name="Home" component={TransitionScreen} />
                             <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
                             <Stack.Screen name="PassengerList" component={PassengerList} />
                             <Stack.Screen name="Passenger" component={Passenger} />
-                            <Stack.Screen name="PassengerInfo" component={PassengerInfo} />
-                        </>
+                        </Stack.Group>
                         :
-                        <>
-                            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-                        </>
+                        <Stack.Group
+                            screenOptions={{
+                                headerTransparent: true,
+                                headerTitle: "",
+                            }}
+                        >
+                            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+                            <Stack.Screen name="Register" component={RegisterScreen} />
+                        </Stack.Group>
                     }
                     </Stack.Navigator>
                 </PaperProvider>

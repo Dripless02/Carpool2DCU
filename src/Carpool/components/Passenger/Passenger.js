@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
 
 
@@ -7,14 +7,20 @@ const Passenger = () => {
 
     const [coordinates] = useState([
         {
-            latitude: 48.8587741,
-            longitude: 2.2069771,
+            latitude: 53.38552870483014,
+            longitude: -6.258832442688319,
         },
         {
-            latitude: 48.8323785,
-            longitude: 2.3361663,
+            latitude: 53.34985446577282,
+            longitude: -6.2602212965815776,
         },
     ])
+
+    // get width of device
+    const width = Dimensions.get('window').width;
+    const height = Dimensions.get('window').height;
+    console.log("width: " + width);
+    const latitudeDelta = 0.02;
 
     return (
 
@@ -34,8 +40,9 @@ const Passenger = () => {
                     // longitude: 2.349014,
                     latitude: coordinates[0].latitude,
                     longitude: coordinates[0].longitude,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitudeDelta: latitudeDelta,
+                    longitudeDelta: latitudeDelta * (width / height),
+
                 }}
                 >
                     <UrlTile
