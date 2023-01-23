@@ -4,9 +4,11 @@ import { Button } from "react-native-paper";
 import { LoginContext } from "./Context";
 import TextInputField from "./TextInputField";
 
-const LoginScreen = ({ navigation }) => {
+const RegisterScreen = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [address, setAddress] = useState("");
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
 
     const checkValidEmail = (email) => {
@@ -35,12 +37,10 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
-    const login = () => {
-        console.log("Login Button Pressed");
-
+    const register = () => {
+        console.log("Register Button Pressed");
         const validEmail = checkValidEmail(email);
         const validPassword = checkValidPassword(password);
-
         if (validEmail && validPassword) {
             setLoggedIn(true);
         }
@@ -49,21 +49,15 @@ const LoginScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
-                <TextInputField label="Email" keyboardType="email-address" onChangeText={text => setEmail(text)} />
-                <TextInputField label="Password" secureTextEntry={true} onChangeText={text => setPassword(text)} />
+                <TextInputField label="Name" onChangeText={text => {setName(text); console.log(`name = ${name}`)}} />
+                <TextInputField label="Email" type="email-address" onChangeText={text => {setEmail(text); console.log(`email = ${email}`)}} />
+                <TextInputField label="Password" onChangeText={text => {setPassword(text); console.log(`password = ${password}`)}} />
+                <TextInputField label="Address" onChangeText={text => {setAddress(text); console.log(`address = ${address}`)}} />
                 <View style={{alignItems: "center"}}>
                     <Button
-                        style= {{marginTop: 10, width: 200}}
+                        style= {{marginTop: 20, width: 200}}
                         mode="contained"
-                        onPress={() => {login();}}
-                    >
-                        Login
-                    </Button>
-                    <Button
-                        style= {{marginTop: 10, width: 200}}
-                        mode="text"
-                        textColor="#1d1a29"
-                        onPress={() => navigation.navigate("Register")}
+                        onPress={() => register()}
                     >
                         Register
                     </Button>
@@ -82,4 +76,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default LoginScreen;
+export default RegisterScreen;
