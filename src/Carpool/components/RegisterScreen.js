@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
@@ -41,18 +42,31 @@ const RegisterScreen = () => {
         console.log("Register Button Pressed");
         const validEmail = checkValidEmail(email);
         const validPassword = checkValidPassword(password);
-        if (validEmail && validPassword) {
-            setLoggedIn(true);
+        if (validEmail && validPassword && name !== "" && address !== "") {
+            fetch(`${BACKEND_URL}/api/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({ name: name, email: email, password: password, address: address }),
+            })
+            .then((response) => {
+                if (response.status === 201) {
+                    console.log("Registration successful");
+                    setLoggedIn(true);
+                } else {
+                    console.log("Registration failed");
+                }
+            })
+            .catch((error) => { console.error(error); })
         }
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
-                <TextInputField label="Name" onChangeText={text => {setName(text); console.log(`name = ${name}`)}} />
-                <TextInputField label="Email" type="email-address" onChangeText={text => {setEmail(text); console.log(`email = ${email}`)}} />
-                <TextInputField label="Password" onChangeText={text => {setPassword(text); console.log(`password = ${password}`)}} />
-                <TextInputField label="Address" onChangeText={text => {setAddress(text); console.log(`address = ${address}`)}} />
+                <TextInputField label="Name" onChangeText={text => setName(text)} />
+                <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} />
+                <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} />
+                <TextInputField label="Address" onChangeText={text => setAddress(text)} />
                 <View style={{alignItems: "center"}}>
                     <Button
                         style= {{marginTop: 20, width: 200}}

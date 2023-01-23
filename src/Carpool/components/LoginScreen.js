@@ -1,3 +1,4 @@
+import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
@@ -42,15 +43,28 @@ const LoginScreen = ({ navigation }) => {
         const validPassword = checkValidPassword(password);
 
         if (validEmail && validPassword) {
-            setLoggedIn(true);
+            fetch(`${BACKEND_URL}/api/login`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", },
+                body: JSON.stringify({ email: email, password: password, }),
+            })
+            .then((response) => {
+                if (response.status === 200) {
+                    console.log("Login successful");
+                    setLoggedIn(true);
+                } else {
+                    console.log("Login failed");
+                }
+            })
+            .catch((error) => { console.error(error); });
         }
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
-                <TextInputField label="Email" keyboardType="email-address" onChangeText={text => setEmail(text)} />
-                <TextInputField label="Password" secureTextEntry={true} onChangeText={text => setPassword(text)} />
+                <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} />
+                <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} />
                 <View style={{alignItems: "center"}}>
                     <Button
                         style= {{marginTop: 10, width: 200}}
