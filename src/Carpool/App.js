@@ -10,6 +10,7 @@ import PassengerList from './components/Driver/PassengerList';
 import { LoginContext } from './components/Context';
 import DriverHomePage from './components/Driver/HomePage';
 import RegisterScreen from './components/RegisterScreen';
+import PassengerInfo from './components/Driver/PassengerInfo';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,7 @@ export default function App() {
                             <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
                             <Stack.Screen name="PassengerList" component={PassengerList} />
                             <Stack.Screen name="Passenger" component={Passenger} />
+                            <Stack.Screen name="PassengerInfo" component={PassengerInfo} />
                         </Stack.Group>
                         :
                         <Stack.Group
