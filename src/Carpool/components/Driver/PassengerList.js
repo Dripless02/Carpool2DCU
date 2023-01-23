@@ -4,7 +4,7 @@ import { Platform, RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 
 
-const PassengerList = () => {
+const PassengerList = ({navigation}) => {
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
@@ -18,7 +18,7 @@ const PassengerList = () => {
     }, [])
 
     const getPassengers = async () => {
-        fetch(`${BACKEND_URL}/api/passengers/getAll`)
+        fetch(`${BACKEND_URL}/api/getAll`)
         .then((response) => response.json())
         .then((json) => { setPassengers(json); setIsLoading(false);  })
         .catch((error) => { console.error(error); });
@@ -45,7 +45,9 @@ const PassengerList = () => {
                     return (
                         <List.Item
                             key={index}
-                            onPress={() => console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`)}
+                            onPress={() => {navigation.navigate('PassengerInfo');
+                            console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`);
+                            }}
                             title={passenger.name}
                             description={description}
                             descriptionNumberOfLines={2}
@@ -67,3 +69,5 @@ const styles = StyleSheet.create({
 });
 
 export default PassengerList;
+
+// Platform.OS} pressed ${passenger.name}'s card`)
