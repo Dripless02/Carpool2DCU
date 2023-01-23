@@ -1,33 +1,50 @@
 import express from "express";
-import Model from "../models/Passenger.js";
+import bcrypt from "bcrypt";
+import User from "../models/User.js";
 
 const router = express.Router();
 
-// Post Method
-router.post("/post", async (req, res) => {
-    const data = new Model({
-        name: req.body.name,
-        departureTime: req.body.departureTime,
-        gender: req.body.gender,
-        noOfPassengers: req.body.noOfPassengers
-    })
-    try {
-        const dataToSave = await data.save();
-        res.status(201).json(dataToSave);
-    }
-    catch (error) {
-        res.status(400).json({ message: error.message });
-    }
-});
+router.post("/register", (req, res) => {
+    bcrypt.hash(req.body.password, 10)
+    .then(hashedPassword => {
+        const user = new User({
+            name: req.body.name,
+            email: req.body.email,
+            password: hashedPassword,
+            address: req.body.address,
+        });
 
-// Get all Method
-router.get("/getAll", async (req, res) => {
-    try {
-        const data = await Model.find();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-});
+        user.save()
+        .then(result => {
+            res.status(201).send({ message: "User registered successfully", result })
+        })
+        .catch(error => {
+            res.status(500).send({ message: "Error registering user", error })
+        })
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error registering user", error })
+    })
+})
+
+router.post("/login", (req, res) => {
+    User.findOne({ email: req.body.email })
+    .then((user) => {
+        bcrypt.compare(req.body.password, user.password)
+        .then((passwordCheck) => {
+            if (!passwordCheck) {
+                return res.status(401).send({ message: "Incorrect password" })
+            }
+
+            res.status(200).send({ message: "Login successful" })
+        })
+        .catch(error => {
+            res.status(500).send({ message: "Error logging in", error })
+        })
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error logging in", error })
+    })
+})
 
 export default router;

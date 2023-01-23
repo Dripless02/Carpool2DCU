@@ -3,6 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import routes from "./routes/routes.js";
+import pasengerRoutes from "./routes/passenger.js";
 
 dotenv.config();
 
@@ -28,3 +29,4 @@ app.listen(3000, () => {
 });
 
 app.use("/api", routes);
+app.use("/api/passengers", pasengerRoutes);
