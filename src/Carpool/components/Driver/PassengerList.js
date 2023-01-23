@@ -4,7 +4,7 @@ import { Platform, RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 
 
-const PassengerList = () => {
+const PassengerList = ({navigation}) => {
     // console.log(BACKEND_URL);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,9 @@ const PassengerList = () => {
                     return (
                         <List.Item
                             key={index}
-                            onPress={() => console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`)}
+                            onPress={() => {navigation.navigate('PassengerInfo');
+                            console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`);
+                            }}
                             title={passenger.name}
                             description={description}
                             descriptionNumberOfLines={2}
@@ -73,3 +75,5 @@ const styles = StyleSheet.create({
 });
 
 export default PassengerList;
+
+// Platform.OS} pressed ${passenger.name}'s card`)

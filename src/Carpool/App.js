@@ -9,7 +9,7 @@ import TransitionScreen from './components/TransitionScreen';
 import PassengerList from './components/Driver/PassengerList';
 import { LoginContext } from './components/Context';
 import DriverHomePage from './components/Driver/HomePage';
-
+import PassengerInfo from './components/Driver/PassengerInfo';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -40,6 +40,7 @@ export default function App() {
                             <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
                             <Stack.Screen name="PassengerList" component={PassengerList} />
                             <Stack.Screen name="Passenger" component={Passenger} />
+                            <Stack.Screen name="PassengerInfo" component={PassengerInfo} />
                         </>
                         :
                         <>
