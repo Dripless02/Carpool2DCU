@@ -5,7 +5,6 @@ import { ActivityIndicator, List } from 'react-native-paper';
 
 
 const PassengerList = () => {
-    // console.log(BACKEND_URL);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
@@ -19,15 +18,10 @@ const PassengerList = () => {
     }, [])
 
     const getPassengers = async () => {
-        try {
-            let response = await fetch(`${BACKEND_URL}/api/getAll`);
-            let json = await response.json();
-            setPassengers(json);
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
+        fetch(`${BACKEND_URL}/api/passengers/getAll`)
+        .then((response) => response.json())
+        .then((json) => { setPassengers(json); setIsLoading(false);  })
+        .catch((error) => { console.error(error); });
     };
 
     useEffect(() => {
