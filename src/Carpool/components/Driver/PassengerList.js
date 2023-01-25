@@ -45,7 +45,7 @@ const PassengerList = ({navigation}) => {
                     return (
                         <List.Item
                             key={index}
-                            onPress={() => {navigation.navigate('PassengerInfo');
+                            onPress={() => {navigation.navigate('PassengerInfo', {passenger});
                             console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`);
                             }}
                             title={passenger.name}
