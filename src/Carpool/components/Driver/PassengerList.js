@@ -69,5 +69,3 @@ const styles = StyleSheet.create({
 });
 
 export default PassengerList;
-
-// Platform.OS} pressed ${passenger.name}'s card`)
