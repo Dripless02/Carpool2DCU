@@ -4,13 +4,14 @@ import { IconButton, Provider as PaperProvider } from 'react-native-paper';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginScreen from './components/LoginScreen';
-import Passenger from './components/Passenger/Passenger';
+import PassengerHomePage from './components/Passenger/HomePage';
 import TransitionScreen from './components/TransitionScreen';
 import PassengerList from './components/Driver/PassengerList';
 import { LoginContext } from './components/Context';
 import DriverHomePage from './components/Driver/HomePage';
 import RegisterScreen from './components/RegisterScreen';
 import PassengerInfo from './components/Driver/PassengerInfo';
+import PassengerMap from './components/Passenger/Passenger';
 
 const Stack = createNativeStackNavigator();
 
@@ -42,10 +43,15 @@ export default function App() {
                             }}
                         >
                             <Stack.Screen name="Home" component={TransitionScreen} />
+
+                            {/* Driver Pages */}
                             <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
                             <Stack.Screen name="PassengerList" component={PassengerList} />
-                            <Stack.Screen name="Passenger" component={Passenger} />
                             <Stack.Screen name="PassengerInfo" component={PassengerInfo} />
+
+                            {/* Passenger Pages */}
+                            <Stack.Screen name="PassengerHomePage" component={PassengerHomePage} />
+                            <Stack.Screen name="PassengerMap" component={PassengerMap} />
                         </Stack.Group>
                         :
                         <Stack.Group
