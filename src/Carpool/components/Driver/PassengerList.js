@@ -17,7 +17,7 @@ const PassengerList = ({navigation}) => {
         }, 1000);
     }, [])
 
-    const getPassengers = async () => {
+    const getPassengers = () => {
         fetch(`${BACKEND_URL}/api/passengers/getAll`)
         .then((response) => response.json())
         .then((json) => { setPassengers(json); setIsLoading(false);  })
