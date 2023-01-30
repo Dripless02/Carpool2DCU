@@ -4,7 +4,7 @@ import { Avatar, Button, Card, Text } from 'react-native-paper';
 import { StyleSheet, View} from 'react-native'
 import { BACKEND_URL } from "@env";
 
-const PassengerInfo = ({route}) => {
+const PassengerInfo = ({route, navigation}) => {
     const passenger = route.params.passenger;
 
     let description = ``;
@@ -23,7 +23,8 @@ const PassengerInfo = ({route}) => {
                     <Text style={styles.info}>{description}</Text>
 
                 </Card.Content>
-                    <Button style={styles.button} mode="contained" onPress={() => console.log(`Driver accepted ${passenger.name}'s ride`)} contentStyle={{padding: 10}}>Click here to accept this ride</Button>
+                    <Button style={styles.button} mode="contained" onPress={() =>{navigation.navigate('DriverHomePage', {passenger});
+                        console.log(`Driver accepted ${passenger.name}'s ride`)}}contentStyle={{padding: 10}}>Click here to accept this ride</Button>
                 </Card>
         </View>
     )
