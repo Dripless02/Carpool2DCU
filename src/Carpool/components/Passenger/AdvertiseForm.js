@@ -85,7 +85,7 @@ const AdvertiseForm = ({navigation, route}) => {
                 />
             </View>
             <View style={{ marginHorizontal: 20, marginVertical: 10, alignItems: "center"}}>
-                <Text>Gender:</Text>
+                <Text>Gender</Text>
                 <SegmentedButtons
                     value={gender}
                     onValueChange={setGender}
