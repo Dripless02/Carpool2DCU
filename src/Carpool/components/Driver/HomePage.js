@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
         marginLeft: 70,},
     button2: {
         borderRadius: 30,
-        alignItems: 'left',
         marginLeft: 300,
         marginTop: 300,}
 
