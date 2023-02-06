@@ -5,6 +5,10 @@ const passengerSchema = new Schema({
     departureTime: { type: String, required: true },
     gender: { type: String, enum: { values: ["Male", "Female", "Other"], message: "{VALUE} is not supported"}},
     noOfPassengers: Number,
+    location: {
+        longitude: { type: Number, required: true },
+        latitude: { type: Number, required: true }
+    }
 });
 
 export default model("Passenger", passengerSchema);

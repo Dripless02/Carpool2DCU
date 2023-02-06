@@ -1,15 +1,24 @@
 import React, { useRef, useState } from 'react';
 import { Alert, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import MapView, { Geojson, Marker } from 'react-native-maps';
-import { Button, Card, Searchbar } from 'react-native-paper';
+import { Card, Searchbar, SegmentedButtons } from 'react-native-paper';
 import { ORS_API_KEY } from '@env';
 
-const Passenger = () => {
-    const dcuCoords = { latitude: 53.3858512588805, longitude: -6.255816917481834 };
+const Passenger = ({ navigation }) => {
     const [buttonDisabled, setButtonDisabled] = useState(true)
     const [searchQuery, setSearchQuery] = useState("");
-    const [coordinates, setCoordinates] = useState({ latitude: dcuCoords.latitude, longitude: dcuCoords.longitude, })
+    const [coordinates, setCoordinates] = useState({
+        dcu: {
+            latitude: 53.38552870483014,
+            longitude: -6.258832442688319,
+        },
+        query: {
+            latitude: 0,
+            longitude: 0,
+        }
+    })
     const [geojson, setGeojson] = useState({})
+    const [buttonValue, setButtonValue] = useState("");
 
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
@@ -27,6 +36,17 @@ const Passenger = () => {
 
     const onChangeSearch = query => setSearchQuery(query);
     const searchAddress = query => {
+        setGeojson({});
+        setCoordinates({ ...coordinates, query: { longitude: 0, latitude: 0 } })
+        if (query === "") {
+            Alert.alert(
+                "No query entered",
+                "Please enter an address to search for",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                { cancelable: false }
+            )
+            return;
+        }
         if (!query.toLowerCase().includes("Ireland") || !query.toLowerCase().includes("IE")) {
             query = query + ", Ireland";
         }
@@ -44,7 +64,7 @@ const Passenger = () => {
             }
             const long = data.features[0].geometry.coordinates[0];
             const lat = data.features[0].geometry.coordinates[1];
-            setCoordinates({ longitude: long, latitude: lat})
+            setCoordinates({ ...coordinates, query: { longitude: long, latitude: lat } })
             animateMap(long, lat);
             setButtonDisabled(false);
         })
@@ -55,12 +75,12 @@ const Passenger = () => {
 
     const getRoute = () => {
         // if the user has already searched for directions to a location and the new location is the same as the previous location, then don't fetch the route again
-        if (geojson.metadata && geojson.metadata.query.coordinates[0][0] === coordinates.longitude && geojson.metadata.query.coordinates[0][1] === coordinates.latitude) {
+        if (geojson.metadata && geojson.metadata.query.coordinates[0][0] === coordinates.query.longitude && geojson.metadata.query.coordinates[0][1] === coordinates.query.latitude) {
             fitMapToMarkers();
             return;
         }
 
-        fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordinates.longitude},${coordinates.latitude}&end=-6.255083,53.386343`)
+        fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordinates.query.longitude},${coordinates.query.latitude}&end=-6.255083,53.386343`)
         .then(response => response.json())
         .then(data => {
             setGeojson(data);
@@ -83,21 +103,29 @@ const Passenger = () => {
                         elevation={5}
                     />
                     <MapView
-                        provider='google'
+                        provider="google"
                         style={styles.maps}
                         initialRegion={{
-                            latitude: coordinates.latitude,
-                            longitude: coordinates.longitude,
+                            latitude: coordinates.dcu.latitude,
+                            longitude: coordinates.dcu.longitude,
                             latitudeDelta: latitudeDelta,
                             longitudeDelta: latitudeDelta * (width / height),
                         }}
                         ref={mapRef}
                         >
-                            <Marker coordinate={dcuCoords} identifier="dcu" />
-                            {coordinates.latitude === dcuCoords.latitude && coordinates.longitude === dcuCoords.longitude ? null : <Marker coordinate={coordinates} identifier="query"/>}
+                            <Marker coordinate={coordinates.dcu} identifier="dcu" />
+                            {coordinates.query.latitude === 0 && coordinates.query.longitude === 0 ? null : <Marker coordinate={coordinates.query} identifier="query" pinColor="blue"/>}
                             {!geojson.features ? null : <Geojson geojson={geojson} lineCap="round" strokeWidth={3} />}
                     </MapView>
-                    <Button mode='contained' onPress={getRoute} disabled={buttonDisabled} style={styles.button} >Preview Route</Button>
+                    <SegmentedButtons
+                        value={buttonValue}
+                        onValueChange={setButtonValue}
+                        buttons={[
+                            { label: "Preview Route", value: "preview", onPress: getRoute, style: { backgroundColor: "#9375ee" }, disabled: buttonDisabled },
+                            { label: "Next", value: "next", onPress: () => navigation.navigate("PassengerAdvertise", coordinates.query), style: { backgroundColor: "#01ffdf" }, disabled: buttonDisabled }
+                        ]}
+                        style={styles.button}
+                    />
                 </Card.Content>
             </Card>
         </SafeAreaView>

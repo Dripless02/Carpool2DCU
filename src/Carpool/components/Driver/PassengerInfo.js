@@ -1,11 +1,11 @@
-
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { Avatar, Button, Card, Text } from 'react-native-paper';
 import { StyleSheet, View} from 'react-native'
-import { BACKEND_URL } from "@env";
+import MapView, { Marker } from 'react-native-maps';
 
 const PassengerInfo = ({route, navigation}) => {
     const passenger = route.params.passenger;
+    console.log(passenger)
 
     let description = ``;
     if (passenger.noOfPassengers === undefined || passenger.noOfPassengers === 1) {passenger.noOfPassengers = 1; description += `there is one person on this ride`;}
@@ -13,15 +13,34 @@ const PassengerInfo = ({route, navigation}) => {
     return (
         <View style={styles.card}>
             <Card style= {styles.card}>
-                <Card.Content style = {{alignItems: "center"}}>
+                <Card.Content style={{alignItems: "center"}}>
                     <Avatar.Icon icon="account" size={100}/>
                 </Card.Content>
                     <Text style={styles.title}>{passenger.name}</Text>
-                <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+                <Card.Content>
+                    <MapView
+                        provider='google'
+                        style={{height: 200, borderRadius: 20, marginBottom: 10}}
+                        initialRegion={{
+                            latitude: passenger.location.latitude,
+                            longitude: passenger.location.longitude,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                    >
+                        <Marker
+                            coordinate={{
+                                latitude: passenger.location.latitude,
+                                longitude: passenger.location.longitude,
+                            }}
+                            title="Pickup Location"
+                            description="DCU"
+                        />
+                    </MapView>
+                </Card.Content>
                 <Card.Content>
                     <Text style={styles.info}>{passenger.name} will be leaving at {passenger.departureTime}</Text>
                     <Text style={styles.info}>{description}</Text>
-
                 </Card.Content>
                     <Button style={styles.button} mode="contained" onPress={() =>{navigation.navigate('DriverHomePage', {passenger});
                         console.log(`Driver accepted ${passenger.name}'s ride`)}}contentStyle={{padding: 10}}>Click here to accept this ride</Button>
@@ -64,4 +83,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default PassengerInfo
+export default PassengerInfo;
