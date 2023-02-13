@@ -36,7 +36,7 @@ router.post("/login", (req, res) => {
                 return res.status(401).send({ message: "Incorrect password" })
             }
 
-            res.status(200).send({ message: "Login successful" })
+            res.status(200).send({ message: "Login successful", id: user._id })
         })
         .catch(error => {
             res.status(500).send({ message: "Error logging in", error })

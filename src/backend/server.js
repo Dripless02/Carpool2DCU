@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import routes from "./routes/routes.js";
 import pasengerRoutes from "./routes/passenger.js";
+import driverRoutes from "./routes/driver.js";
 
 dotenv.config();
 
@@ -22,6 +23,7 @@ database.once("connected", () => {
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.listen(3000, () => {
@@ -30,3 +32,4 @@ app.listen(3000, () => {
 
 app.use("/api", routes);
 app.use("/api/passengers", pasengerRoutes);
+app.use("/api/driver", driverRoutes);
