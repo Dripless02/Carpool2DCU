@@ -12,23 +12,19 @@ router.post("/add", async (req, res) => {
         noOfPassengers: req.body.noOfPassengers,
         location: req.body.location
     })
-    try {
-        const dataToSave = await data.save();
-        res.status(201).json(dataToSave);
-    }
-    catch (error) {
-        console.log(error)
-        res.status(400).json({ message: error.message });
-    }
+    data.save()
+    .then(result => {
+        res.status(201).send({ message: "Passenger added successfully", result })
+    })
+    .catch(error => {
+        res.status(400).send({ message: "Error adding passenger", error })
+    })
 });
 
 router.get("/getAll", async (req, res) => {
-    try {
-        const data = await Passenger.find();
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+    Passenger.find()
+    .then((data) => res.json(data))
+    .catch((error) => res.status(500).json({ message: error.message }));
 });
 
 router.get("/get/:id",  (req, res) => {

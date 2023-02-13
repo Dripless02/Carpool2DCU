@@ -6,18 +6,12 @@ const router = express.Router();
 
 router.post("/add", async (req, res) => {
     const data = new Driver({
-        name: req.body.name,
         userID: req.body.userID,
         acceptedPassengers: []
     })
-    try {
-        const dataToSave = await data.save();
-        res.status(201).json(dataToSave);
-    }
-    catch (error) {
-        console.log(error)
-        res.status(400).json({ message: error.message });
-    }
+    data.save()
+    .then(result => { res.status(201).send({ message: "Driver added successfully", result }) })
+    .catch(error => { res.status(400).send({ message: "Error adding driver", error }) })
 });
 
 router.post("/addPassenger/:driverID", async (req, res) => {
