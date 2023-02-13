@@ -95,7 +95,7 @@ const Passenger = ({ navigation }) => {
             <Card mode="elevated" >
                 <Card.Content>
                     <Searchbar
-                        placeholder='Enter Address'
+                        placeholder='Enter Pickup Address'
                         style={{ margin: 10 }}
                         onChangeText={onChangeSearch}
                         value={searchQuery}
