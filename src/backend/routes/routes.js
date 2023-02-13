@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User.js";
+import Driver from "../models/Driver.js";
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.post("/register", (req, res) => {
 
         user.save()
         .then(result => {
+            Driver.create({ userID: result._id, acceptedPassengers: [] })
             res.status(201).send({ message: "User registered successfully", result })
         })
         .catch(error => {

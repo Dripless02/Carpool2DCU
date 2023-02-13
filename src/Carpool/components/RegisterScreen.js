@@ -52,7 +52,7 @@ const RegisterScreen = () => {
             .then((response) => {
                 if (response.ok) {
                     console.log("Registration successful");
-                    response.json().then((data) => { setCurrentUser({ ...currentUser, userID: data.id }); });
+                    response.json().then(data => setCurrentUser({ ...currentUser, userID: data.result._id }) );
                     setLoggedIn(true);
                 } else {
                     console.log("Registration failed");
