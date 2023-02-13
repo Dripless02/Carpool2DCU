@@ -2,7 +2,7 @@ import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
-import { LoginContext } from "./Context";
+import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
 const RegisterScreen = () => {
@@ -11,6 +11,7 @@ const RegisterScreen = () => {
     const [password, setPassword] = useState("");
     const [address, setAddress] = useState("");
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const checkValidEmail = (email) => {
         if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
@@ -49,8 +50,9 @@ const RegisterScreen = () => {
                 body: JSON.stringify({ name: name, email: email, password: password, address: address }),
             })
             .then((response) => {
-                if (response.status === 201) {
+                if (response.ok) {
                     console.log("Registration successful");
+                    response.json().then((data) => { setCurrentUser({ ...currentUser, userID: data.id }); });
                     setLoggedIn(true);
                 } else {
                     console.log("Registration failed");

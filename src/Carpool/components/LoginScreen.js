@@ -2,13 +2,14 @@ import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
-import { LoginContext } from "./Context";
+import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
 const LoginScreen = ({ navigation }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const checkValidEmail = (email) => {
         if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
@@ -37,8 +38,6 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const login = () => {
-        console.log("Login Button Pressed");
-
         const validEmail = checkValidEmail(email);
         const validPassword = checkValidPassword(password);
 
@@ -49,7 +48,10 @@ const LoginScreen = ({ navigation }) => {
                 body: JSON.stringify({ email: email, password: password, }),
             })
             .then((response) => {
-                if (response.status === 200) {
+                if (response.ok) {
+                    response.json().then((data) => {
+                        setCurrentUser({ ...currentUser, userID: data.id });
+                    });
                     console.log("Login successful");
                     setLoggedIn(true);
                 } else {
@@ -63,18 +65,18 @@ const LoginScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
-                <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} />
-                <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} />
+                <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} autoCapitalize="none" />
+                <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} autoCapitalize="none" />
                 <View style={{alignItems: "center"}}>
                     <Button
-                        style= {{marginTop: 10, width: 200}}
+                        style={styles.button}
                         mode="contained"
                         onPress={() => {login();}}
                     >
                         Login
                     </Button>
                     <Button
-                        style= {{marginTop: 10, width: 200}}
+                        style={styles.button}
                         mode="text"
                         textColor="#1d1a29"
                         onPress={() => navigation.navigate("Register")}
@@ -93,6 +95,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#E7DCEB',
+    },
+    button : {
+        marginTop: 10,
+        width: 200,
     }
 })
 
