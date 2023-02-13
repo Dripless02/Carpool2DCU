@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native'
 import React from 'react';
-import { Button, List, Modal, Portal, Provider, Text } from 'react-native-paper';
+import { Button, IconButton, List, Modal, Portal, Provider, Text } from 'react-native-paper';
 
 const HomePage = ({navigation, route}) => {
     const[visible, setVisible] = React.useState(false);
@@ -16,8 +16,14 @@ const HomePage = ({navigation, route}) => {
             </Button>
                 <Portal>
                     <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
-                    {passenger ? <Text> {passenger.name}</Text> : null}
-                </Modal>
+                        <Text style={styles.containerH}>My Ride</Text>
+                    {passenger ? <List.Item
+                                            right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`) }}{...props} icon="delete" />}
+                                            title={passenger.name}
+                                            description={`Departure Time: ${passenger.departureTime}`}
+                                            left={props => <List.Icon {...props} icon="seat-passenger" />}
+                                            > </List.Item> : null}
+                    </Modal>
             </Portal>
             <Button mode= 'outlined'style={styles.button2} onPress={showModal}>
                 My Ride
@@ -37,14 +43,16 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         justifyContent: 'center',
-        alignItems: 'center',
         paddingVertical: 170,
-        borderRadius: 30,
+        borderRadius: 20,
         marginLeft: 70,},
     button2: {
         borderRadius: 30,
         marginLeft: 300,
-        marginTop: 300,}
+        marginTop: 300,},
+    containerH: {
+        fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 50,}
+
 
 });
 
