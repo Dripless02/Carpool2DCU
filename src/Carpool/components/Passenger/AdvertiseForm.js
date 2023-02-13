@@ -1,17 +1,19 @@
 import { BACKEND_URL } from "@env";
-import React, { useEffect, useState } from 'react'
-import { View, SafeAreaView, StyleSheet } from 'react-native'
+import React, { useContext, useEffect, useState } from 'react'
+import { View, SafeAreaView, StyleSheet, Alert } from 'react-native'
 import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper'
 import TextInputField from "../TextInputField"
 import { TimePickerModal } from 'react-native-paper-dates';
+import { CurrentUserContext } from "../Context";
 
 const AdvertiseForm = ({navigation, route}) => {
     const [coords, setCoords] = useState(null);
-    const [name, setName] = useState("");
+    const [name, setName] = useState(null);
     const [departureTime, setDepartureTime] = useState("12:15");
     const [gender, setGender] = useState("");
     const [noOfPassengers, setNoOfPassengers] = useState(1);
     const [timePickerVisible, setTimePickerVisible] = useState(false);
+    const [currentUser] = useContext(CurrentUserContext);
 
     const onTimePickerDismiss = () => setTimePickerVisible(false);
 
@@ -28,14 +30,23 @@ const AdvertiseForm = ({navigation, route}) => {
 
     useEffect(() => {
         setCoords(route.params)
-        console.log(coords)
     }, [])
 
     const addPassenger = () => {
+        if (noOfPassengers === "" || noOfPassengers === 0) {
+            Alert.alert(
+                "Invalid Passenger Number",
+                "Please enter a valid number of passengers",
+                [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+                { cancelable: false }
+            )
+            return;
+        }
         fetch(`${BACKEND_URL}/api/passengers/add`, {
             method: "POST",
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({
+                userID: currentUser.userID,
                 name: name,
                 departureTime: departureTime,
                 gender: gender,
@@ -49,7 +60,7 @@ const AdvertiseForm = ({navigation, route}) => {
         .then((response) => {
             if (response.status === 201) {
                 console.log("Passenger added successfully");
-                navigation.popToTop();
+                navigation.navigate("PassengerHomePage");
             } else {
                 console.log("Passenger add failed");
             }
@@ -59,7 +70,6 @@ const AdvertiseForm = ({navigation, route}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            {/* {coords ? <Text> {coords.latitude}, {coords.longitude}</Text> : null} */}
             <TextInputField label="Name" onChangeText={text => setName(text)}/>
             <TextInput
                 mode="outlined"
