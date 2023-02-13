@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/add", async (req, res) => {
     const data = new Passenger({
+        userID: req.body.userID,
         name: req.body.name,
         departureTime: req.body.departureTime,
         gender: req.body.gender,
