@@ -1,34 +1,80 @@
-import { View, StyleSheet } from 'react-native'
-import React from 'react';
-import { Button, IconButton, List, Modal, Portal, Provider, Text } from 'react-native-paper';
+import { StyleSheet } from 'react-native'
+import React, { useContext, useEffect } from 'react';
+import { Button, IconButton, List, Modal, Portal, Provider, Snackbar, Text } from 'react-native-paper';
 
-const HomePage = ({navigation, route}) => {
-    const[visible, setVisible] = React.useState(false);
+import { BACKEND_URL } from "@env";
+import { CurrentUserContext } from "../Context";
+
+const HomePage = ({ navigation, route }) => {
+    const [visible, setVisible] = React.useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
-    let passenger = null;
-    if (route.params) passenger = route.params.passenger;
-    return (
+    const [currentUser] = useContext(CurrentUserContext);
+    const [passengers, setPassengers] = React.useState([]);
+    const [snackBarVisible, setSnackBarVisible] = React.useState(false);
 
-            <Provider>
-                <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{padding: 25}}>
+    const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
+    const onDismissSnackBar = () => setSnackBarVisible(false);
+
+    const getPassengers = () => {
+        fetch(`${BACKEND_URL}/api/driver/getPassengers/${currentUser.driverID}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json", },
+        })
+        .then((response) => {
+            response.json()
+                .then((data) => {
+                    setPassengers(data);
+                })
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+    }
+
+    useEffect(() => {
+        if (route.params?.message) {
+            onToggleSnackBar();
+            if (route.params.message === "PassengerAdded") {
+                getPassengers();
+            } else if (route.params.message === "PassengerNotAdded") {
+                route.params.message = null;
+            }
+        }
+    }, [route.params]);
+
+    useEffect(() => {
+        getPassengers();
+    }, []);
+
+    return (
+        <Provider>
+            <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{ padding: 25 }}>
                 View Passenger List
             </Button>
-                <Portal>
-                    <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
-                        <Text style={styles.containerH}>My Ride</Text>
-                    {passenger ? <List.Item
-                                            right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`) }}{...props} icon="delete" />}
-                                            title={passenger.name}
-                                            description={`Departure Time: ${passenger.departureTime}`}
-                                            left={props => <List.Icon {...props} icon="seat-passenger" />}
-                                            > </List.Item> : null}
-                    </Modal>
+            {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >
+                {route.params.message === "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : `Passenger '${route.params.passengerName}' already added to your ride`}
+            </Snackbar> : null}
+            <Portal>
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
+                    <Text style={styles.containerH}>My Ride</Text>
+                    {passengers ? passengers.map((passenger) => {
+                        return (
+                            <List.Item
+                                key={passenger._id}
+                                right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`) }}{...props} icon="delete" />}
+                                title={passenger.name}
+                                description={`Departure Time: ${passenger.departureTime}`}
+                                left={props => <List.Icon {...props} icon="seat-passenger" />}
+                            />
+                        )
+                    }) : null}
+                </Modal>
             </Portal>
-            <Button mode= 'outlined'style={styles.button2} onPress={showModal}>
+            <Button mode='outlined' style={styles.button2} onPress={showModal}>
                 My Ride
             </Button>
-            </Provider>
+        </Provider>
     )
 }
 
@@ -43,15 +89,22 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         justifyContent: 'center',
-        paddingVertical: 170,
+        paddingVertical: 30,
+        paddingHorizontal: 20,
         borderRadius: 20,
-        marginLeft: 70,},
+        marginLeft: 70,
+    },
     button2: {
         borderRadius: 30,
         marginLeft: 300,
-        marginTop: 300,},
+        marginTop: 300,
+    },
     containerH: {
-        fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 50,}
+        fontSize: 30,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    }
 
 
 });

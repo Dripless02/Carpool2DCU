@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Avatar, Button, Card, Text } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
-import {  CurrentUserContext } from "../Context";
+import { CurrentUserContext } from "../Context";
 import { BACKEND_URL } from "@env";
 
 const PassengerInfo = ({ route, navigation }) => {
@@ -17,13 +17,12 @@ const PassengerInfo = ({ route, navigation }) => {
         })
             .then((response) => {
                 if (response.ok) {
-                    response.json().then((data) => {
-                        console.log("ok response", JSON.stringify(data))
-                        navigation.navigate('DriverHomePage', { passenger });
+                    response.json().then(() => {
+                        navigation.navigate('DriverHomePage', { message: "PassengerAdded", passengerName: passenger.name });
                     });
                     console.log("Passenger added to driver");
                 } else {
-                    response.json().then((data) => { console.log("non ok response", data); });
+                    navigation.navigate('DriverHomePage', { message: "PassengerNotAdded", passengerName: passenger.name });
                     console.log("Error adding passenger to driver");
                 }
             })
@@ -34,7 +33,7 @@ const PassengerInfo = ({ route, navigation }) => {
 
 
     let description = ``;
-    if (passenger.noOfPassengers === undefined || passenger.noOfPassengers === 1) { passenger.noOfPassengers = 1; description += `there is one person on this ride`; }
+    if (passenger.noOfPassengers === 1) { description += `There is one person on this ride`; }
     else { description += `There are ${passenger.noOfPassengers} people on this ride.`; }
     return (
         <View style={styles.card}>
@@ -71,7 +70,9 @@ const PassengerInfo = ({ route, navigation }) => {
                 <Button style={styles.button} mode="contained" onPress={() => {
                     console.log(`Driver accepted ${passenger.name}'s ride`)
                     sendToDriver();
-                }} contentStyle={{ padding: 10 }}>Click here to accept this ride</Button>
+                }} contentStyle={{ padding: 10 }}>
+                    Click here to accept this ride
+                </Button>
             </Card>
         </View>
     )
