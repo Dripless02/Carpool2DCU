@@ -32,6 +32,27 @@ const HomePage = ({ navigation, route }) => {
         });
     }
 
+    const deletePassenger = (passengerID) => {
+        fetch(`${BACKEND_URL}/api/driver/deletePassenger/${currentUser.driverID}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify({ passengerID: passengerID }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                response.json().then(() => {
+                    getPassengers();
+                });
+                console.log("Passenger deleted from driver");
+            } else {
+                console.log("Error deleting passenger from driver");
+            }
+        })
+        .catch((error) => {
+            console.log(error, "Error deleting passenger from driver");
+        });
+    }
+
     useEffect(() => {
         if (route.params?.message) {
             onToggleSnackBar();
@@ -62,7 +83,7 @@ const HomePage = ({ navigation, route }) => {
                         return (
                             <List.Item
                                 key={passenger._id}
-                                right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`) }}{...props} icon="delete" />}
+                                right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`); deletePassenger(passenger._id) }}{...props} icon="delete" />}
                                 title={passenger.name}
                                 description={`Departure Time: ${passenger.departureTime}`}
                                 left={props => <List.Icon {...props} icon="seat-passenger" />}
