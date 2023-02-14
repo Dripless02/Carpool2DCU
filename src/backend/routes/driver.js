@@ -54,6 +54,29 @@ router.get("/getPassengers/:driverID", async (req, res) => {
     })
 });
 
+router.delete("/deletePassenger/:driverID/", async (req, res) => {
+    Driver.findById(req.params.driverID)
+    .then((driver) => {
+        if (driver.acceptedPassengers.includes(req.body.passengerID)) {
+            const index = driver.acceptedPassengers.indexOf(req.body.passengerID);
+            driver.acceptedPassengers.splice(index, 1);
+        } else {
+            return res.status(500).send({ message: "Passenger not found" })
+        }
+
+        driver.save()
+        .then(result => {
+            res.status(201).send({ message: "Passenger deleted successfully", result })
+        })
+        .catch(error => {
+            res.status(500).send({ message: "Error deleting passenger", error })
+        })
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error deleting passenger", error })
+    })
+});
+
 router.get("/getDriverID/:userID", async (req, res) => {
     Driver.findOne({ userID: req.params.userID })
     .then((driver) => {

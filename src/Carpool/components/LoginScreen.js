@@ -50,7 +50,7 @@ const LoginScreen = ({ navigation }) => {
             .then((response) => {
                 if (response.ok) {
                     response.json().then((data) => {
-                        setCurrentUser({ ...currentUser, userID: data.id });
+                        setCurrentUser({ ...currentUser, loggedIn: true, userID: data.id });
                     });
                     console.log("Login successful");
                     setLoggedIn(true);
