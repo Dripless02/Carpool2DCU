@@ -20,7 +20,7 @@ router.post("/addPassenger/:driverID", async (req, res) => {
         if (driver.acceptedPassengers.includes(req.body.passenger._id)) {
             return res.status(500).send({ message: "Passenger already added" })
         } else {
-            console.log("Passenger not added")
+            console.log("Passenger added")
             driver.acceptedPassengers.push(req.body.passenger);
         }
 
@@ -57,9 +57,9 @@ router.get("/getPassengers/:driverID", async (req, res) => {
 router.delete("/deletePassenger/:driverID/", async (req, res) => {
     Driver.findById(req.params.driverID)
     .then((driver) => {
-        if (driver.acceptedPassengers.includes(req.body.passengerID)) {
-            const index = driver.acceptedPassengers.indexOf(req.body.passengerID);
-            driver.acceptedPassengers.splice(index, 1);
+        const filtered = driver.acceptedPassengers.filter(passenger => passenger._id !== req.body.passengerID);
+        if (filtered.length !== driver.acceptedPassengers.length) {
+            driver.acceptedPassengers = filtered;
         } else {
             return res.status(500).send({ message: "Passenger not found" })
         }
