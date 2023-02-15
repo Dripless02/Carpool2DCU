@@ -49,4 +49,13 @@ router.post("/login", (req, res) => {
     })
 })
 
+router.get("/getUserDetails/:id", (req, res) => {
+    User.findById({ _id: req.params.id })
+    .then((user) => {
+        res.status(200).send(user)
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error getting user details", error })
+    })
+});
 export default router;
