@@ -37,6 +37,24 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
+    const getUserDetails = (userID) => {
+        fetch(`${BACKEND_URL}/api/getUserDetails/${userID}`, {
+            method: "GET",
+            headers: { "Content-Type": "application/json", },
+        })
+        .then((response) => {
+            if (response.ok) {
+                response.json().then((data) => {
+                    setCurrentUser({ ...currentUser, userID: userID, name: data.name, email: data.email, address: data.address });
+                });
+                console.log("User details retrieved");
+            } else {
+                console.log("User details retrieval failed");
+            }
+        })
+        .catch((error) => { console.error(error); });
+    };
+
     const login = () => {
         const validEmail = checkValidEmail(email);
         const validPassword = checkValidPassword(password);
@@ -50,7 +68,7 @@ const LoginScreen = ({ navigation }) => {
             .then((response) => {
                 if (response.ok) {
                     response.json().then((data) => {
-                        setCurrentUser({ ...currentUser, loggedIn: true, userID: data.id });
+                        getUserDetails(data.id);
                     });
                     console.log("Login successful");
                     setLoggedIn(true);
