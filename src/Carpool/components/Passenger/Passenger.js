@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Alert, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import MapView, { Geojson, Marker } from 'react-native-maps';
 import { Card, Searchbar, SegmentedButtons } from 'react-native-paper';
-import { ORS_API_KEY } from '@env';
+import { ORS_API_KEY, GEOCODE_API_KEY } from '@env';
 
 const Passenger = ({ navigation }) => {
     const [buttonDisabled, setButtonDisabled] = useState(true)
@@ -35,6 +35,7 @@ const Passenger = ({ navigation }) => {
     }
 
     const onChangeSearch = query => setSearchQuery(query);
+
     const searchAddress = query => {
         setGeojson({});
         setCoordinates({ ...coordinates, query: { longitude: 0, latitude: 0 } })
@@ -45,25 +46,29 @@ const Passenger = ({ navigation }) => {
                 [{ text: "OK", onPress: () => console.log("OK Pressed") }],
                 { cancelable: false }
             )
+            animateMap(coordinates.dcu.longitude, coordinates.dcu.latitude);
+            setButtonDisabled(true);
             return;
         }
-        if (!query.toLowerCase().includes("Ireland") || !query.toLowerCase().includes("IE")) {
+        if (!query.toLowerCase().includes("ireland") || !query.toLowerCase().includes("ie")) {
             query = query + ", Ireland";
         }
-        fetch("https://nominatim.openstreetmap.org/search?q=" + query + "&format=geojson")
+        fetch(`http://dev.virtualearth.net/REST/v1/Locations?query=${query}&maxResults=1&key=${GEOCODE_API_KEY}`)
         .then(response => response.json())
         .then(data => {
-            if (data.features.length === 0) {
+            if (data.resourceSets[0].estimatedTotal === 0 || data.resourceSets[0].resources[0].entityType === "CountryRegion") {
                 Alert.alert(
                     "No results found",
                     `No results found with the serach query: ${query.replace(", Ireland", "") }`,
                     [{ text: "OK", onPress: () => console.log("OK Pressed") }],
                     { cancelable: false }
                 )
+                animateMap(coordinates.dcu.longitude, coordinates.dcu.latitude);
+                setButtonDisabled(true);
                 return;
             }
-            const long = data.features[0].geometry.coordinates[0];
-            const lat = data.features[0].geometry.coordinates[1];
+            const lat = data.resourceSets[0].resources[0].point.coordinates[0];
+            const long = data.resourceSets[0].resources[0].point.coordinates[1];
             setCoordinates({ ...coordinates, query: { longitude: long, latitude: lat } })
             animateMap(long, lat);
             setButtonDisabled(false);
@@ -82,9 +87,7 @@ const Passenger = ({ navigation }) => {
 
         fetch(`https://api.openrouteservice.org/v2/directions/driving-car?api_key=${ORS_API_KEY}&start=${coordinates.query.longitude},${coordinates.query.latitude}&end=-6.255083,53.386343`)
         .then(response => response.json())
-        .then(data => {
-            setGeojson(data);
-        })
+        .then(data => setGeojson(data))
         .catch(error => console.log(error));
 
         fitMapToMarkers();
