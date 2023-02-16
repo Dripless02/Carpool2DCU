@@ -2,9 +2,11 @@ import { BACKEND_URL } from "@env";
 import React, { useCallback, useEffect, useState } from 'react';
 import { Platform, RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
+import { CurrentUserContext } from "../Context";
 
 
 const PassengerList = ({navigation}) => {
+    const [currentUser] = React.useContext(CurrentUserContext);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
@@ -20,9 +22,18 @@ const PassengerList = ({navigation}) => {
     const getPassengers = () => {
         fetch(`${BACKEND_URL}/api/passengers/getAll`)
         .then((response) => response.json())
-        .then((json) => { setPassengers(json); setIsLoading(false);  })
+        .then((json) => { setPassengers(sortPassengersOnDistanceToDriver(json)); setIsLoading(false); })
         .catch((error) => { console.error(error); });
     };
+
+    const sortPassengersOnDistanceToDriver = (passengers) => {
+        passengers.sort((a, b) => {
+            const aDistance = Math.sqrt(Math.pow(a.location.latitude - currentUser.coords.latitude, 2) + Math.pow(a.location.longitude - currentUser.coords.longitude, 2));
+            const bDistance = Math.sqrt(Math.pow(b.location.latitude - currentUser.coords.latitude, 2) + Math.pow(b.location.longitude - currentUser.coords.longitude, 2));
+            return aDistance - bDistance;
+        });
+        return passengers;
+    }
 
     useEffect(() => {
         getPassengers();
