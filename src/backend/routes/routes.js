@@ -13,6 +13,10 @@ router.post("/register", (req, res) => {
             email: req.body.email,
             password: hashedPassword,
             address: req.body.address,
+            coordinates: {
+                longitude: req.body.coordinates.longitude,
+                latitude: req.body.coordinates.latitude
+            },
         });
 
         user.save()

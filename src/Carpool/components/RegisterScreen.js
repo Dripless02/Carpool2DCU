@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "@env";
+import { BACKEND_URL, GEOCODE_API_KEY } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Button } from "react-native-paper";
@@ -39,23 +39,65 @@ const RegisterScreen = () => {
         }
     };
 
-    const register = () => {
+    const createDriver = (userID) => {
+        fetch(`${BACKEND_URL}/api/driver/add/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify({ userID: userID }),
+        })
+    }
+
+    const register = async () => {
         console.log("Register Button Pressed");
+        const coords = { latitude: 0, longitude: 0 }
         const validEmail = checkValidEmail(email);
         const validPassword = checkValidPassword(password);
+
+        if (!address.toLowerCase().includes("ireland")) {
+            setAddress(address + ", Ireland")
+        }
+
+        const response = await fetch(`https://dev.virtualearth.net/REST/v1/Locations?query=${address}&key=${GEOCODE_API_KEY}`);
+        const geoData = await response.json();
+
+        if (geoData.resourceSets[0].estimatedTotal === 0) {
+            console.log("Address is invalid");
+            return;
+        }
+
+        coords.latitude = geoData.resourceSets[0].resources[0].point.coordinates[0];
+        coords.longitude = geoData.resourceSets[0].resources[0].point.coordinates[1];
+
         if (validEmail && validPassword && name !== "" && address !== "") {
             fetch(`${BACKEND_URL}/api/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", },
-                body: JSON.stringify({ name: name, email: email, password: password, address: address }),
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password,
+                    address: address,
+                    coordinates: coords
+                }),
             })
             .then((response) => {
                 if (response.ok) {
                     console.log("Registration successful");
-                    response.json().then(data => setCurrentUser({ ...currentUser, userID: data.result._id }) );
+                    response.json().then(data => {
+                            setCurrentUser({
+                            ...currentUser,
+                            userID: data.result._id,
+                            name: data.result.name,
+                            email: data.result.email,
+                            address: data.result.address,
+                            coordinates: data.result.coordinates
+                        })
+                        createDriver(data.result._id);
+                    });
                     setLoggedIn(true);
                 } else {
                     console.log("Registration failed");
+                    response.json().then(data => console.log(data));
                 }
             })
             .catch((error) => { console.error(error); })
