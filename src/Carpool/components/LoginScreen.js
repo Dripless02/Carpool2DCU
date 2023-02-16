@@ -45,7 +45,7 @@ const LoginScreen = ({ navigation }) => {
         .then((response) => {
             if (response.ok) {
                 response.json().then((data) => {
-                    setCurrentUser({ ...currentUser, userID: userID, name: data.name, email: data.email, address: data.address, coords: data.coords });
+                    setCurrentUser({ ...currentUser, userID: userID, name: data.name, email: data.email, address: data.address, coords: data.coordinates});
                 });
                 console.log("User details retrieved");
             } else {

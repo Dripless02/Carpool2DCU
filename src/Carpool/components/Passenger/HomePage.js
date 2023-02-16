@@ -1,10 +1,16 @@
 import React from "react"
 import { View, StyleSheet } from "react-native"
-import { Button } from "react-native-paper"
+import { Button, Card, Avatar } from "react-native-paper"
 
 const HomePage = ({navigation}) => {
     return (
         <View>
+            <Card>
+                <Card.Content style={{ alignItems: "center" }}>
+                        <Avatar.Icon icon="account" size={100} />
+                </Card.Content>
+                <Card.Cover  source={{ uri: 'https://picsum.photos/700' }} />
+            </Card>
             <Button
                 icon="map"
                 mode="contained"

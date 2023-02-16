@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native'
 import React, { useContext, useEffect } from 'react';
-import { Button, IconButton, List, Modal, Portal, Provider, Snackbar, Text } from 'react-native-paper';
-
+import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text, Avatar } from 'react-native-paper';
 import { BACKEND_URL } from "@env";
+import MapView, {Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
 
 const HomePage = ({ navigation, route }) => {
@@ -53,6 +53,8 @@ const HomePage = ({ navigation, route }) => {
         });
     }
 
+
+
     useEffect(() => {
         if (route.params?.message) {
             onToggleSnackBar();
@@ -70,9 +72,40 @@ const HomePage = ({ navigation, route }) => {
 
     return (
         <Provider>
-            <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{ padding: 25 }}>
+            <Card>
+                <Card.Content style={{ alignItems: "center" }}>
+                        <Avatar.Icon icon="account" size={100} />
+                        <Text style={{fontSize: 40}}>{currentUser.name}</Text>
+                    </Card.Content>
+                <Card.Content>
+                <MapView
+                        provider='google'
+                        style={{ height: 250, borderRadius: 10, marginBottom: 10 }}
+                        initialRegion={{
+                            latitude: currentUser.coords.latitude,
+                            longitude: currentUser.coords.longitude,
+                            latitudeDelta: 0.01,
+                            longitudeDelta: 0.01,
+                        }}
+                        showsUserLocation={true}
+                        showsMyLocationButton={true}
+                    >
+                        <Marker
+                            coordinate={{
+                                latitude: currentUser.coords.latitude,
+                                longitude: currentUser.coords.longitude,
+                            }}
+                            title="Drivers Location"
+                            description="Driver's start location"
+                        />
+                    </MapView>
+                </Card.Content>
+
+                <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{ padding: 25 }}>
                 View Passenger List
             </Button>
+            </Card>
+
             {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >
                 {route.params.message === "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : `Passenger '${route.params.passengerName}' already added to your ride`}
             </Snackbar> : null}
@@ -101,24 +134,27 @@ const HomePage = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     button: {
-        borderRadius: 30,
+        borderRadius: 35,
         marginTop: 30,
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+
 
     },
     container: {
         backgroundColor: 'white',
         justifyContent: 'center',
         paddingVertical: 30,
-        paddingHorizontal: 20,
+        paddingHorizontal: 30,
         borderRadius: 20,
         marginLeft: 70,
     },
     button2: {
         borderRadius: 30,
         marginLeft: 300,
-        marginTop: 300,
+        marginTop: 20,
+
     },
     containerH: {
         fontSize: 30,
