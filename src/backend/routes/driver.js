@@ -41,13 +41,7 @@ router.post("/addPassenger/:driverID", async (req, res) => {
 router.get("/getPassengers/:driverID", async (req, res) => {
     Driver.findById(req.params.driverID)
     .then((driver) => {
-        Passenger.find({ _id: { $in: driver.acceptedPassengers } })
-        .then((passengers) => {
-            res.status(201).send(passengers);
-        })
-        .catch(error => {
-            res.status(500).send({ message: "Error getting passengers", error })
-        })
+        res.status(201).send(driver.acceptedPassengers);
     })
     .catch(error => {
         res.status(500).send({ message: "Error getting passengers", error })

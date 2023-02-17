@@ -1,22 +1,26 @@
 import { StyleSheet } from 'react-native'
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text, Avatar } from 'react-native-paper';
-import { BACKEND_URL } from "@env";
-import MapView, {Marker}from 'react-native-maps';
+import { BACKEND_URL, ORS_API_KEY } from "@env";
+import MapView, {Geojson, Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
 
 const HomePage = ({ navigation, route }) => {
-    const [visible, setVisible] = React.useState(false);
+    const [visible, setVisible] = useState(false);
     const showModal = () => setVisible(true);
     const hideModal = () => setVisible(false);
     const [currentUser] = useContext(CurrentUserContext);
-    const [passengers, setPassengers] = React.useState([]);
-    const [snackBarVisible, setSnackBarVisible] = React.useState(false);
+    const [acceptedPassengers, setAcceptedPassengers] = useState([]);
+    const [snackBarVisible, setSnackBarVisible] = useState(false);
+    const [routeGeoJSON, setRouteGeoJSON] = useState(null);
+    const isFirstRender = useRef(true);
+
+    const coordinatesToSend = { "coordinates": [] }
 
     const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
     const onDismissSnackBar = () => setSnackBarVisible(false);
 
-    const getPassengers = () => {
+    const getAcceptedPassengers = () => {
         fetch(`${BACKEND_URL}/api/driver/getPassengers/${currentUser.driverID}`, {
             method: "GET",
             headers: { "Content-Type": "application/json", },
@@ -24,12 +28,36 @@ const HomePage = ({ navigation, route }) => {
         .then((response) => {
             response.json()
                 .then((data) => {
-                    setPassengers(data);
+                    setAcceptedPassengers(data);
                 })
         })
         .catch((error) => {
             console.error(error);
         });
+    }
+
+    const addCoords = () => {
+        coordinatesToSend.coordinates.push([currentUser.coords.longitude, currentUser.coords.latitude]);
+        acceptedPassengers.forEach((passenger) => {
+            coordinatesToSend.coordinates.push([passenger.location.longitude, passenger.location.latitude]);
+        });
+        coordinatesToSend.coordinates.push([-6.255083, 53.386343])
+    }
+
+    const getRoute = (coords) => {
+        fetch(`https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key=${ORS_API_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(coords),
+        })
+        .then((response) => {
+            response.json()
+            .then((data) => {
+                setRouteGeoJSON(data);
+            })
+            .catch((error) => { console.log(error) })
+        })
+        .catch((error) => { console.log(error) })
     }
 
     const deletePassenger = (passengerID) => {
@@ -41,7 +69,7 @@ const HomePage = ({ navigation, route }) => {
         .then((response) => {
             if (response.ok) {
                 response.json().then(() => {
-                    getPassengers();
+                    getAcceptedPassengers();
                 });
                 console.log("Passenger deleted from driver");
             } else {
@@ -53,13 +81,15 @@ const HomePage = ({ navigation, route }) => {
         });
     }
 
-
+    useEffect(() => {
+        getAcceptedPassengers();
+    }, []);
 
     useEffect(() => {
         if (route.params?.message) {
             onToggleSnackBar();
             if (route.params.message === "PassengerAdded") {
-                getPassengers();
+                getAcceptedPassengers();
             } else if (route.params.message === "PassengerNotAdded") {
                 route.params.message = null;
             }
@@ -67,8 +97,22 @@ const HomePage = ({ navigation, route }) => {
     }, [route.params]);
 
     useEffect(() => {
-        getPassengers();
-    }, []);
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+        addCoords();
+        getRoute(coordinatesToSend);
+    }, [acceptedPassengers]);
+
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
+
+    }, [routeGeoJSON])
 
     return (
         <Provider>
@@ -97,7 +141,31 @@ const HomePage = ({ navigation, route }) => {
                             }}
                             title="Drivers Location"
                             description="Driver's start location"
+                            pinColor="blue"
                         />
+                        <Marker
+                            coordinate={{
+                                latitude: 53.386343,
+                                longitude: -6.255083,
+                            }}
+                            title="DCU"
+                            pinColor="green"
+                        />
+                        {acceptedPassengers.map((passenger, index) => {
+                            return (
+                                <Marker
+                                    key={index}
+                                    coordinate={{
+                                        latitude: passenger.location.latitude,
+                                        longitude: passenger.location.longitude,
+                                    }}
+                                    title={`${index + 1}: ${passenger.name}`}
+                                    description={"Passenger Count: " + passenger.noOfPassengers}
+                                    pinColor="red"
+                                />
+                            )
+                        })}
+                        {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />}
                     </MapView>
                 </Card.Content>
 
@@ -112,7 +180,7 @@ const HomePage = ({ navigation, route }) => {
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
                     <Text style={styles.containerH}>My Ride</Text>
-                    {passengers ? passengers.map((passenger) => {
+                    {acceptedPassengers ? acceptedPassengers.map((passenger) => {
                         return (
                             <List.Item
                                 key={passenger._id}

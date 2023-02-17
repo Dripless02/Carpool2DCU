@@ -1,12 +1,12 @@
 import { BACKEND_URL } from "@env";
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Platform, RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import { ActivityIndicator, List } from 'react-native-paper';
 import { CurrentUserContext } from "../Context";
 
 
 const PassengerList = ({navigation}) => {
-    const [currentUser] = React.useContext(CurrentUserContext);
+    const [currentUser] = useContext(CurrentUserContext);
     const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [passengers, setPassengers] = useState([]);
