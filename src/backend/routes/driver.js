@@ -17,7 +17,8 @@ router.post("/add", async (req, res) => {
 router.post("/addPassenger/:driverID", async (req, res) => {
     Driver.findById(req.params.driverID)
     .then((driver) => {
-        if (driver.acceptedPassengers.includes(req.body.passenger._id)) {
+        const filtered = driver.acceptedPassengers.filter(passenger => passenger._id === req.body.passenger._id);
+        if (filtered.length > 0) {
             return res.status(500).send({ message: "Passenger already added" })
         } else {
             console.log("Passenger added")
@@ -47,7 +48,6 @@ router.get("/getPassengers/:driverID", async (req, res) => {
         .catch(error => {
             res.status(500).send({ message: "Error getting passengers", error })
         })
-
     })
     .catch(error => {
         res.status(500).send({ message: "Error getting passengers", error })
