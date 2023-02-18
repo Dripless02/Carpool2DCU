@@ -14,11 +14,23 @@ const HomePage = ({ navigation, route }) => {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [routeGeoJSON, setRouteGeoJSON] = useState(null);
     const isFirstRender = useRef(true);
+    const mapRef = useRef(null);
 
     const coordinatesToSend = { "coordinates": [] }
 
     const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
     const onDismissSnackBar = () => setSnackBarVisible(false);
+
+    const fitMapToMarkers = () => mapRef.current.fitToSuppliedMarkers(["dcu", "driver", "passenger"], { edgePadding: { top: 65, right: 50, bottom: 100, left: 50 } });
+
+    const sortPassengersOnDistanceToDcu = (passengers) => {
+        passengers.sort((a, b) => {
+            const aDistance = Math.sqrt(Math.pow(a.location.latitude - 53.386343, 2) + Math.pow(a.location.longitude + 6.255083, 2));
+            const bDistance = Math.sqrt(Math.pow(b.location.latitude - 53.386343, 2) + Math.pow(b.location.longitude + 6.255083, 2));
+            return aDistance - bDistance;
+        });
+        return passengers.reverse();
+    }
 
     const getAcceptedPassengers = () => {
         fetch(`${BACKEND_URL}/api/driver/getPassengers/${currentUser.driverID}`, {
@@ -28,7 +40,7 @@ const HomePage = ({ navigation, route }) => {
         .then((response) => {
             response.json()
                 .then((data) => {
-                    setAcceptedPassengers(data);
+                    setAcceptedPassengers(sortPassengersOnDistanceToDcu(data));
                 })
         })
         .catch((error) => {
@@ -111,6 +123,7 @@ const HomePage = ({ navigation, route }) => {
             return;
         }
 
+        fitMapToMarkers();
 
     }, [routeGeoJSON])
 
@@ -133,6 +146,7 @@ const HomePage = ({ navigation, route }) => {
                         }}
                         showsUserLocation={true}
                         showsMyLocationButton={true}
+                        ref={mapRef}
                     >
                         <Marker
                             coordinate={{
@@ -142,6 +156,7 @@ const HomePage = ({ navigation, route }) => {
                             title="Drivers Location"
                             description="Driver's start location"
                             pinColor="blue"
+                            identifier="driver"
                         />
                         <Marker
                             coordinate={{
@@ -150,6 +165,7 @@ const HomePage = ({ navigation, route }) => {
                             }}
                             title="DCU"
                             pinColor="green"
+                            identifier="dcu"
                         />
                         {acceptedPassengers.map((passenger, index) => {
                             return (
@@ -162,6 +178,7 @@ const HomePage = ({ navigation, route }) => {
                                     title={`${index + 1}: ${passenger.name}`}
                                     description={"Passenger Count: " + passenger.noOfPassengers}
                                     pinColor="red"
+                                    identifier="passenger"
                                 />
                             )
                         })}
