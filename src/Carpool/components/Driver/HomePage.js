@@ -4,6 +4,7 @@ import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text
 import { BACKEND_URL, ORS_API_KEY } from "@env";
 import MapView, {Geojson, Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
+import { Rating, AirbnbRating } from 'react-native-ratings';
 
 const HomePage = ({ navigation, route }) => {
     const [visible, setVisible] = useState(false);
@@ -114,6 +115,8 @@ const HomePage = ({ navigation, route }) => {
 
     }, [routeGeoJSON])
 
+    const [bannervisible, setbannerVisible] = useState(false);
+
     return (
         <Provider>
             <Card>
@@ -189,8 +192,28 @@ const HomePage = ({ navigation, route }) => {
                                 description={`Departure Time: ${passenger.departureTime}`}
                                 left={props => <List.Icon {...props} icon="seat-passenger" />}
                             />
+
                         )
                     }) : null}
+                     <Button
+                        style={styles.button3}
+                        buttonColor="#F10A4C"
+                        mode='contained'
+                        onPress={()=> {setbannerVisible(true);setVisible(false)}}> Finish Ride</Button>
+                </Modal>
+            </Portal>
+
+            <Portal>
+                <Modal visible={bannervisible} onDismiss={() => setbannerVisible(false)} contentContainerStyle={styles.review}>
+                    <Text style={styles.reviewT}>Leave feedback for your passenger</Text>
+                <Rating
+                type='star'
+                ratingCount={5}
+                imageSize={70}
+                ratingColor="3F51B5"
+                showRating
+                onFinishRating={console.log("Rating is: ")}
+                />
                 </Modal>
             </Portal>
             <Button mode='outlined' style={styles.button2} onPress={showModal}>
@@ -229,8 +252,24 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
-    }
+    },
+    button3: {
+        borderRadius: 15,
+        marginHorizontal: 30,
+        paddingVertical: 2,
+    },
+    review: {
+        fontSize: 20,
+        backgroundColor: 'white',
+        paddingVertical: 50,
 
+    },
+    reviewT: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 20,
+    },
 
 });
 
