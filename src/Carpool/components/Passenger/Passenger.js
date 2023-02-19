@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import MapView, { Geojson, Marker } from 'react-native-maps';
 import { Card, Searchbar, SegmentedButtons } from 'react-native-paper';
@@ -76,7 +76,7 @@ const Passenger = ({ navigation }) => {
         .catch(error => console.log(error));
     }
 
-    const fitMapToMarkers = () =>  mapRef.current.fitToSuppliedMarkers(["dcu", "query"], { edgePadding: { top: 65, right: 50, bottom: 100, left: 50 } });
+    const fitMapToMarkers = () => mapRef.current.fitToSuppliedMarkers(["dcu", "query"], { edgePadding: { top: 65, right: 50, bottom: 100, left: 50 } });
 
     const getRoute = () => {
         // if the user has already searched for directions to a location and the new location is the same as the previous location, then don't fetch the route again
@@ -89,9 +89,18 @@ const Passenger = ({ navigation }) => {
         .then(response => response.json())
         .then(data => setGeojson(data))
         .catch(error => console.log(error));
-
-        fitMapToMarkers();
     }
+
+    useEffect(() => {
+        getRoute();
+    }, [coordinates])
+
+    useEffect(() => {
+        if (coordinates.query.latitude === 0 && coordinates.query.longitude === 0) {
+            return;
+        }
+        fitMapToMarkers();
+    }, [geojson])
 
     return (
         <SafeAreaView style={styles.container}>
