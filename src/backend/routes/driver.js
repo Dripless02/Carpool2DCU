@@ -17,6 +17,12 @@ router.post("/add", async (req, res) => {
 router.post("/addPassenger/:driverID", async (req, res) => {
     Driver.findById(req.params.driverID)
     .then((driver) => {
+        const totalNoOfPassengers = driver.acceptedPassengers.reduce((acc, passenger) => acc + passenger.noOfPassengers, 0);
+        if (totalNoOfPassengers + req.body.passenger.noOfPassengers > 4) {
+            console.log("Too many passengers")
+            return res.status(500).send({ message: "Passenger cannot be added. Total number of passengers exceeds 4" })
+        } else {console.log("Space for passengers")}
+
         const filtered = driver.acceptedPassengers.filter(passenger => passenger._id === req.body.passenger._id);
         if (filtered.length > 0) {
             return res.status(500).send({ message: "Passenger already added" })
