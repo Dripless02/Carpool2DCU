@@ -9,7 +9,7 @@ const HomePage = ({navigation}) => {
                 <Card.Content style={{ alignItems: "center" }}>
                         <Avatar.Icon icon="account" size={100} />
                 </Card.Content>
-                <Card.Cover  source={{ uri: 'https://picsum.photos/700' }} />
+                <Card.Cover source={{ uri:'https://picsum.photos/1000' }} />
             </Card>
             <Button
                 icon="map"
@@ -18,7 +18,7 @@ const HomePage = ({navigation}) => {
                 style={styles.button}
                 contentStyle={{ padding: 25 }}
             >
-                Map
+                Click here to start your journey
             </Button>
         </View>
     )
