@@ -22,7 +22,9 @@ router.post("/add", async (req, res) => {
 });
 
 router.get("/getAll", async (req, res) => {
-    Passenger.find()
+    const findArgs = req.query.userID ? { accepted: false, userID: { $ne: req.query.userID } } : { accepted: false };
+
+    Passenger.find(findArgs)
     .then((data) => res.json(data))
     .catch((error) => res.status(500).json({ message: error.message }));
 });

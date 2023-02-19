@@ -21,9 +21,15 @@ router.post("/addPassenger/:driverID", async (req, res) => {
         if (filtered.length > 0) {
             return res.status(500).send({ message: "Passenger already added" })
         } else {
-            console.log("Passenger added")
+            console.log(`Passenger ${req.body.passenger.name} added`)
+            req.body.passenger.acceptedDriverID = req.params.driverID;
+            req.body.passenger.accepted = true;
             driver.acceptedPassengers.push(req.body.passenger);
         }
+
+        Passenger.updateOne({ _id: req.body.passenger._id }, { accepted: true, acceptedDriverID: req.params.driverID })
+        .then(result => { console.log("Passenger accepted") })
+        .catch(error => { return res.status(500).send({ message: "Error updating passenger", error }) })
 
         driver.save()
         .then(result => {
@@ -57,6 +63,10 @@ router.delete("/deletePassenger/:driverID/", async (req, res) => {
         } else {
             return res.status(500).send({ message: "Passenger not found" })
         }
+
+        Passenger.findOneAndUpdate({ _id: req.body.passengerID }, { accepted: false, acceptedDriverID: null })
+        .then(() => { console.log("Passenger accepted set to false and acceptedDriverID set to null") })
+        .catch(error => { return res.status(500).send({ message: "Error deleting passenger", error }) })
 
         driver.save()
         .then(result => {

@@ -20,7 +20,7 @@ const PassengerList = ({navigation}) => {
     }, [])
 
     const getPassengers = () => {
-        fetch(`${BACKEND_URL}/api/passengers/getAll`)
+        fetch(`${BACKEND_URL}/api/passengers/getAll?userID=${currentUser.userID}`)
         .then((response) => response.json())
         .then((json) => { setPassengers(sortPassengersOnDistanceToDriver(json)); setIsLoading(false); })
         .catch((error) => { console.error(error); });
@@ -32,6 +32,7 @@ const PassengerList = ({navigation}) => {
             const bDistance = Math.sqrt(Math.pow(b.location.latitude - currentUser.coords.latitude, 2) + Math.pow(b.location.longitude - currentUser.coords.longitude, 2));
             return aDistance - bDistance;
         });
+
         return passengers;
     }
 

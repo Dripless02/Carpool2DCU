@@ -4,7 +4,7 @@ import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text
 import { BACKEND_URL, ORS_API_KEY } from "@env";
 import MapView, {Geojson, Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
-import { Rating, AirbnbRating } from 'react-native-ratings';
+import { Rating } from 'react-native-ratings';
 
 const HomePage = ({ navigation, route }) => {
     const [visible, setVisible] = useState(false);
@@ -229,7 +229,7 @@ const HomePage = ({ navigation, route }) => {
                 imageSize={70}
                 ratingColor="3F51B5"
                 showRating
-                onFinishRating={console.log("Rating is: ")}
+                onFinishRating={(rating) => {console.log("Rating is: " + rating)}}
                 />
                 </Modal>
             </Portal>

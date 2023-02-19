@@ -9,7 +9,7 @@ const PassengerInfo = ({ route, navigation }) => {
     const [currentUser] = useContext(CurrentUserContext);
     const passenger = route.params.passenger;
 
-    const sendToDriver = () => {
+    const acceptPassenger = () => {
         fetch(`${BACKEND_URL}/api/driver/addPassenger/${currentUser.driverID}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", },
@@ -69,7 +69,7 @@ const PassengerInfo = ({ route, navigation }) => {
                 </Card.Content>
                 <Button style={styles.button} mode="contained" onPress={() => {
                     console.log(`Driver accepted ${passenger.name}'s ride`)
-                    sendToDriver();
+                    acceptPassenger();
                 }} contentStyle={{ padding: 10 }}>
                     Click here to accept this ride
                 </Button>
