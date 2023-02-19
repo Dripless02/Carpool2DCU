@@ -90,7 +90,7 @@ const RegisterScreen = () => {
                             name: data.result.name,
                             email: data.result.email,
                             address: data.result.address,
-                            coordinates: data.result.coordinates
+                            coords: data.result.coordinates
                         })
                         createDriver(data.result._id);
                     });
