@@ -17,6 +17,10 @@ router.post("/register", (req, res) => {
                 longitude: req.body.coordinates.longitude,
                 latitude: req.body.coordinates.latitude
             },
+            driverAverageRating: req.body.driverAverageRating || 3,
+            passengerAverageRating: req.body.passengerAverageRating || 3,
+            driverRatings: req.body.driverRatings || [],
+            passengerRatings: req.body.passengerRatings || []
         });
 
         user.save()
@@ -62,4 +66,5 @@ router.get("/getUserDetails/:id", (req, res) => {
         res.status(500).send({ message: "Error getting user details", error })
     })
 });
+
 export default router;

@@ -1,5 +1,6 @@
 import express from "express";
 import Passenger from "../models/Passenger.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -33,6 +34,24 @@ router.get("/get/:id",  (req, res) => {
     Passenger.findById(req.params.id)
     .then((data) => res.json(data))
     .catch((error) => res.status(404).json({ message: error.message }));
+});
+
+router.post("/rate", async (req, res) => {
+    Passenger.findById(req.body.passengerID)
+    .then((data) => {
+        User.findById(data.userID)
+        .then((user) => {
+            user.passengerRatings.push(req.body.rating)
+            user.passengerAverageRating = user.passengerRatings.reduce((a, b) => a + b, 0) / user.passengerRatings.length
+            user.save()
+            .then(() => {
+                res.status(200).send({ message: "Passenger rated successfully", body: req.body })
+            })
+            .catch((error) => res.status(404).json({ message: error.message }))
+        })
+        .catch((error) => res.status(404).json({ message: error.message }))
+    })
+    .catch((error) => res.status(404).json({ message: error.message }))
 });
 
 export default router;

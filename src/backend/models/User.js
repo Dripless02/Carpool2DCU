@@ -8,7 +8,11 @@ const userSchema = new Schema({
     coordinates: {
         longitude: { type: Number, required: true },
         latitude: { type: Number, required: true }
-    }
+    },
+    driverAverageRating: { type: Number, default: 3, min: 0, max: 5 },
+    passengerAverageRating: { type: Number, default: 3, min: 0, max: 5 },
+    driverRatings: [{ type: Number, min: 0, max: 5 }],
+    passengerRatings: [{ type: Number, min: 0, max: 5 }],
 });
 
 export default model("User", userSchema);

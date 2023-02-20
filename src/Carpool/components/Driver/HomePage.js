@@ -4,7 +4,7 @@ import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text
 import { BACKEND_URL, ORS_API_KEY } from "@env";
 import MapView, {Geojson, Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
-import { Rating } from 'react-native-ratings';
+import PassengerRating from "./PassengerRating";
 
 const HomePage = ({ navigation, route }) => {
     const [visible, setVisible] = useState(false);
@@ -14,6 +14,7 @@ const HomePage = ({ navigation, route }) => {
     const [acceptedPassengers, setAcceptedPassengers] = useState([]);
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [routeGeoJSON, setRouteGeoJSON] = useState(null);
+    const [bannerVisible, setBannerVisible] = useState(false);
     const isFirstRender = useRef(true);
     const mapRef = useRef(null);
 
@@ -128,7 +129,6 @@ const HomePage = ({ navigation, route }) => {
 
     }, [routeGeoJSON])
 
-    const [bannervisible, setbannerVisible] = useState(false);
 
     return (
         <Provider>
@@ -209,28 +209,24 @@ const HomePage = ({ navigation, route }) => {
                                 description={`Departure Time: ${passenger.departureTime}`}
                                 left={props => <List.Icon {...props} icon="seat-passenger" />}
                             />
-
                         )
                     }) : null}
                      <Button
                         style={styles.button3}
                         buttonColor="#F10A4C"
                         mode='contained'
-                        onPress={()=> {setbannerVisible(true);setVisible(false)}}> Finish Ride</Button>
+                        onPress={() => { setBannerVisible(true); setVisible(false); }}>Finish Ride</Button>
                 </Modal>
             </Portal>
 
             <Portal>
-                <Modal visible={bannervisible} onDismiss={() => setbannerVisible(false)} contentContainerStyle={styles.review}>
-                    <Text style={styles.reviewT}>Leave feedback for your passenger</Text>
-                <Rating
-                type='star'
-                ratingCount={5}
-                imageSize={70}
-                ratingColor="3F51B5"
-                showRating
-                onFinishRating={(rating) => {console.log("Rating is: " + rating)}}
-                />
+                <Modal visible={bannerVisible} onDismiss={() => setBannerVisible(false)} contentContainerStyle={styles.review}>
+                    <Text style={styles.reviewT}>Leave feedback for your passengers</Text>
+                    {acceptedPassengers ? acceptedPassengers.map((passenger, index) => {
+                        return (
+                            <PassengerRating key={index} index={index} passenger={passenger} send={!bannerVisible} />
+                        )
+                    }): null}
                 </Modal>
             </Portal>
             <Button mode='outlined' style={styles.button2} onPress={showModal}>
@@ -247,8 +243,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
-
-
     },
     container: {
         backgroundColor: 'white',
@@ -262,7 +256,6 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         marginLeft: 300,
         marginTop: 20,
-
     },
     containerH: {
         fontSize: 30,
@@ -279,7 +272,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         backgroundColor: 'white',
         paddingVertical: 50,
-
+        borderRadius: 20,
     },
     reviewT: {
         fontSize: 25,
