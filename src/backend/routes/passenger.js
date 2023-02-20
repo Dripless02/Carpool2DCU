@@ -11,7 +11,9 @@ router.post("/add", async (req, res) => {
         departureTime: req.body.departureTime,
         gender: req.body.gender,
         noOfPassengers: req.body.noOfPassengers,
-        location: req.body.location
+        location: req.body.location,
+        status: "Pending",
+        acceptedDriverID: null
     })
     data.save()
     .then(result => {
@@ -23,10 +25,10 @@ router.post("/add", async (req, res) => {
 });
 
 router.get("/getAll", async (req, res) => {
-    const findArgs = req.query.userID ? { accepted: false, userID: { $ne: req.query.userID } } : { accepted: false };
+    const findArgs = req.query.userID ? { status: "Pending", userID: { $ne: req.query.userID } } : { status: "Pending" };
 
     Passenger.find(findArgs)
-    .then((data) => res.json(data))
+    .then((data) => res.status(200).json(data))
     .catch((error) => res.status(500).json({ message: error.message }));
 });
 

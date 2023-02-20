@@ -10,8 +10,8 @@ const passengerSchema = new Schema({
         longitude: { type: Number, required: true },
         latitude: { type: Number, required: true }
     },
-    accepted: { type: Boolean, default: false },
     acceptedDriverID: { type: Schema.Types.ObjectId, ref: "Driver", default: null },
+    status: { type: String, enum: { values: ["Pending", "Accepted", "Completed"], message: "{VALUE} is not supported" }, default: "Pending" },
 });
 
 export default model("Passenger", passengerSchema);

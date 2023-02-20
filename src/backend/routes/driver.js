@@ -33,7 +33,7 @@ router.post("/addPassenger/:driverID", async (req, res) => {
             driver.acceptedPassengers.push(req.body.passenger);
         }
 
-        Passenger.updateOne({ _id: req.body.passenger._id }, { accepted: true, acceptedDriverID: req.params.driverID })
+        Passenger.updateOne({ _id: req.body.passenger._id }, { status: "Accepted", acceptedDriverID: req.params.driverID })
         .then(result => { console.log("Passenger accepted") })
         .catch(error => { return res.status(500).send({ message: "Error updating passenger", error }) })
 
@@ -94,6 +94,28 @@ router.get("/getDriverID/:userID", async (req, res) => {
     })
     .catch(error => {
         res.status(500).send({ message: "Error getting driver", error })
+    })
+})
+
+router.post("/finishRide/:driverID", async (req, res) => {
+    Driver.findById(req.params.driverID)
+    .then((driver) => {
+        driver.acceptedPassengers.forEach(passenger => {
+            Passenger.updateOne({ _id: passenger._id }, { status: "Completed" })
+            .then(() => { console.log("Passenger status set to completed") })
+            .catch(error => { return res.status(500).send({ message: "Error finishing ride", error }) })
+        })
+        driver.acceptedPassengers = [];
+        driver.save()
+        .then(result => {
+            res.status(201).send({ message: "Ride finished successfully", result })
+        })
+        .catch(error => {
+            res.status(500).send({ message: "Error finishing ride", error })
+        })
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error finishing ride", error })
     })
 })
 
