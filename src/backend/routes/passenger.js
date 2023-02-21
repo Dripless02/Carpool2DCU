@@ -11,6 +11,7 @@ router.post("/add", async (req, res) => {
         departureTime: req.body.departureTime,
         gender: req.body.gender,
         noOfPassengers: req.body.noOfPassengers,
+        searchQuery: req.body.searchQuery,
         location: req.body.location,
         status: "Pending",
         acceptedDriverID: null

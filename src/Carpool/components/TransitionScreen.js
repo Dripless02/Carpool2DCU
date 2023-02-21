@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import TransitionCard from './TransitionCard';
 import { CurrentUserContext } from "./Context";
 import { BACKEND_URL } from "@env";
 
 const TransitionScreen = ({ navigation }) => {
-    const [currentUser, setCurrentUser] = React.useContext(CurrentUserContext);
+    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const getDriverID = () => {
         fetch(`${BACKEND_URL}/api/driver/getDriverID/${currentUser.userID}`)

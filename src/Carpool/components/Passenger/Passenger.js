@@ -134,7 +134,7 @@ const Passenger = ({ navigation }) => {
                         onValueChange={setButtonValue}
                         buttons={[
                             { label: "Preview Route", value: "preview", onPress: getRoute, style: { backgroundColor: "#9375ee" }, disabled: buttonDisabled },
-                            { label: "Next", value: "next", onPress: () => navigation.navigate("PassengerAdvertise", coordinates.query), style: { backgroundColor: "#01ffdf" }, disabled: buttonDisabled }
+                            { label: "Next", value: "next", onPress: () => navigation.navigate("PassengerAdvertise", {coords: coordinates.query, query: searchQuery}), style: { backgroundColor: "#01ffdf" }, disabled: buttonDisabled }
                         ]}
                         style={styles.button}
                     />

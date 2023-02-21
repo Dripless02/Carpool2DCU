@@ -70,7 +70,7 @@ router.delete("/deletePassenger/:driverID/", async (req, res) => {
             return res.status(500).send({ message: "Passenger not found" })
         }
 
-        Passenger.findOneAndUpdate({ _id: req.body.passengerID }, { accepted: false, acceptedDriverID: null })
+        Passenger.findOneAndUpdate({ _id: req.body.passengerID }, { acceptedDriverID: null, status: "Pending" })
         .then(() => { console.log("Passenger accepted set to false and acceptedDriverID set to null") })
         .catch(error => { return res.status(500).send({ message: "Error deleting passenger", error }) })
 

@@ -29,7 +29,7 @@ const AdvertiseForm = ({navigation, route}) => {
     }
 
     useEffect(() => {
-        setCoords(route.params)
+        setCoords(route.params.coords);
     }, [])
 
     const addPassenger = () => {
@@ -51,6 +51,7 @@ const AdvertiseForm = ({navigation, route}) => {
                 departureTime: departureTime,
                 gender: gender,
                 noOfPassengers: Number(noOfPassengers),
+                searchQuery: route.params.query,
                 location: {
                     longitude: coords.longitude,
                     latitude: coords.latitude

@@ -6,6 +6,7 @@ const passengerSchema = new Schema({
     departureTime: { type: String, required: true },
     gender: { type: String, enum: { values: ["Male", "Female", "Other"], message: "{VALUE} is not supported" }, required: true },
     noOfPassengers: { type: Number, required: true, max: 4, min: 1 },
+    searchQuery: { type: String, required: true },
     location: {
         longitude: { type: Number, required: true },
         latitude: { type: Number, required: true }
