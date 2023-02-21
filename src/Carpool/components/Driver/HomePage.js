@@ -220,13 +220,15 @@ const HomePage = ({ navigation, route }) => {
             </Portal>
 
             <Portal>
-                <Modal visible={bannerVisible} onDismiss={() => setBannerVisible(false)} contentContainerStyle={styles.review}>
+                <Modal visible={bannerVisible}  contentContainerStyle={styles.review}>
                     <Text style={styles.reviewT}>Leave feedback for your passengers</Text>
                     {acceptedPassengers ? acceptedPassengers.map((passenger, index) => {
                         return (
                             <PassengerRating key={index} index={index} passenger={passenger} send={!bannerVisible} />
                         )
                     }): null}
+                    <Button style={styles.button3} buttonColor="#F10A4C" mode='contained'
+                        onPress={() => {setBannerVisible(false)}}> Finish Rating</Button>
                 </Modal>
             </Portal>
             <Button mode='outlined' style={styles.button2} onPress={showModal}>
@@ -279,6 +281,13 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         marginBottom: 20,
+    },
+    button3: {
+        borderRadius: 15,
+        marginHorizontal: 70,
+        marginTop: 30,
+        paddingVertical: 2,
+
     },
 
 });
