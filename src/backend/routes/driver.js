@@ -1,6 +1,7 @@
 import express from "express";
 import Driver from "../models/Driver.js";
 import Passenger from "../models/Passenger.js";
+import User from "../models/User.js";
 
 const router = express.Router();
 
@@ -117,6 +118,30 @@ router.post("/finishRide/:driverID", async (req, res) => {
     })
     .catch(error => {
         res.status(500).send({ message: "Error finishing ride", error })
+    })
+})
+
+router.post("/rate", async (req, res) => {
+    Driver.findById(req.body.driverID)
+    .then((driver) => {
+        User.findById(driver.userID)
+        .then((user) => {
+            user.driverRatings.push(req.body.rating);
+            user.driverAverageRating = user.driverRatings.reduce((acc, rating) => acc + rating, 0) / user.driverRatings.length;
+            user.save()
+            .then(result => {
+                res.status(201).send({ message: "Driver rated successfully", body: req.body })
+            })
+            .catch(error => {
+                res.status(500).send({ message: "Error rating driver", error })
+            })
+        })
+        .catch(error => {
+            res.status(500).send({ message: "Error rating driver", error })
+        })
+    })
+    .catch(error => {
+        res.status(500).send({ message: "Error rating driver", error })
     })
 })
 

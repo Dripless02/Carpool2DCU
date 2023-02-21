@@ -60,11 +60,11 @@ router.post("/rate", async (req, res) => {
             .then(() => {
                 res.status(200).send({ message: "Passenger rated successfully", body: req.body })
             })
-            .catch((error) => res.status(404).json({ message: error.message }))
+            .catch((error) => res.status(500).send({ message: "Error rating passenger", error }))
         })
-        .catch((error) => res.status(404).json({ message: error.message }))
+        .catch((error) => res.status(500).send({ message: "Error rating passenger", error }))
     })
-    .catch((error) => res.status(404).json({ message: error.message }))
+    .catch((error) => res.status(500).send({ message: "Error rating passenger", error }))
 });
 
 router.post("/acknowledge", async (req, res) => {

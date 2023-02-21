@@ -104,6 +104,7 @@ const HomePage = ({ navigation, route }) => {
             onToggleSnackBar();
             if (route.params.message === "PassengerAdded") {
                 getAcceptedPassengers();
+                route.params.message = null;
             } else if (route.params.message === "PassengerNotAdded") {
                 route.params.message = null;
             }
@@ -228,7 +229,8 @@ const HomePage = ({ navigation, route }) => {
                         )
                     }): null}
                     <Button style={styles.button3} buttonColor="#F10A4C" mode='contained'
-                        onPress={() => {setBannerVisible(false)}}> Finish Rating</Button>
+                        onPress={() => {setBannerVisible(false)}}> Finish Rating
+                    </Button>
                 </Modal>
             </Portal>
             <Button mode='outlined' style={styles.button2} onPress={showModal}>

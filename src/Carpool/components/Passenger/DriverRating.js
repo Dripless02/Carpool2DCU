@@ -1,29 +1,27 @@
-import { StyleSheet } from 'react-native'
 import React, { useState } from 'react'
-import { Rating } from "react-native-ratings";
-import { Text } from "react-native-paper";
-import { BACKEND_URL } from "@env";
+import { Text } from "react-native-paper"
+import { Rating } from "react-native-ratings"
+import { BACKEND_URL } from "@env"
 
-const PassengerRating = ({ passenger, index, send }) => {
+const DriverRating = ({ key, ride, send }) => {
     const [rating, setRating] = useState(3);
 
     if (send === true) {
-        console.log(`Rating for ${passenger.name} is ${rating}!`)
-        fetch(`${BACKEND_URL}/api/passengers/rate`, {
+        console.log(`Rating for ${ride.name} is ${rating}!`)
+        fetch(`${BACKEND_URL}/api/driver/rate`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                passengerID: passenger._id,
+                driverID: ride.acceptedDriverID,
                 rating: rating
             })
         })
             .then(res => res.json())
             .then(data => {
                 console.log(data)
-            }
-            )
+            })
             .catch(err => {
                 console.log(err)
             })
@@ -31,9 +29,10 @@ const PassengerRating = ({ passenger, index, send }) => {
 
     return (
         <>
-            <Text style={{ marginVertical: 5, textAlign: "center" }} variant="titleLarge">{passenger.name}</Text>
+            <Text style={{ marginVertical: 5, textAlign: "center" }} variant="titleMedium">{ride.acceptedDriverName}</Text>
+            <Text key={key} style={{ textAlign: "center" }}>{ride.acceptedDriverName} has completed your ride for {ride.departureTime} to {ride.searchQuery}</Text>
             <Rating
-                key={index}
+                key={key}
                 type='star'
                 ratingCount={5}
                 imageSize={70}
@@ -46,4 +45,4 @@ const PassengerRating = ({ passenger, index, send }) => {
     )
 }
 
-export default PassengerRating
+export default DriverRating;
