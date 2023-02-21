@@ -12,6 +12,7 @@ const passengerSchema = new Schema({
         latitude: { type: Number, required: true }
     },
     acceptedDriverID: { type: Schema.Types.ObjectId, ref: "Driver", default: null },
+    acceptedDriverName: { type: String, default: null },
     status: { type: String, enum: { values: ["Pending", "Accepted", "Completed"], message: "{VALUE} is not supported" }, default: "Pending" },
 });
 

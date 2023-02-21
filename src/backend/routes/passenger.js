@@ -14,6 +14,7 @@ router.post("/add", async (req, res) => {
         searchQuery: req.body.searchQuery,
         location: req.body.location,
         status: "Pending",
+        acceptedDriverName: null,
         acceptedDriverID: null
     })
     data.save()
@@ -33,10 +34,19 @@ router.get("/getAll", async (req, res) => {
     .catch((error) => res.status(500).json({ message: error.message }));
 });
 
-router.get("/get/:id",  (req, res) => {
-    Passenger.findById(req.params.id)
-    .then((data) => res.json(data))
-    .catch((error) => res.status(404).json({ message: error.message }));
+router.get("/get", (req, res) => {
+    let findArgs = {};
+    if (req.query.passengerID) {
+        findArgs = { _id: req.query.passengerID };
+    } else if (req.query.userID) {
+        findArgs = { userID: req.query.userID };
+    } else {
+        res.status(400).send({ message: "No passengerID or userID provided" })
+    }
+
+    Passenger.find(findArgs)
+    .then((data) => res.status(200).json(data))
+    .catch((error) => res.status(500).json({ message: error.message }));
 });
 
 router.post("/rate", async (req, res) => {

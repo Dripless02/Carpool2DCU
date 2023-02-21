@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/add", async (req, res) => {
     const data = new Driver({
         userID: req.body.userID,
+        name: req.body.name,
         acceptedPassengers: []
     })
     data.save()
@@ -33,7 +34,7 @@ router.post("/addPassenger/:driverID", async (req, res) => {
             driver.acceptedPassengers.push(req.body.passenger);
         }
 
-        Passenger.updateOne({ _id: req.body.passenger._id }, { status: "Accepted", acceptedDriverID: req.params.driverID })
+        Passenger.updateOne({ _id: req.body.passenger._id }, { status: "Accepted", acceptedDriverID: req.params.driverID, acceptedDriverName: driver.name })
         .then(result => { console.log("Passenger accepted") })
         .catch(error => { return res.status(500).send({ message: "Error updating passenger", error }) })
 
