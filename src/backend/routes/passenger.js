@@ -67,4 +67,28 @@ router.post("/rate", async (req, res) => {
     .catch((error) => res.status(404).json({ message: error.message }))
 });
 
+router.post("/acknowledge", async (req, res) => {
+    Passenger.findById(req.query.passengerID)
+        .then((passenger) => {
+            if (passenger.status === "Accepted-NotACK") {
+                passenger.status = "Accepted-ACK"
+            } else if (passenger.status === "Completed-NotACK") {
+                passenger.status = "Completed-ACK"
+            } else {
+                return res.status(400).send({ message: "Invalid status" })
+            }
+
+            passenger.save()
+                .then(() => {
+                    res.status(200).send({ message: "Passenger acknowledged successfully" })
+                })
+                .catch((error) => {
+                    res.status(404).json({ message: error.message })
+                })
+        })
+        .catch((error) => {
+            res.status(404).json({ message: error.message })
+        })
+})
+
 export default router;

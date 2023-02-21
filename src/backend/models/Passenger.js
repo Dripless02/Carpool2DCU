@@ -13,7 +13,7 @@ const passengerSchema = new Schema({
     },
     acceptedDriverID: { type: Schema.Types.ObjectId, ref: "Driver", default: null },
     acceptedDriverName: { type: String, default: null },
-    status: { type: String, enum: { values: ["Pending", "Accepted", "Completed"], message: "{VALUE} is not supported" }, default: "Pending" },
+    status: { type: String, enum: { values: ["Pending", "Accepted-NotACK", "Accepted-ACK", "Completed-NotACK", "Completed-ACK"], message: "{VALUE} is not supported" }, default: "Pending" },
 });
 
 export default model("Passenger", passengerSchema);
