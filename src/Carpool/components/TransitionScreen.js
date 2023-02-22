@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, ImageBackground} from 'react-native';
 import TransitionCard from './TransitionCard';
 import { CurrentUserContext } from "./Context";
 import { BACKEND_URL } from "@env";
@@ -31,8 +31,11 @@ const TransitionScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
+            <ImageBackground source={require('../assets/dcu.png')}resizeMode="cover" style={styles.ImageBackground}/>
+            <View style={styles.cards}>
             <TransitionCard title="Driver" description="DriverHomePage" navigation={navigation} />
             <TransitionCard title="Passenger" description="PassengerHomePage" navigation={navigation} />
+            </View>
         </View>
     );
 };
@@ -40,8 +43,23 @@ const TransitionScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    ImageBackground: {
+        flex: 1,
+        resizeMode: "cover",
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+
+
+    },
+    cards: {
         margin: 20,
+        marginTop: 50,
+        flex: 1,
+        flexDirection: "Column",
     }
+
 });
 
 export default TransitionScreen;
