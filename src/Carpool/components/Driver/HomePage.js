@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ImageBackground } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text, Avatar } from 'react-native-paper';
 import { BACKEND_URL, ORS_API_KEY } from "@env";
@@ -145,10 +145,11 @@ const HomePage = ({ navigation, route }) => {
 
     return (
         <Provider>
-            <Card>
+            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
+            <Card style={{marginTop: 90}}>
                 <Card.Content style={{ alignItems: "center" }}>
                         <Avatar.Icon icon="account" size={100} />
-                        <Text style={{fontSize: 40}}>{currentUser.name}</Text>
+                        <Text style={{fontSize: 30, fontWeight: 'bold',textAlign: 'center', marginBottom: 5}}>Welcome {currentUser.name}!</Text>
                     </Card.Content>
                 <Card.Content>
                 <MapView
@@ -245,7 +246,7 @@ const HomePage = ({ navigation, route }) => {
                     </Button>
                 </Modal>
             </Portal>
-            <Button mode='outlined' style={styles.button2} onPress={showModal}>
+            <Button mode='contained-tonal' style={styles.button2} onPress={showModal}>
                 My Ride
             </Button>
         </Provider>
@@ -303,6 +304,13 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
 
     },
+    ImageBackground: {
+        flex: 1,
+        resizeMode: "cover",
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+    }
 
 });
 

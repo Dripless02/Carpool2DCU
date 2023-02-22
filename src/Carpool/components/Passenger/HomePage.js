@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react"
-import { View, StyleSheet } from "react-native"
-import { Button, Card, Avatar, Modal, Portal, Provider, Text } from "react-native-paper"
+import { View, StyleSheet, ImageBackground } from "react-native"
+import { Button, Card, Avatar, Modal, Portal, Text } from "react-native-paper"
 import { BACKEND_URL } from "@env"
 import { CurrentUserContext } from "../Context";
 import DriverRating from "./DriverRating";
@@ -84,36 +84,41 @@ const HomePage = ({ navigation }) => {
     }, [acceptedRides, completedRides])
 
     return (
-        <Provider>
-            <View>
-                <Card>
-                    <Card.Content style={{ alignItems: "center" }}>
+            <View style={{flex:1}}>
+            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
+                <Card style={{marginTop: 120}}>
+                    <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
                         <Avatar.Icon icon="account" size={100} />
+                        <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>Welcome {currentUser.name}!</Text>
                     </Card.Content>
-                    <Card.Cover source={{ uri: 'https://picsum.photos/1000' }} />
-                </Card>
-                <Button
-                    icon="map"
-                    mode="contained"
-                    onPress={() => navigation.navigate("PassengerMap")}
-                    style={styles.button}
-                    contentStyle={{ padding: 25 }}
-                >
+                    <Card.Cover style={{marginHorizontal: 10}} source={require('../../assets/passenger.png')} />
+                    <Card.Content>
+
+                        <Button
+                        icon="map"
+                        mode="contained"
+                        onPress={() => navigation.navigate("PassengerMap")}
+                        style={styles.button}
+                        contentStyle={{ padding: 25 }}>
                     Click here to start your journey
                 </Button>
+                    </Card.Content>
+                </Card>
+
 
                 <Portal>
-                    <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={containerStyle}>
-                        <Text style={{ fontSize: 25,
+                    <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={styles.contentContainerStyle} >
+                        <Text style={{ fontSize: 23,
                             fontWeight: 'bold',
                             textAlign: 'center',
-                            marginBottom: 10,}}>Your Ride has been accepted by a driver</Text>
+                            marginBottom: 5
+                            }}>Your Ride has been accepted by a driver</Text>
                                 {acceptedRides.map((ride, index) => {
-                            return (<Text key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
+                            return (<Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5}} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
                         })}
                     </Modal>
-                    <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={containerStyle}>
-                        <Text style={{ textAlign: "center" }} variant="titleLarge">Your Ride has been completed</Text>
+                    <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={styles.contentContainerStyle} >
+                        <Text style={{ textAlign: "center", paddingBottom: 10}} variant="titleLarge">Your Ride has been completed</Text>
                         {completedRides.map((ride, index) => {
                             console.log("ride", ride)
                             return (<DriverRating key={index} ride={ride} send={!completedModalVisible}/>)
@@ -127,7 +132,6 @@ const HomePage = ({ navigation }) => {
                     </Modal>
                 </Portal>
             </View>
-        </Provider>
     )
 }
 
@@ -146,4 +150,17 @@ const styles = StyleSheet.create({
         paddingVertical: 2,
         marginTop: 20,
     },
+    contentContainerStyle: {
+        backgroundColor: 'white',
+        borderRadius: 15,
+        padding: 20,
+        marginHorizontal: 10,
+    },
+    ImageBackground: {
+        flex: 1,
+        resizeMode: "cover",
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+    }
 })
