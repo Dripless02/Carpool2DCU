@@ -31,7 +31,7 @@ const TransitionScreen = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            <ImageBackground source={require('../assets/dcu.png')}resizeMode="cover" style={styles.ImageBackground}/>
+            <ImageBackground source={require('../assets/dcu.png')} resizeMode="cover" style={styles.ImageBackground}/>
             <View style={styles.cards}>
             <TransitionCard title="Driver" description="DriverHomePage" navigation={navigation} />
             <TransitionCard title="Passenger" description="PassengerHomePage" navigation={navigation} />
@@ -50,14 +50,12 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         position: "absolute",
-
-
     },
     cards: {
         margin: 20,
         marginTop: 50,
         flex: 1,
-        flexDirection: "Column",
+        flexDirection: "column",
     }
 
 });

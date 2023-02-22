@@ -14,10 +14,9 @@ const HomePage = ({ navigation }) => {
     const [completedRides, setCompletedRides] = useState([]);
     const isFirstRender = useRef(true);
     const showAcceptedModal = () => setAcceptedModalVisible(true);
-    const hideAcceptedModal = () => {acknowledgeRides(acceptedRides); setAcceptedModalVisible(false)};
+    const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false) };
     const showCompletedModal = () => setCompletedModalVisible(true);
-    const hideCompletedModal = () => {acknowledgeRides(completedRides); setCompletedModalVisible(false)};
-    const containerStyle = { backgroundColor: 'white', padding: 20 };
+    const hideCompletedModal = () => { acknowledgeRides(completedRides); setCompletedModalVisible(false) };
 
     const getRides = () => {
         fetch(`${BACKEND_URL}/api/passengers/get?userID=${currentUser.userID}`)
@@ -84,54 +83,54 @@ const HomePage = ({ navigation }) => {
     }, [acceptedRides, completedRides])
 
     return (
-            <View style={{flex:1}}>
-            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
-                <Card style={{marginTop: 120}}>
-                    <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
-                        <Avatar.Icon icon="account" size={100} />
-                        <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>Welcome {currentUser.name}!</Text>
-                    </Card.Content>
-                    <Card.Cover style={{marginHorizontal: 10}} source={require('../../assets/passenger.png')} />
-                    <Card.Content>
+        <View style={{ flex: 1 }}>
+            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground} />
+            <Card style={{ marginTop: 120 }}>
+                <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
+                    <Avatar.Icon icon="account" size={100} />
+                    <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>Welcome {currentUser.name}!</Text>
+                </Card.Content>
+                <Card.Cover style={{ marginHorizontal: 10 }} source={require('../../assets/passenger.png')} />
+                <Card.Content>
 
-                        <Button
+                    <Button
                         icon="map"
                         mode="contained"
                         onPress={() => navigation.navigate("PassengerMap")}
                         style={styles.button}
                         contentStyle={{ padding: 25 }}>
-                    Click here to start your journey
-                </Button>
-                    </Card.Content>
-                </Card>
+                        Click here to start your journey
+                    </Button>
+                </Card.Content>
+            </Card>
 
-
-                <Portal>
-                    <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={styles.contentContainerStyle} >
-                        <Text style={{ fontSize: 23,
-                            fontWeight: 'bold',
-                            textAlign: 'center',
-                            marginBottom: 5
-                            }}>Your Ride has been accepted by a driver</Text>
-                                {acceptedRides.map((ride, index) => {
-                            return (<Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5}} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
-                        })}
-                    </Modal>
-                    <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={styles.contentContainerStyle} >
-                        <Text style={{ textAlign: "center", paddingBottom: 10}} variant="titleLarge">Your Ride has been completed</Text>
-                        {completedRides.map((ride, index) => {
-                            console.log("ride", ride)
-                            return (<DriverRating key={index} ride={ride} send={!completedModalVisible}/>)
-                        })}
-                        <Button
-                            style={styles.button2}
-                            buttonColor="#F10A4C"
-                            mode='contained'
-                            onPress={hideCompletedModal}> Finish Rating
-                        </Button>
-                    </Modal>
-                </Portal>
-            </View>
+            <Portal>
+                <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={styles.contentContainerStyle} >
+                    <Text style={{
+                        fontSize: 23,
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        marginBottom: 5
+                    }}>Your Ride has been accepted by a driver</Text>
+                    {acceptedRides.map((ride, index) => {
+                        return (<Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5 }} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
+                    })}
+                </Modal>
+                <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={styles.contentContainerStyle} >
+                    <Text style={{ textAlign: "center", paddingBottom: 10 }} variant="titleLarge">Your Ride has been completed</Text>
+                    {completedRides.map((ride, index) => {
+                        console.log("ride", ride)
+                        return (<DriverRating key={index} ride={ride} send={!completedModalVisible} />)
+                    })}
+                    <Button
+                        style={styles.button2}
+                        buttonColor="#F10A4C"
+                        mode='contained'
+                        onPress={hideCompletedModal}> Finish Rating
+                    </Button>
+                </Modal>
+            </Portal>
+        </View>
     )
 }
 
