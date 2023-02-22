@@ -13,12 +13,10 @@ const HomePage = ({ navigation }) => {
     const [acceptedRides, setAcceptedRides] = useState([]);
     const [completedRides, setCompletedRides] = useState([]);
     const isFirstRender = useRef(true);
-
     const showAcceptedModal = () => setAcceptedModalVisible(true);
     const hideAcceptedModal = () => {acknowledgeRides(acceptedRides); setAcceptedModalVisible(false)};
     const showCompletedModal = () => setCompletedModalVisible(true);
     const hideCompletedModal = () => {acknowledgeRides(completedRides); setCompletedModalVisible(false)};
-
     const containerStyle = { backgroundColor: 'white', padding: 20 };
 
     const getRides = () => {
@@ -62,7 +60,6 @@ const HomePage = ({ navigation }) => {
                 })
         })
     }
-
     useEffect(() => {
         getRides()
     }, [])
@@ -107,8 +104,11 @@ const HomePage = ({ navigation }) => {
 
                 <Portal>
                     <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={containerStyle}>
-                        <Text>Your Ride has been accepted by a driver</Text>
-                        {acceptedRides.map((ride, index) => {
+                        <Text style={{ fontSize: 25,
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            marginBottom: 10,}}>Your Ride has been accepted by a driver</Text>
+                                {acceptedRides.map((ride, index) => {
                             return (<Text key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
                         })}
                     </Modal>
