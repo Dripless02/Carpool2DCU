@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Dimensions, SafeAreaView, StyleSheet } from 'react-native';
 import MapView, { Geojson, Marker } from 'react-native-maps';
-import { Card, Searchbar, SegmentedButtons } from 'react-native-paper';
+import { Button, Card, Searchbar } from 'react-native-paper';
 import { ORS_API_KEY, GEOCODE_API_KEY } from '@env';
 
 const Passenger = ({ navigation }) => {
@@ -18,7 +18,6 @@ const Passenger = ({ navigation }) => {
         }
     })
     const [geojson, setGeojson] = useState({})
-    const [buttonValue, setButtonValue] = useState("");
 
     const width = Dimensions.get('window').width;
     const height = Dimensions.get('window').height;
@@ -129,15 +128,16 @@ const Passenger = ({ navigation }) => {
                             {coordinates.query.latitude === 0 && coordinates.query.longitude === 0 ? null : <Marker coordinate={coordinates.query} identifier="query" pinColor="blue"/>}
                             {!geojson.features ? null : <Geojson geojson={geojson} lineCap="round" strokeWidth={3} />}
                     </MapView>
-                    <SegmentedButtons
-                        value={buttonValue}
-                        onValueChange={setButtonValue}
-                        buttons={[
-                            { label: "Preview Route", value: "preview", onPress: getRoute, style: { backgroundColor: "#9375ee" }, disabled: buttonDisabled },
-                            { label: "Next", value: "next", onPress: () => navigation.navigate("PassengerAdvertise", {coords: coordinates.query, query: searchQuery}), style: { backgroundColor: "#01ffdf" }, disabled: buttonDisabled }
-                        ]}
+                    <Button
+                        mode="contained"
                         style={styles.button}
-                    />
+                        onPress={() => navigation.navigate("PassengerAdvertise", {coords: coordinates.query, query: searchQuery})}
+                        disabled={buttonDisabled}
+                        contentStyle={styles.buttonContent}
+                        labelStyle={styles.buttonLabel}
+                    >
+                        Next
+                    </Button>
                 </Card.Content>
             </Card>
         </SafeAreaView>
@@ -158,6 +158,15 @@ const styles = StyleSheet.create({
         position: "absolute",
         alignSelf: "center",
         bottom: 50
+    },
+    buttonContent: {
+        width: "100%",
+        paddingTop: 10,
+        paddingBottom: 5
+    },
+    buttonLabel: {
+        fontSize: 20,
+        paddingBottom: 0
     }
 });
 
