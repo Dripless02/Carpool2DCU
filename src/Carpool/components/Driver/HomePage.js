@@ -23,6 +23,8 @@ const HomePage = ({ navigation, route }) => {
     const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
     const onDismissSnackBar = () => setSnackBarVisible(false);
 
+    const hideBanner = () => { setBannerVisible(false); finishRide(); };
+
     const fitMapToMarkers = () => mapRef.current.fitToSuppliedMarkers(["dcu", "driver", "passenger"], { edgePadding: { top: 65, right: 50, bottom: 100, left: 50 } });
 
     const sortPassengersOnDistanceToDcu = (passengers) => {
@@ -93,6 +95,16 @@ const HomePage = ({ navigation, route }) => {
         .catch((error) => {
             console.log(error, "Error deleting passenger from driver");
         });
+    }
+
+    const finishRide = () => {
+        fetch(`${BACKEND_URL}/api/driver/finishRide/${currentUser.driverID}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+        })
+            .then((response) => { response.json() })
+            .then((data) => { console.log(data); getAcceptedPassengers(); })
+            .catch((error) => { console.log("Unable to finish ride", error) });
     }
 
     useEffect(() => {
@@ -229,7 +241,7 @@ const HomePage = ({ navigation, route }) => {
                         )
                     }): null}
                     <Button style={styles.button3} buttonColor="#F10A4C" mode='contained'
-                        onPress={() => {setBannerVisible(false)}}> Finish Rating
+                        onPress={() => {hideBanner()}}> Finish Rating
                     </Button>
                 </Modal>
             </Portal>

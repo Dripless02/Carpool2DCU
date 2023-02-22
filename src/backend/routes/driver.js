@@ -103,7 +103,7 @@ router.post("/finishRide/:driverID", async (req, res) => {
     Driver.findById(req.params.driverID)
     .then((driver) => {
         driver.acceptedPassengers.forEach(passenger => {
-            Passenger.updateOne({ _id: passenger._id }, { status: "Completed" })
+            Passenger.updateOne({ _id: passenger._id }, { status: "Completed-NotACK" })
             .then(() => { console.log("Passenger status set to completed") })
             .catch(error => { return res.status(500).send({ message: "Error finishing ride", error }) })
         })
