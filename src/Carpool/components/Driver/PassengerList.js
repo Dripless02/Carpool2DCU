@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "@env";
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Platform, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button, Dialog, List, Portal, SegmentedButtons, Text } from 'react-native-paper';
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { Platform, RefreshControl, ScrollView, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Button, Dialog, List, Portal, SegmentedButtons, Text } from "react-native-paper";
 import InputSpinner from "react-native-input-spinner";
 import { CurrentUserContext } from "../Context";
 
@@ -29,7 +29,7 @@ const PassengerList = ({ navigation }) => {
             getPassengers();
             setRefreshing(false);
         }, 1000);
-    }, [])
+    }, []);
 
     const getPassengers = () => {
         fetch(`${BACKEND_URL}/api/passengers/getAll?userID=${currentUser.userID}`)
@@ -46,14 +46,14 @@ const PassengerList = ({ navigation }) => {
         passengers.sort((a, b) => a.distanceToDriver - b.distanceToDriver);
 
         return passengers;
-    }
+    };
 
     const resetFilters = () => {
         setGenderButtonValue("All");
         setMaxPassengersButtonValue(4);
         setDistanceButtonValue(100);
         hideFilterDialog();
-    }
+    };
 
     const getDistance = (lat1, lon1, lat2, lon2) => {
         // use the haversine formula to calculate the distance between two coordinates https://stackoverflow.com/q/18883601
@@ -64,7 +64,7 @@ const PassengerList = ({ navigation }) => {
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
-    }
+    };
 
     useEffect(() => {
         getPassengers();
@@ -78,7 +78,7 @@ const PassengerList = ({ navigation }) => {
             }
         >
             {isLoading ? null :
-                <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     {/* <IconButton icon="sort" onPress={showSortDialog} />
                     <IconButton icon="filter" onPress={showFilterDialog} /> */}
                     <SegmentedButtons
@@ -102,7 +102,7 @@ const PassengerList = ({ navigation }) => {
                 }).filter((passenger) => {
                     return passenger.distanceToDriver <= distanceButtonValue;
                 }).map((passenger, index) => {
-                    let description = ``;
+                    let description = "";
                     if (passenger.noOfPassengers === undefined || passenger.noOfPassengers === 1) { passenger.noOfPassengers = 1; description += `${passenger.noOfPassengers} passenger`; }
                     else description += `${passenger.noOfPassengers} passengers`;
 
@@ -111,14 +111,14 @@ const PassengerList = ({ navigation }) => {
                         <List.Item
                             key={index}
                             onPress={() => {
-                                navigation.navigate('PassengerInfo', { passenger });
+                                navigation.navigate("PassengerInfo", { passenger });
                                 console.log(`user on ${Platform.OS} pressed ${passenger.name}'s card`);
                             }}
                             title={passenger.name}
                             description={description}
                             descriptionNumberOfLines={2}
                             left={props => <List.Icon {...props} icon="seat-passenger" />}
-                            style={{ marginBottom: 10, borderRadius: 10, borderWidth: .6, borderColor: '#000' }}
+                            style={{ marginBottom: 10, borderRadius: 10, borderWidth: .6, borderColor: "#000" }}
                         />
                     );
                 })

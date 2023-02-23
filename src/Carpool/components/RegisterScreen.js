@@ -6,7 +6,7 @@ import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
 const RegisterScreen = () => {
-    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+    const [, setLoggedIn] = useContext(LoginContext);
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const [name, setName] = useState("");
@@ -47,7 +47,7 @@ const RegisterScreen = () => {
 
     // Function to register the user
     const register = async () => {
-        const coords = { latitude: 0, longitude: 0 }
+        const coords = { latitude: 0, longitude: 0 };
         // If the email, password, name and address are valid, send a POST request to the backend to register the user
         if (!checkValidEmail(email) || !checkValidPassword(password)|| !checkValidString(name) || !checkValidString(address)) {
             return;
@@ -55,7 +55,7 @@ const RegisterScreen = () => {
 
         // If the address does not contain "Ireland", append "Ireland" to the end of the address
         if (!address.toLowerCase().includes("ireland")) {
-            setAddress(address + ", Ireland")
+            setAddress(address + ", Ireland");
         }
 
         // Get the coordinates of the address
@@ -83,27 +83,27 @@ const RegisterScreen = () => {
                 coordinates: coords
             }),
         })
-        .then((response) => {
+            .then((response) => {
             // If the registration is successful, set the current user and set the loggedIn flag to true
-            if (response.ok) {
-                console.log("Registration successful");
-                response.json().then(data => {
-                    setCurrentUser({
-                        ...currentUser,
-                        userID: data.result._id,
-                        name: data.result.name,
-                        email: data.result.email,
-                        address: data.result.address,
-                        coords: data.result.coordinates
-                    })
-                })
-                setLoggedIn(true);
-            } else {
-                console.log("Registration failed");
-                response.json().then(data => console.log(data));
-            }
-        })
-        .catch((error) => { console.error(error); });
+                if (response.ok) {
+                    console.log("Registration successful");
+                    response.json().then(data => {
+                        setCurrentUser({
+                            ...currentUser,
+                            userID: data.result._id,
+                            name: data.result.name,
+                            email: data.result.email,
+                            address: data.result.address,
+                            coords: data.result.coordinates
+                        });
+                    });
+                    setLoggedIn(true);
+                } else {
+                    console.log("Registration failed");
+                    response.json().then(data => console.log(data));
+                }
+            })
+            .catch((error) => { console.error(error); });
     };
 
     return (
@@ -140,10 +140,10 @@ const RegisterScreen = () => {
 const styles = StyleSheet.create({
     container : {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#E7DCEB',
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#E7DCEB",
     }
-})
+});
 
 export default RegisterScreen;

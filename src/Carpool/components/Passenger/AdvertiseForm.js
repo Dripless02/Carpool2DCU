@@ -1,9 +1,9 @@
 import { BACKEND_URL } from "@env";
-import React, { useContext, useEffect, useState } from 'react'
-import { View, SafeAreaView, StyleSheet, Alert } from 'react-native'
-import { Button, HelperText, SegmentedButtons, Text } from 'react-native-paper'
-import TextInputField from "../TextInputField"
-import { TimePickerModal } from 'react-native-paper-dates';
+import React, { useContext, useEffect, useState } from "react";
+import { View, SafeAreaView, StyleSheet, Alert } from "react-native";
+import { Button, HelperText, SegmentedButtons, Text } from "react-native-paper";
+import TextInputField from "../TextInputField";
+import { TimePickerModal } from "react-native-paper-dates";
 import { CurrentUserContext } from "../Context";
 import InputSpinner from "react-native-input-spinner";
 
@@ -28,12 +28,12 @@ const AdvertiseForm = ({navigation, route}) => {
             minutes = "0" + minutes;
         }
         setDepartureTime(`${hours}:${minutes}`);
-    }
+    };
 
     // Set coords to the coords passed in from the previous screen when the page loads
     useEffect(() => {
         setCoords(route.params.coords);
-    }, [])
+    }, []);
 
     // Function to add a passenger to the database
     const addPassenger = () => {
@@ -44,7 +44,7 @@ const AdvertiseForm = ({navigation, route}) => {
                 "Please enter a valid number of passengers",
                 [{ text: "OK", onPress: () => console.log("OK Pressed") }],
                 { cancelable: false }
-            )
+            );
             return;
         }
 
@@ -65,17 +65,17 @@ const AdvertiseForm = ({navigation, route}) => {
                 }
             }),
         })
-        .then((response) => {
+            .then((response) => {
             // If the passenger was added successfully, navigate to the passenger home page
-            if (response.status === 201) {
-                console.log("Passenger added successfully");
-                navigation.navigate("PassengerHomePage");
-            } else {
-                console.log("Passenger add failed");
-            }
-        })
-        .catch((error) => { console.error(error); });
-    }
+                if (response.status === 201) {
+                    console.log("Passenger added successfully");
+                    navigation.navigate("PassengerHomePage");
+                } else {
+                    console.log("Passenger add failed");
+                }
+            })
+            .catch((error) => { console.error(error); });
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -132,14 +132,14 @@ const AdvertiseForm = ({navigation, route}) => {
                 Send
             </Button>
         </SafeAreaView>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         margin: 15,
     },
-})
+});
 
-export default AdvertiseForm
+export default AdvertiseForm;

@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextInput } from 'react-native-paper';
+import React from "react";
+import { TextInput } from "react-native-paper";
 
 const TextInputField = ({ label = "Label", type = "default", onChangeText, secureText, autoCapitalize = "sentences", value }) => {
     return (
@@ -13,7 +13,7 @@ const TextInputField = ({ label = "Label", type = "default", onChangeText, secur
             autoCapitalize={autoCapitalize}
             value={value}
         />
-    )
-}
+    );
+};
 
 export default TextInputField;

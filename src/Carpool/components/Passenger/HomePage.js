@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useRef, useState } from "react"
-import { View, StyleSheet, ImageBackground } from "react-native"
-import { Button, Card, Avatar, Modal, Portal, Text } from "react-native-paper"
-import { BACKEND_URL } from "@env"
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { View, StyleSheet, ImageBackground } from "react-native";
+import { Button, Card, Avatar, Modal, Portal, Text } from "react-native-paper";
+import { BACKEND_URL } from "@env";
 import { CurrentUserContext } from "../Context";
 import DriverRating from "./DriverRating";
 
 const HomePage = ({ navigation }) => {
-    const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const [currentUser] = useContext(CurrentUserContext);
 
     const [currentRides, setCurrentRides] = useState([]);
     const [acceptedRides, setAcceptedRides] = useState([]);
@@ -18,36 +18,36 @@ const HomePage = ({ navigation }) => {
     const isFirstRender = useRef(true);
 
     const showAcceptedModal = () => setAcceptedModalVisible(true);
-    const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false) };
+    const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false); };
 
     const showCompletedModal = () => setCompletedModalVisible(true);
-    const hideCompletedModal = () => { acknowledgeRides(completedRides); setCompletedModalVisible(false) };
+    const hideCompletedModal = () => { acknowledgeRides(completedRides); setCompletedModalVisible(false); };
 
     // Function to get the user's current rides from the database and store them in the currentRides state
     const getRides = () => {
         fetch(`${BACKEND_URL}/api/passengers/get?userID=${currentUser.userID}`)
             .then((response) => response.json())
             .then((data) => {
-                setCurrentRides(data)
+                setCurrentRides(data);
             })
             .catch((error) => {
-                console.error(error)
-            })
-    }
+                console.error(error);
+            });
+    };
 
     // Function to check the status of the current rides and store them in the acceptedRides and completedRides states
     const checkStatus = () => {
         let accRides = [], compRides = [];
         for (let i = 0; i < currentRides.length; i++) {
             if (currentRides[i].status === "Accepted-NotACK") {
-                accRides.push(currentRides[i])
+                accRides.push(currentRides[i]);
             } else if (currentRides[i].status === "Completed-NotACK") {
-                compRides.push(currentRides[i])
+                compRides.push(currentRides[i]);
             }
         }
         setAcceptedRides(accRides);
         setCompletedRides(compRides);
-    }
+    };
 
     // Function to acknowledge the rides in the acceptedRides and completedRides states
     const acknowledgeRides = (rides) => {
@@ -60,18 +60,18 @@ const HomePage = ({ navigation }) => {
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data)
+                    console.log(data);
                 })
                 .catch((error) => {
-                    console.error(error)
-                })
-        })
-    }
+                    console.error(error);
+                });
+        });
+    };
 
     // Get the user's current rides when the page loads
     useEffect(() => {
-        getRides()
-    }, [])
+        getRides();
+    }, []);
 
     // Check the status of the current rides when the currentRides state changes
     useEffect(() => {
@@ -80,8 +80,8 @@ const HomePage = ({ navigation }) => {
             return;
         }
 
-        checkStatus()
-    }, [currentRides])
+        checkStatus();
+    }, [currentRides]);
 
     // Show the accepted and completed modals when the acceptedRides and completedRides states change respectively
     useEffect(() => {
@@ -90,21 +90,21 @@ const HomePage = ({ navigation }) => {
             return;
         }
 
-        if (acceptedRides.length > 0) showAcceptedModal()
-        if (completedRides.length > 0) showCompletedModal()
-    }, [acceptedRides, completedRides])
+        if (acceptedRides.length > 0) showAcceptedModal();
+        if (completedRides.length > 0) showCompletedModal();
+    }, [acceptedRides, completedRides]);
 
     return (
         <View style={{ flex: 1 }}>
-            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground} />
+            <ImageBackground source={require("../../assets/dcu.png")} style={styles.ImageBackground} />
             <Card style={{ marginTop: 120, shadowColor: "#000", shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5 }}>
                 <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
                     <Avatar.Icon icon="account" size={100} />
-                    <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>
+                    <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center", marginBottom: 5 }}>
                         Welcome {currentUser.name}!
                     </Text>
                 </Card.Content>
-                <Card.Cover style={{ marginHorizontal: 10 }} source={require('../../assets/passenger.png')} />
+                <Card.Cover style={{ marginHorizontal: 10 }} source={require("../../assets/passenger.png")} />
                 <Card.Content>
                     <Button
                         icon="map"
@@ -121,15 +121,15 @@ const HomePage = ({ navigation }) => {
                 <Modal visible={acceptedModalVisible} onDismiss={hideAcceptedModal} contentContainerStyle={styles.contentContainerStyle} >
                     <Text style={{
                         fontSize: 23,
-                        fontWeight: 'bold',
-                        textAlign: 'center',
+                        fontWeight: "bold",
+                        textAlign: "center",
                         marginBottom: 5
                     }}>
                         Your Ride has been accepted by a driver
                     </Text>
                     {/* For each accepted ride, render text that shows who has accepted your ride */}
                     {acceptedRides.map((ride, index) => {
-                        return (<Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5 }} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
+                        return (<Text style={{ fontSize: 20, textAlign: "center", marginBottom: 5 }} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>);
                     })}
                 </Modal>
                 <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={styles.contentContainerStyle} >
@@ -144,8 +144,8 @@ const HomePage = ({ navigation }) => {
                     </Text>
                     {/* For each completed ride, show a rating menu for each driver */}
                     {completedRides.map((ride, index) => {
-                        console.log("ride", ride)
-                        return (<DriverRating key={index} ride={ride} send={!completedModalVisible} />)
+                        console.log("ride", ride);
+                        return (<DriverRating key={index} ride={ride} send={!completedModalVisible} />);
                     })}
                     <Button
                         style={styles.button2}
@@ -158,10 +158,10 @@ const HomePage = ({ navigation }) => {
                 </Modal>
             </Portal>
         </View>
-    )
-}
+    );
+};
 
-export default HomePage
+export default HomePage;
 
 const styles = StyleSheet.create({
     button: {
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
     },
     contentContainerStyle: {
-        backgroundColor: 'white',
+        backgroundColor: "white",
         borderRadius: 15,
         padding: 20,
         marginHorizontal: 10,
@@ -189,4 +189,4 @@ const styles = StyleSheet.create({
         height: "100%",
         position: "absolute",
     }
-})
+});

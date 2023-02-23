@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Platform } from 'react-native';
-import { Card, Text } from 'react-native-paper';
+import React, { useEffect, useState } from "react";
+import { Platform } from "react-native";
+import { Card, Text } from "react-native-paper";
 
 const TransitionCard = ({ title, description, navigation }) => {
     const [image, setImage] = useState(null);
@@ -8,12 +8,12 @@ const TransitionCard = ({ title, description, navigation }) => {
     // Function to select the correct image for the card based on the title
     const imageSelector = () => {
         if (title === "Driver") {
-            setImage(require('../assets/driver.png'));
+            setImage(require("../assets/driver.png"));
         }
         else if (title === "Passenger") {
-            setImage(require('../assets/passenger.png'));
+            setImage(require("../assets/passenger.png"));
         }
-    }
+    };
 
     // Call the imageSelector function when the title changes
     useEffect(() => {

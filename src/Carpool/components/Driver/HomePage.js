@@ -1,8 +1,8 @@
-import { StyleSheet, ImageBackground, View } from 'react-native'
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, IconButton, List, Modal, Portal, Card, Snackbar, Text } from 'react-native-paper';
+import { StyleSheet, ImageBackground, View, Platform } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, IconButton, List, Modal, Portal, Card, Snackbar, Text } from "react-native-paper";
 import { BACKEND_URL, ORS_API_KEY } from "@env";
-import MapView, {Geojson, Marker}from 'react-native-maps';
+import MapView, {Geojson, Marker}from "react-native-maps";
 import { CurrentUserContext } from "../Context";
 import PassengerRating from "./PassengerRating";
 
@@ -18,7 +18,7 @@ const HomePage = ({ navigation, route }) => {
     const isFirstRender = useRef(true);
     const mapRef = useRef(null);
 
-    const coordinatesToSend = { "coordinates": [] }
+    const coordinatesToSend = { "coordinates": [] };
 
     const onToggleSnackBar = () => setSnackBarVisible(!snackBarVisible);
     const onDismissSnackBar = () => setSnackBarVisible(false);
@@ -34,31 +34,31 @@ const HomePage = ({ navigation, route }) => {
             return aDistance - bDistance;
         });
         return passengers.reverse();
-    }
+    };
 
     const getAcceptedPassengers = () => {
         fetch(`${BACKEND_URL}/api/driver/getPassengers/${currentUser.driverID}`, {
             method: "GET",
             headers: { "Content-Type": "application/json", },
         })
-        .then((response) => {
-            response.json()
-                .then((data) => {
-                    setAcceptedPassengers(sortPassengersOnDistanceToDcu(data));
-                })
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-    }
+            .then((response) => {
+                response.json()
+                    .then((data) => {
+                        setAcceptedPassengers(sortPassengersOnDistanceToDcu(data));
+                    });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    };
 
     const addCoords = () => {
         coordinatesToSend.coordinates.push([currentUser.coords.longitude, currentUser.coords.latitude]);
         acceptedPassengers.forEach((passenger) => {
             coordinatesToSend.coordinates.push([passenger.location.longitude, passenger.location.latitude]);
         });
-        coordinatesToSend.coordinates.push([-6.255083, 53.386343])
-    }
+        coordinatesToSend.coordinates.push([-6.255083, 53.386343]);
+    };
 
     const getRoute = (coords) => {
         fetch(`https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key=${ORS_API_KEY}`, {
@@ -66,15 +66,15 @@ const HomePage = ({ navigation, route }) => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(coords),
         })
-        .then((response) => {
-            response.json()
-            .then((data) => {
-                setRouteGeoJSON(data);
+            .then((response) => {
+                response.json()
+                    .then((data) => {
+                        setRouteGeoJSON(data);
+                    })
+                    .catch((error) => { console.log(error); });
             })
-            .catch((error) => { console.log(error) })
-        })
-        .catch((error) => { console.log(error) })
-    }
+            .catch((error) => { console.log(error); });
+    };
 
     const deletePassenger = (passengerID) => {
         fetch(`${BACKEND_URL}/api/driver/deletePassenger/${currentUser.driverID}`, {
@@ -82,30 +82,30 @@ const HomePage = ({ navigation, route }) => {
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({ passengerID: passengerID }),
         })
-        .then((response) => {
-            if (response.ok) {
-                response.json().then(() => {
-                    getAcceptedPassengers();
-                });
-                console.log("Passenger deleted from driver");
-            } else {
-                console.log("Error deleting passenger from driver");
-            }
-        })
-        .catch((error) => {
-            console.log(error, "Error deleting passenger from driver");
-        });
-    }
+            .then((response) => {
+                if (response.ok) {
+                    response.json().then(() => {
+                        getAcceptedPassengers();
+                    });
+                    console.log("Passenger deleted from driver");
+                } else {
+                    console.log("Error deleting passenger from driver");
+                }
+            })
+            .catch((error) => {
+                console.log(error, "Error deleting passenger from driver");
+            });
+    };
 
     const finishRide = () => {
         fetch(`${BACKEND_URL}/api/driver/finishRide/${currentUser.driverID}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", },
         })
-            .then((response) => { response.json() })
+            .then((response) => { response.json(); })
             .then((data) => { console.log(data); getAcceptedPassengers(); })
-            .catch((error) => { console.log("Unable to finish ride", error) });
-    }
+            .catch((error) => { console.log("Unable to finish ride", error); });
+    };
 
     useEffect(() => {
         getAcceptedPassengers();
@@ -140,18 +140,18 @@ const HomePage = ({ navigation, route }) => {
 
         fitMapToMarkers();
 
-    }, [routeGeoJSON])
+    }, [routeGeoJSON]);
 
 
     return (
-        <View style={{ flex: 1, justifyContent: 'center' }}>
-            <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
+        <View style={{ flex: 1, justifyContent: "center" }}>
+            <ImageBackground source={require("../../assets/dcu.png")} style={styles.ImageBackground}/>
             <Card style={{marginVertical: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 5, }, shadowOpacity: 0.4 }}>
                 <Card.Content style={{ alignItems: "center" }}>
-                    <Text style={{fontSize: 30, fontWeight: 'bold',textAlign: 'center', marginBottom: 5}}>Welcome {currentUser.name}!</Text>
+                    <Text style={{fontSize: 30, fontWeight: "bold",textAlign: "center", marginBottom: 5}}>Welcome {currentUser.name}!</Text>
                 </Card.Content>
                 <Card.Content>
-                <MapView
+                    <MapView
                         provider='google'
                         style={{ height: 300, borderRadius: 10, marginBottom: 10 }}
                         initialRegion={{
@@ -194,18 +194,18 @@ const HomePage = ({ navigation, route }) => {
                                     pinColor="red"
                                     identifier="passenger"
                                 />
-                            )
+                            );
                         })}
                         {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />}
-                </MapView>
-                <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{ padding: 25 }}>
+                    </MapView>
+                    <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate("PassengerList")} style={styles.button} contentStyle={{ padding: 25 }}>
                     View Passenger List
-                </Button>
+                    </Button>
 
-                {acceptedPassengers.length > 0 ?
-                    <Button mode='contained-tonal' style={styles.button2} onPress={showModal} contentStyle={{ padding: 20 }}>
+                    {acceptedPassengers.length > 0 ?
+                        <Button mode='contained-tonal' style={styles.button2} onPress={showModal} contentStyle={{ padding: 20 }}>
                         Current Ride
-                    </Button> : null}
+                        </Button> : null}
 
                 </Card.Content>
             </Card>
@@ -220,14 +220,14 @@ const HomePage = ({ navigation, route }) => {
                         return (
                             <List.Item
                                 key={passenger._id}
-                                right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`); deletePassenger(passenger._id) }}{...props} icon="delete" />}
+                                right={props => <IconButton onPress={() => { console.log(`user on ${Platform.OS} deleted ${passenger.name}'s ride`); deletePassenger(passenger._id); }}{...props} icon="delete" />}
                                 title={passenger.name}
                                 description={`Departure Time: ${passenger.departureTime}`}
                                 left={props => <List.Icon {...props} icon="seat-passenger" />}
                             />
-                        )
+                        );
                     }) : null}
-                     <Button
+                    <Button
                         style={styles.button3}
                         buttonColor="#F10A4C"
                         mode='contained'
@@ -241,17 +241,17 @@ const HomePage = ({ navigation, route }) => {
                     {acceptedPassengers ? acceptedPassengers.map((passenger, index) => {
                         return (
                             <PassengerRating key={index} index={index} passenger={passenger} send={!bannerVisible} />
-                        )
+                        );
                     }): null}
                     <Button style={styles.button3} buttonColor="#F10A4C" mode='contained'
-                        onPress={() => {hideBanner()}}> Finish Rating
+                        onPress={() => {hideBanner();}}> Finish Rating
                     </Button>
                 </Modal>
             </Portal>
 
         </View>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     button: {
@@ -262,8 +262,8 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     container: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
+        backgroundColor: "white",
+        justifyContent: "center",
         paddingVertical: 30,
         paddingHorizontal: 30,
         borderRadius: 20,
@@ -279,26 +279,8 @@ const styles = StyleSheet.create({
     },
     containerH: {
         fontSize: 30,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    button3: {
-        borderRadius: 15,
-        marginHorizontal: 30,
-        paddingVertical: 2,
-    },
-    review: {
-        fontSize: 20,
-        backgroundColor: 'white',
-        paddingVertical: 50,
-        borderRadius: 20,
-        shadowColor: "#000",shadowOffset: { width: 0, height: 3, }, shadowOpacity: 0.3,
-    },
-    reviewT: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        textAlign: 'center',
+        fontWeight: "bold",
+        textAlign: "center",
         marginBottom: 20,
     },
     button3: {
@@ -306,7 +288,19 @@ const styles = StyleSheet.create({
         marginHorizontal: 70,
         marginTop: 30,
         paddingVertical: 2,
-
+    },
+    review: {
+        fontSize: 20,
+        backgroundColor: "white",
+        paddingVertical: 50,
+        borderRadius: 20,
+        shadowColor: "#000",shadowOffset: { width: 0, height: 3, }, shadowOpacity: 0.3,
+    },
+    reviewT: {
+        fontSize: 25,
+        fontWeight: "bold",
+        textAlign: "center",
+        marginBottom: 20,
     },
     ImageBackground: {
         flex: 1,

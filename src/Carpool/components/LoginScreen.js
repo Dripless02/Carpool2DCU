@@ -5,8 +5,8 @@ import { Button, HelperText } from "react-native-paper";
 import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
-const LoginScreen = ({ navigation }) => {
-    const [loggedIn, setLoggedIn] = useContext(LoginContext);
+function LoginScreen({ navigation }) {
+    const [, setLoggedIn] = useContext(LoginContext);
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const [email, setEmail] = useState("");
@@ -14,45 +14,54 @@ const LoginScreen = ({ navigation }) => {
     const [failedLogin, setFailedLogin] = useState(false);
 
     // Function to check if email is a valid DCU email
-    const checkValidEmail = (email) => {
+    const checkValidEmail = email => {
         if (email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i)) {
             return true;
-        } else if (email === "") {
-            return false;
-        } else {
+        }
+        if (email === "") {
             return false;
         }
+        return false;
     };
 
     // Function to check if password is at least 8 characters
-    const checkValidPassword = (password) => {
+    const checkValidPassword = password => {
         if (password.length >= 8) {
             return true;
-        } else if (password === "") {
-            return false;
-        } else {
+        }
+        if (password === "") {
             return false;
         }
+        return false;
     };
 
     // Function to get the user's details from the database
-    const getUserDetails = (userID) => {
+    const getUserDetails = userID => {
         // Get the user's details from the database
         fetch(`${BACKEND_URL}/api/getUserDetails/${userID}`, {
             method: "GET",
-            headers: { "Content-Type": "application/json", },
+            headers: { "Content-Type": "application/json" },
         })
-        .then((response) => {
-            // If the user's details were retrieved successfully, set the current user's details to the retrieved details
-            if (response.ok) {
-                response.json().then((data) => {
-                    setCurrentUser({ ...currentUser, userID: userID, name: data.name, email: data.email, address: data.address, coords: data.coordinates});
-                });
-            } else {
-                console.log("User details retrieval failed");
-            }
-        })
-        .catch((error) => { console.error(error); });
+            .then(response => {
+                // If the user's details were retrieved successfully, set the current user's details to the retrieved details
+                if (response.ok) {
+                    response.json().then(data => {
+                        setCurrentUser({
+                            ...currentUser,
+                            userID,
+                            name: data.name,
+                            email: data.email,
+                            address: data.address,
+                            coords: data.coordinates,
+                        });
+                    });
+                } else {
+                    console.log("User details retrieval failed");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
     };
 
     // Function to log the user in
@@ -61,70 +70,90 @@ const LoginScreen = ({ navigation }) => {
         if (checkValidEmail(email) && checkValidPassword(password)) {
             fetch(`${BACKEND_URL}/api/login`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json", },
-                body: JSON.stringify({ email: email, password: password, }),
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email, password }),
             })
-            .then((response) => {
-                // If the login was successful, get the user's details from the database and set the user as logged in
-                if (response.ok) {
-                    response.json().then((data) => {
-                        getUserDetails(data.id);
-                    });
-                    console.log("Login successful");
-                    setLoggedIn(true);
-                } else {
-                    // If the login was unsuccessful, set the failed login flag to true to display an error message
-                    setFailedLogin(true);
-                    console.log("Login failed");
-                }
-            })
-            .catch((error) => { console.error(error); });
+                .then(response => {
+                    // If the login was successful, get the user's details from the database and set the user as logged in
+                    if (response.ok) {
+                        response.json().then(data => {
+                            getUserDetails(data.id);
+                        });
+                        console.log("Login successful");
+                        setLoggedIn(true);
+                    } else {
+                        // If the login was unsuccessful, set the failed login flag to true to display an error message
+                        setFailedLogin(true);
+                        console.log("Login failed");
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
     };
 
     const devLogin = () => {
         fetch(`${BACKEND_URL}/api/login`, {
             method: "POST",
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ email: "test@gmail.com", password: "password", }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: "test@gmail.com", password: "password" }),
         })
-        .then((response) => {
-            if (response.ok) {
-                console.log("ok");
-                console.log(JSON.stringify(response));
-                response.json().then((data) => {
-                    getUserDetails(data.id);
-                    console.log("User ID: " + data.id);
-                });
-                console.log("Login successful");
-                setLoggedIn(true);
-            } else {
-
-                console.log("Login failed");
-            }
-        })
-        .catch((error) => { console.error(error); });
-    }
+            .then(response => {
+                if (response.ok) {
+                    console.log("ok");
+                    console.log(JSON.stringify(response));
+                    response.json().then(data => {
+                        getUserDetails(data.id);
+                        console.log(`User ID: ${data.id}`);
+                    });
+                    console.log("Login successful");
+                    setLoggedIn(true);
+                } else {
+                    console.log("Login failed");
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    };
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={{width: "80%"}}>
-
+            <View style={{ width: "80%" }}>
                 {/* If email or password are invalid, show a helper text for what is invalid  */}
 
-                <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} autoCapitalize="none" />
-                {email.length > 0 && !email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
+                <TextInputField
+                    label="Email"
+                    type="email-address"
+                    onChangeText={text => setEmail(text)}
+                    autoCapitalize="none"
+                />
+                {email.length > 0 && !email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i) ? (
+                    <HelperText type="info">Email is invalid</HelperText>
+                ) : null}
 
-                <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} autoCapitalize="none" />
-                {password.length < 8 ? <HelperText type="info" >Password must be at least 8 characters</HelperText> : null}
+                <TextInputField
+                    label="Password"
+                    secureText
+                    onChangeText={text => setPassword(text)}
+                    autoCapitalize="none"
+                />
+                {password.length < 8 ? (
+                    <HelperText type="info">Password must be at least 8 characters</HelperText>
+                ) : null}
 
-                <View style={{alignItems: "center"}}>
+                <View style={{ alignItems: "center" }}>
                     {/* if the login fails, show error text to the user */}
-                    {failedLogin ? <HelperText type="error">Incorrect Email or Password</HelperText> : null}
+                    {failedLogin ? (
+                        <HelperText type="error">Incorrect Email or Password</HelperText>
+                    ) : null}
                     <Button
                         style={styles.button}
                         mode="contained"
-                        onPress={() => {login();}}
+                        onPress={() => {
+                            login();
+                        }}
                     >
                         Login
                     </Button>
@@ -150,19 +179,19 @@ const LoginScreen = ({ navigation }) => {
             </View>
         </SafeAreaView>
     );
-};
+}
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#E7DCEB',
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#E7DCEB",
     },
-    button : {
+    button: {
         marginTop: 10,
         width: 200,
-    }
-})
+    },
+});
 
 export default LoginScreen;

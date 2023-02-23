@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Text } from "react-native-paper"
-import { Rating } from "react-native-ratings"
-import { BACKEND_URL } from "@env"
+import React, { useState } from "react";
+import { Text } from "react-native-paper";
+import { Rating } from "react-native-ratings";
+import { BACKEND_URL } from "@env";
 
 const DriverRating = ({ key, ride, send }) => {
     // State to store the rating
@@ -9,7 +9,7 @@ const DriverRating = ({ key, ride, send }) => {
 
     // Function to send the rating to the backend
     if (send === true) {
-        console.log(`Rating for ${ride.name} is ${rating}!`)
+        console.log(`Rating for ${ride.name} is ${rating}!`);
         fetch(`${BACKEND_URL}/api/driver/rate`, {
             method: "POST",
             headers: {
@@ -22,11 +22,11 @@ const DriverRating = ({ key, ride, send }) => {
         })
             .then(res => res.json())
             .then(data => {
-                console.log(data)
+                console.log(data);
             })
             .catch(err => {
-                console.log(err)
-            })
+                console.log(err);
+            });
     }
 
     return (
@@ -41,10 +41,10 @@ const DriverRating = ({ key, ride, send }) => {
                 ratingColor="3F51B5"
                 showRating
                 startingValue={3}
-                onFinishRating={rating => { setRating(rating) }}
+                onFinishRating={rating => { setRating(rating); }}
             />
         </>
-    )
-}
+    );
+};
 
 export default DriverRating;
