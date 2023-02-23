@@ -15,7 +15,7 @@ const RegisterScreen = () => {
     const [invalidAddress, setInvalidAddress] = useState(false);
 
     const checkValidEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)(@mail\.dcu\.ie)/i)) {
+        if (email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i)) {
             return true;
         } else if (email === "") {
             return false;
@@ -99,16 +99,16 @@ const RegisterScreen = () => {
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
                 <TextInputField label="Name" onChangeText={text => setName(text)} />
-                {name.length > 0 && !name.match(/^[a-zA-Z0-9 ,.]{3,}$/) ? <HelperText type="info">Name must be longer than 3 characters</HelperText> : null}
+                {name.length > 0 && !name.match(/^[\w ,.]{3,}$/i) ? <HelperText type="info">Name must be longer than 3 characters</HelperText> : null}
 
                 <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} />
-                {email.length > 0 && !email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
+                {email.length > 0 && !email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
 
                 <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} />
                 {password.length < 8 ? <HelperText type="info" >Password must be at least 8 characters</HelperText> : null}
 
                 <TextInputField label="Address" onChangeText={text => setAddress(text)} />
-                {address.length > 0 && !address.match(/^[a-zA-Z0-9 ,.]{3,}$/)? <HelperText type="info">Address is required</HelperText> : null}
+                {address.length > 0 && !address.match(/^[\w ,.]{5,}$/i)? <HelperText type="info">Address is required</HelperText> : null}
                 {invalidAddress ? <HelperText type="error">Address is invalid</HelperText> : null}
 
                 <View style={{alignItems: "center"}}>

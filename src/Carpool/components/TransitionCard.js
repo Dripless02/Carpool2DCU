@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 import { Card, Text } from 'react-native-paper';
 
 const TransitionCard = ({ title, description, navigation }) => {
-    // console.log ("title =", title);
 
     const [image, setImage] = useState(null);
     const imageSelector = () => {

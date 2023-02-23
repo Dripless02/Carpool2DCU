@@ -10,9 +10,10 @@ const LoginScreen = ({ navigation }) => {
     const [password, setPassword] = useState("");
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const [failedLogin, setFailedLogin] = useState(false);
 
     const checkValidEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)(@mail\.dcu\.ie)/i)) {
+        if (email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i)) {
             return true;
         } else if (email === "") {
             return false;
@@ -50,10 +51,7 @@ const LoginScreen = ({ navigation }) => {
     };
 
     const login = () => {
-        const validEmail = checkValidEmail(email);
-        const validPassword = checkValidPassword(password);
-
-        if (validEmail && validPassword) {
+        if (checkValidEmail(email) && checkValidPassword(password)) {
             fetch(`${BACKEND_URL}/api/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", },
@@ -67,6 +65,7 @@ const LoginScreen = ({ navigation }) => {
                     console.log("Login successful");
                     setLoggedIn(true);
                 } else {
+                    setFailedLogin(true);
                     console.log("Login failed");
                 }
             })
@@ -91,6 +90,7 @@ const LoginScreen = ({ navigation }) => {
                 console.log("Login successful");
                 setLoggedIn(true);
             } else {
+
                 console.log("Login failed");
             }
         })
@@ -101,12 +101,13 @@ const LoginScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
                 <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} autoCapitalize="none" />
-                {email.length > 0 && !email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
+                {email.length > 0 && !email.match(/^([\w.%+-]+)@(mail.)*(dcu\.ie)/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
 
                 <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} autoCapitalize="none" />
                 {password.length < 8 ? <HelperText type="info" >Password must be at least 8 characters</HelperText> : null}
 
                 <View style={{alignItems: "center"}}>
+                    {failedLogin ? <HelperText type="error">Incorrect Email or Password</HelperText> : null}
                     <Button
                         style={styles.button}
                         mode="contained"
