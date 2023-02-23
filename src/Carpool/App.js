@@ -45,17 +45,17 @@ export default function App() {
                                     )
                                 }}
                             >
-                                <Stack.Screen name="Home" component={TransitionScreen} />
+                                <Stack.Screen name="Home" component={TransitionScreen} options={{ headerTitle: "" }} />
 
                                 {/* Driver Pages */}
-                                <Stack.Screen name="DriverHomePage" component={DriverHomePage} />
-                                <Stack.Screen name="PassengerList" component={PassengerList} />
-                                <Stack.Screen name="PassengerInfo" component={PassengerInfo} />
+                                <Stack.Screen name="DriverHomePage" component={DriverHomePage} options={{ headerTitle: "Driver Home" }} />
+                                <Stack.Screen name="PassengerList" component={PassengerList} options={{ headerTitle: "Passenger List" }} />
+                                <Stack.Screen name="PassengerInfo" component={PassengerInfo} options={{ headerTitle: "Passenger Info" }} />
 
                                 {/* Passenger Pages */}
-                                <Stack.Screen name="PassengerHomePage" component={PassengerHomePage} />
-                                <Stack.Screen name="PassengerMap" component={PassengerMap} />
-                                <Stack.Screen name="PassengerAdvertise" component={PassengerAdvertise} />
+                                <Stack.Screen name="PassengerHomePage" component={PassengerHomePage} options={{ headerTitle: "Passenger Home" }} />
+                                <Stack.Screen name="PassengerMap" component={PassengerMap} options={{ headerTitle: "Passenger Map" }} />
+                                <Stack.Screen name="PassengerAdvertise" component={PassengerAdvertise} options={{ headerTitle: "Advertise Ride" }} />
                             </Stack.Group>
                             :
                             <Stack.Group

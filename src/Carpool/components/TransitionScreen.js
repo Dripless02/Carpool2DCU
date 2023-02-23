@@ -7,9 +7,11 @@ import { BACKEND_URL } from "@env";
 const TransitionScreen = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
+    // Function to get the user's driverID from the database
     const getDriverID = () => {
         fetch(`${BACKEND_URL}/api/driver/getDriverID/${currentUser.userID}`)
             .then((response) => {
+                // If the user's driverID was retrieved successfully, set the current user's driverID to the retrieved ID
                 if (response.ok) {
                     response.json().then((data) => {
                         console.log("driverID =", data);
@@ -25,6 +27,7 @@ const TransitionScreen = ({ navigation }) => {
             });
     }
 
+    // Get the user's driverID when currentUser.userID changes
     useEffect(() => {
         getDriverID();
     }, [currentUser.userID])

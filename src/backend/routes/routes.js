@@ -5,7 +5,9 @@ import Driver from "../models/Driver.js";
 
 const router = express.Router();
 
+// Route to register a new user
 router.post("/register", (req, res) => {
+    // Encrypt the password before saving it to the database
     bcrypt.hash(req.body.password, 10)
     .then(hashedPassword => {
         const user = new User({
@@ -25,6 +27,7 @@ router.post("/register", (req, res) => {
 
         user.save()
         .then(result => {
+            // Create a new driver document for the user
             Driver.create({ userID: result._id, acceptedPassengers: [], name: result.name })
             res.status(201).send({ message: "User registered successfully", result })
         })
@@ -37,9 +40,11 @@ router.post("/register", (req, res) => {
     })
 })
 
+// Route to login a user
 router.post("/login", (req, res) => {
     User.findOne({ email: req.body.email })
     .then((user) => {
+        // Check if the password is correct
         bcrypt.compare(req.body.password, user.password)
         .then((passwordCheck) => {
             if (!passwordCheck) {
@@ -57,6 +62,7 @@ router.post("/login", (req, res) => {
     })
 })
 
+// Route to get a user's details by ID
 router.get("/getUserDetails/:id", (req, res) => {
     User.findById({ _id: req.params.id })
     .then((user) => {

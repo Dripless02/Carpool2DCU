@@ -4,8 +4,10 @@ import { Rating } from "react-native-ratings"
 import { BACKEND_URL } from "@env"
 
 const DriverRating = ({ key, ride, send }) => {
+    // State to store the rating
     const [rating, setRating] = useState(3);
 
+    // Function to send the rating to the backend
     if (send === true) {
         console.log(`Rating for ${ride.name} is ${rating}!`)
         fetch(`${BACKEND_URL}/api/driver/rate`, {

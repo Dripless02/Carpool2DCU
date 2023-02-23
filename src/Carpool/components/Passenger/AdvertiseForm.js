@@ -9,8 +9,9 @@ import InputSpinner from "react-native-input-spinner";
 
 const AdvertiseForm = ({navigation, route}) => {
     const [currentUser] = useContext(CurrentUserContext);
-    const [coords, setCoords] = useState(null);
+
     const [name, setName] = useState(currentUser.name);
+    const [coords, setCoords] = useState(null);
     const [departureTime, setDepartureTime] = useState("12:15");
     const [gender, setGender] = useState("");
     const [noOfPassengers, setNoOfPassengers] = useState(1);
@@ -29,11 +30,14 @@ const AdvertiseForm = ({navigation, route}) => {
         setDepartureTime(`${hours}:${minutes}`);
     }
 
+    // Set coords to the coords passed in from the previous screen when the page loads
     useEffect(() => {
         setCoords(route.params.coords);
     }, [])
 
+    // Function to add a passenger to the database
     const addPassenger = () => {
+        // If the user has entered an invalid number of passengers, alert them and return
         if (noOfPassengers === "" || noOfPassengers === 0) {
             Alert.alert(
                 "Invalid Passenger Number",
@@ -43,6 +47,8 @@ const AdvertiseForm = ({navigation, route}) => {
             )
             return;
         }
+
+        // Fetch request to add the passenger to the database
         fetch(`${BACKEND_URL}/api/passengers/add`, {
             method: "POST",
             headers: { "Content-Type": "application/json", },
@@ -60,6 +66,7 @@ const AdvertiseForm = ({navigation, route}) => {
             }),
         })
         .then((response) => {
+            // If the passenger was added successfully, navigate to the passenger home page
             if (response.status === 201) {
                 console.log("Passenger added successfully");
                 navigation.navigate("PassengerHomePage");

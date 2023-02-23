@@ -10,6 +10,7 @@ dotenv.config();
 
 const mongoUrl = process.env.DATABASE_URL;
 
+// Connect to the database
 mongoose.connect(mongoUrl);
 const database = mongoose.connection;
 
@@ -21,15 +22,18 @@ database.once("connected", () => {
     console.log("Connected to database");
 });
 
+// Create the express app and set up middleware
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+// Start the server on port 3000
 app.listen(3000, () => {
     console.log("Server started on port 3000");
 });
 
+// Set up routes
 app.use("/api", routes);
 app.use("/api/passengers", pasengerRoutes);
 app.use("/api/driver", driverRoutes);

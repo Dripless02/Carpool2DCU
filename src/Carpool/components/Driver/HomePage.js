@@ -1,6 +1,6 @@
-import { StyleSheet, ImageBackground } from 'react-native'
+import { StyleSheet, ImageBackground, View } from 'react-native'
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, IconButton, List, Modal, Portal, Card, Provider, Snackbar, Text, Avatar } from 'react-native-paper';
+import { Button, IconButton, List, Modal, Portal, Card, Snackbar, Text } from 'react-native-paper';
 import { BACKEND_URL, ORS_API_KEY } from "@env";
 import MapView, {Geojson, Marker}from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
@@ -153,27 +153,22 @@ const HomePage = ({ navigation, route }) => {
 
 
     return (
-        <Provider> {/** Provider for snackbar */}
+        <View style={{ flex: 1, justifyContent: 'center' }}>
             <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
-            <Card style={{marginTop: 90, shadowColor: "#000",
-        shadowOffset: { width: 0, height: 5, },
-        shadowOpacity: 0.4,}}>
+            <Card style={{marginVertical: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 5, }, shadowOpacity: 0.4 }}>
                 <Card.Content style={{ alignItems: "center" }}>
-                        <Avatar.Icon icon="account" size={100} />
-                        <Text style={{fontSize: 30, fontWeight: 'bold',textAlign: 'center', marginBottom: 5}}>Welcome {currentUser.name}!</Text>
-                    </Card.Content>
+                    <Text style={{fontSize: 30, fontWeight: 'bold',textAlign: 'center', marginBottom: 5}}>Welcome {currentUser.name}!</Text>
+                </Card.Content>
                 <Card.Content>
                 <MapView
                         provider='google'
-                        style={{ height: 250, borderRadius: 10, marginBottom: 10 }}
+                        style={{ height: 300, borderRadius: 10, marginBottom: 10 }}
                         initialRegion={{
                             latitude: currentUser.coords.latitude,
                             longitude: currentUser.coords.longitude,
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
-                        showsUserLocation={true}
-                        showsMyLocationButton={true}
                         ref={mapRef}
                     > {/** Map view for driver hompage */}
                         <Marker
@@ -211,13 +206,18 @@ const HomePage = ({ navigation, route }) => {
                                 /> // Marker for passenger's location
                             )
                         })}
-                        {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />} {/** Geojson for route */}
-                    </MapView>
-                </Card.Content>
-
+                        {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />}
+                </MapView>
                 <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate('PassengerList')} style={styles.button} contentStyle={{ padding: 25 }}>
-                View Passenger List
-            </Button>
+                    View Passenger List
+                </Button>
+
+                {acceptedPassengers.length > 0 ?
+                    <Button mode='contained-tonal' style={styles.button2} onPress={showModal} contentStyle={{ padding: 20 }}>
+                        Current Ride
+                    </Button> : null}
+
+                </Card.Content>
             </Card>
 
             {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >  {/** Snackbar for passenger added */}
@@ -258,17 +258,15 @@ const HomePage = ({ navigation, route }) => {
                     </Button>   {/** Button for finishing rating */}
                 </Modal>
             </Portal>
-            <Button mode='contained-tonal' style={styles.button2} onPress={showModal}>
-                My Ride
-            </Button>
-        </Provider>
+
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     button: {
         borderRadius: 35,
-        marginTop: 30,
+        marginTop: 25,
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
@@ -286,8 +284,7 @@ const styles = StyleSheet.create({
     },
     button2: {
         borderRadius: 30,
-        marginLeft: 300,
-        marginTop: 20,
+        marginHorizontal: 20,
         shadowColor: "#000",shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5,
     },
     containerH: {
