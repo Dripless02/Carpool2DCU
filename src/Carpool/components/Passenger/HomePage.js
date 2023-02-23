@@ -14,7 +14,7 @@ const HomePage = ({ navigation }) => {
     const [completedRides, setCompletedRides] = useState([]);
     const isFirstRender = useRef(true);
     const showAcceptedModal = () => setAcceptedModalVisible(true);
-    const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false) };
+    const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false)};
     const showCompletedModal = () => setCompletedModalVisible(true);
     const hideCompletedModal = () => { acknowledgeRides(completedRides); setCompletedModalVisible(false) };
 

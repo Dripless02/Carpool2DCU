@@ -5,7 +5,7 @@ import { ActivityIndicator, Button, Dialog, List, Portal, SegmentedButtons, Text
 import InputSpinner from "react-native-input-spinner";
 import { CurrentUserContext } from "../Context";
 
-
+// PassengerList component
 const PassengerList = ({ navigation }) => {
     const [currentUser] = useContext(CurrentUserContext);
     const [refreshing, setRefreshing] = useState(false);
@@ -22,7 +22,7 @@ const PassengerList = ({ navigation }) => {
 
     const showFilterDialog = () => setFilterDialogVisible(true);
     const hideFilterDialog = () => setFilterDialogVisible(false);
-
+    // useEffect hook
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         setTimeout(() => {
@@ -30,31 +30,32 @@ const PassengerList = ({ navigation }) => {
             setRefreshing(false);
         }, 1000);
     }, [])
-
+    // getPassengers function
     const getPassengers = () => {
         fetch(`${BACKEND_URL}/api/passengers/getAll?userID=${currentUser.userID}`)
             .then((response) => response.json())
             .then((json) => { setPassengers(sortPassengersOnDistanceToDriver(json)); setIsLoading(false); })
             .catch((error) => { console.error(error); setIsLoading(false); });
     };
-
+    // sortPassengersOnDistanceToDriver function
     const sortPassengersOnDistanceToDriver = (passengers) => {
         passengers.map((passenger) => {
+            // calculate the distance between the passenger and the driver
             passenger.distanceToDriver = getDistance(passenger.location.latitude, passenger.location.longitude, currentUser.coords.latitude, currentUser.coords.longitude);
         });
-
+        // sort the passengers by distance to driver
         passengers.sort((a, b) => a.distanceToDriver - b.distanceToDriver);
 
         return passengers;
     }
-
+    // resetFilters function
     const resetFilters = () => {
         setGenderButtonValue("All");
         setMaxPassengersButtonValue(4);
         setDistanceButtonValue(100);
         hideFilterDialog();
     }
-
+    // filterPassengers function
     const getDistance = (lat1, lon1, lat2, lon2) => {
         // use the haversine formula to calculate the distance between two coordinates https://stackoverflow.com/q/18883601
         const R = 6371;
@@ -65,7 +66,7 @@ const PassengerList = ({ navigation }) => {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c;
     }
-
+    // useEffect hook
     useEffect(() => {
         getPassengers();
     }, []);
@@ -77,10 +78,9 @@ const PassengerList = ({ navigation }) => {
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
         >
+            {/* Dialog for sorting passengers */}
             {isLoading ? null :
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
-                    {/* <IconButton icon="sort" onPress={showSortDialog} />
-                    <IconButton icon="filter" onPress={showFilterDialog} /> */}
                     <SegmentedButtons
                         buttons={[
                             { value: "sort", label: "Sort", icon: "sort", style: { backgroundColor: "#E8DEF8" } },
@@ -93,6 +93,7 @@ const PassengerList = ({ navigation }) => {
                     />
                 </View>
             }
+
             {isLoading ? <ActivityIndicator animating={true} color="#f452" size="large" /> : (
                 passengers.filter((passenger) => {
                     if (genderButtonValue === "All") return true;
@@ -119,7 +120,7 @@ const PassengerList = ({ navigation }) => {
                             descriptionNumberOfLines={2}
                             left={props => <List.Icon {...props} icon="seat-passenger" />}
                             style={{ marginBottom: 10, borderRadius: 10, borderWidth: .6, borderColor: '#000' }}
-                        />
+                        /> // list of passengers
                     );
                 })
             )}
@@ -131,17 +132,17 @@ const PassengerList = ({ navigation }) => {
                             title="Distance from you"
                             onPress={() => { setPassengers(sortPassengersOnDistanceToDriver(passengers)); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="map-marker-distance" />}
-                        />
+                        />  {/*List of distance*/}
                         <List.Item
                             title="Name"
                             onPress={() => { setPassengers(passengers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="account" />}
-                        />
+                        /> {/*List of names*/}
                         <List.Item
                             title="Departure time"
                             onPress={() => { setPassengers(passengers.sort((a, b) => a.departureTime.localeCompare(b.departureTime))); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="clock" />}
-                        />
+                        /> {/*List of depature time*/}
                         <Dialog.Actions>
                             <Button onPress={hideSortDialog}>Cancel</Button>
                         </Dialog.Actions>
@@ -158,7 +159,7 @@ const PassengerList = ({ navigation }) => {
                                 value={genderButtonValue}
                                 onValueChange={setGenderButtonValue}
                                 buttons={[{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }, { value: "Other", label: "Other" }]}
-                            />
+                            />  {/*Input for gender*/}
                         </View>
                         <View style={{ paddingVertical: 10, alignItems: "center" }}>
                             <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Max number of passengers</Text>
@@ -170,7 +171,7 @@ const PassengerList = ({ navigation }) => {
                                 onChange={setMaxPassengersButtonValue}
                                 skin="paper"
                                 rounded={false}
-                            />
+                            />  {/*Input for max number of passengers*/}
                         </View>
                         <View style={{ paddingVertical: 10, alignItems: "center" }}>
                             <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Radius (km)</Text>
@@ -182,7 +183,7 @@ const PassengerList = ({ navigation }) => {
                                 onChange={setDistanceButtonValue}
                                 skin="paper"
                                 rounded={false}
-                            />
+                            />  {/*Input for radius*/}
                         </View>
                         <Dialog.Actions>
                             <Button onPress={resetFilters}>Remove Filters</Button>
