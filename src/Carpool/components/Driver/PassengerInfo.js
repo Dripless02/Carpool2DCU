@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
-import { Avatar, Button, Card, Text } from 'react-native-paper';
+import React, { useContext, useEffect, useState } from 'react';
+import { Button, Card, Text } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native'
 import MapView, { Marker } from 'react-native-maps';
 import { CurrentUserContext } from "../Context";
-import { BACKEND_URL } from "@env";
+import { BACKEND_URL, ORS_API_KEY } from "@env";
 
 const PassengerInfo = ({ route, navigation }) => {
     const [currentUser] = useContext(CurrentUserContext);
+    const [routeDistance, setRouteDistance] = useState(0);
+    const [routeDuration, setRouteDuration] = useState(0);
+
     const passenger = route.params.passenger;
 
     const acceptPassenger = () => {
@@ -31,21 +34,47 @@ const PassengerInfo = ({ route, navigation }) => {
             });
     };
 
+    const getRoute = () => {
+        console.log(`Getting route from ${currentUser.coords.longitude}, ${currentUser.coords.latitude} to ${passenger.location.longitude}, ${passenger.location.latitude}`)
+        if (passenger.location.latitude === currentUser.coords.latitude && passenger.location.longitude === currentUser.coords.longitude) {
+            console.log("Same location");
+            setRouteDistance("0");
+            setRouteDuration("0");
+            return;
+        }
+
+        fetch(`https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key=${ORS_API_KEY}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({"coordinates": [[currentUser.coords.longitude, currentUser.coords.latitude], [passenger.location.longitude, passenger.location.latitude]], "units": "km"}),
+        })
+        .then((response) => {
+            response.json()
+            .then((data) => {
+                setRouteDistance(data.features[0].properties.summary.distance);
+                setRouteDuration((data.features[0].properties.summary.duration / 60).toFixed());
+            })
+            .catch((error) => { console.log(1, error); getRoute(); })
+        })
+        .catch((error) => { console.log(2, error); getRoute(); })
+    }
+
+    useEffect(() => {
+        getRoute();
+    }, [])
+
 
     let description = ``;
-    if (passenger.noOfPassengers === 1) { description += `There is one person on this ride`; }
-    else { description += `There are ${passenger.noOfPassengers} people on this ride.`; }
+    if (passenger.noOfPassengers === 1) { description += `There is one passenger on this ride`; }
+    else { description += `There are ${passenger.noOfPassengers} passengers on this ride.`; }
     return (
-        <View style={styles.card}>
+        <View style={styles.container}>
             <Card style={styles.card}>
-                <Card.Content style={{ alignItems: "center" }}>
-                    <Avatar.Icon icon="account" size={100} />
-                </Card.Content>
                 <Text style={styles.title}>{passenger.name}</Text>
                 <Card.Content>
                     <MapView
                         provider='google'
-                        style={{ height: 200, borderRadius: 20, marginBottom: 10 }}
+                        style={{ height: 350, borderRadius: 20, marginBottom: 10 }}
                         initialRegion={{
                             latitude: passenger.location.latitude,
                             longitude: passenger.location.longitude,
@@ -64,8 +93,12 @@ const PassengerInfo = ({ route, navigation }) => {
                     </MapView>
                 </Card.Content>
                 <Card.Content>
-                    <Text style={styles.info}>{passenger.name} will be leaving at {passenger.departureTime}</Text>
+                    <Text style={styles.info}>{passenger.name} would like to be picked up at {passenger.departureTime}</Text>
                     <Text style={styles.info}>{description}</Text>
+                    {passenger.searchQuery ? <Text style={styles.info}>Their search query: {passenger.searchQuery}</Text> : null}
+                    {console.log(JSON.stringify(passenger))}
+                    {routeDistance ? <Text style={styles.info}>Estimated driving distance: {routeDistance} km</Text> : null}
+                    {routeDuration && routeDuration !== 'NaN' ? <Text style={styles.info}>Estimated time: {routeDuration} minutes</Text> : null}
                 </Card.Content>
                 <Button style={styles.button} mode="contained" onPress={() => {
                     console.log(`Driver accepted ${passenger.name}'s ride`)
@@ -80,18 +113,21 @@ const PassengerInfo = ({ route, navigation }) => {
 
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     title: {
         fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
-        marginTop: 5,
         marginBottom: 10,
     },
     card: {
-        paddingTop: 20,
+        paddingTop: 10,
         borderRadius: 30,
-        padding: 5,
-        marginTop: 20,
+        margin: 5,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4, },
         shadowOpacity: 0.4,
