@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, HelperText } from "react-native-paper";
 import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
@@ -12,27 +12,21 @@ const LoginScreen = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
 
     const checkValidEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
-            console.log("email is valid");
+        if (email.match(/^([\w.%+-]+)(@mail\.dcu\.ie)/i)) {
             return true;
         } else if (email === "") {
-            console.log("email is empty");
             return false;
         } else {
-            console.log("email is invalid");
             return false;
         }
     };
 
     const checkValidPassword = (password) => {
         if (password.length >= 8) {
-            console.log("password is valid");
             return true;
         } else if (password === "") {
-            console.log("password is empty");
             return false;
         } else {
-            console.log("password is too short");
             return false;
         }
     };
@@ -80,7 +74,6 @@ const LoginScreen = ({ navigation }) => {
         }
     };
 
-
     const devLogin = () => {
         fetch(`${BACKEND_URL}/api/login`, {
             method: "POST",
@@ -92,8 +85,6 @@ const LoginScreen = ({ navigation }) => {
                 console.log("ok");
                 console.log(JSON.stringify(response));
                 response.json().then((data) => {
-                    // createDriver(data.id);
-                    // setCurrentUser({ ...currentUser, loggedIn: true, userID: data.id });
                     getUserDetails(data.id);
                     console.log("User ID: " + data.id);
                 });
@@ -110,7 +101,11 @@ const LoginScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
                 <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} autoCapitalize="none" />
+                {email.length > 0 && !email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
+
                 <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} autoCapitalize="none" />
+                {password.length < 8 ? <HelperText type="info" >Password must be at least 8 characters</HelperText> : null}
+
                 <View style={{alignItems: "center"}}>
                     <Button
                         style={styles.button}

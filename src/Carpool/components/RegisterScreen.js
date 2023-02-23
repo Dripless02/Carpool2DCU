@@ -1,7 +1,7 @@
 import { BACKEND_URL, GEOCODE_API_KEY } from "@env";
 import React, { useContext, useState } from "react";
 import { SafeAreaView, StyleSheet, View } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, HelperText } from "react-native-paper";
 import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
 
@@ -12,46 +12,40 @@ const RegisterScreen = () => {
     const [address, setAddress] = useState("");
     const [loggedIn, setLoggedIn] = useContext(LoginContext);
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
+    const [invalidAddress, setInvalidAddress] = useState(false);
 
     const checkValidEmail = (email) => {
-        if (email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i)) {
-            console.log("email is valid");
+        if (email.match(/^([\w.%+-]+)(@mail\.dcu\.ie)/i)) {
             return true;
         } else if (email === "") {
-            console.log("email is empty");
             return false;
         } else {
-            console.log("email is invalid");
             return false;
         }
     };
 
     const checkValidPassword = (password) => {
         if (password.length >= 8) {
-            console.log("password is valid");
             return true;
         } else if (password === "") {
-            console.log("password is empty");
             return false;
         } else {
-            console.log("password is too short");
             return false;
         }
     };
 
-    const createDriver = (userID) => {
-        fetch(`${BACKEND_URL}/api/driver/add/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ userID: userID }),
-        })
-    }
+    const checkValidString = (string) => {
+        if (string.match(/^[\w ,.]{3,}$/i)) {
+            return true;
+        }
+        return false;
+    };
 
     const register = async () => {
-        console.log("Register Button Pressed");
         const coords = { latitude: 0, longitude: 0 }
-        const validEmail = checkValidEmail(email);
-        const validPassword = checkValidPassword(password);
+        if (!checkValidEmail(email) || !checkValidPassword(password)|| !checkValidString(name) || !checkValidString(address)) {
+            return;
+        }
 
         if (!address.toLowerCase().includes("ireland")) {
             setAddress(address + ", Ireland")
@@ -61,56 +55,62 @@ const RegisterScreen = () => {
         const geoData = await response.json();
 
         if (geoData.resourceSets[0].estimatedTotal === 0) {
-            console.log("Address is invalid");
+            setInvalidAddress(true);
             return;
         }
 
         coords.latitude = geoData.resourceSets[0].resources[0].point.coordinates[0];
         coords.longitude = geoData.resourceSets[0].resources[0].point.coordinates[1];
 
-        if (validEmail && validPassword && name !== "" && address !== "") {
-            fetch(`${BACKEND_URL}/api/register`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    password: password,
-                    address: address,
-                    coordinates: coords
-                }),
-            })
-            .then((response) => {
-                if (response.ok) {
-                    console.log("Registration successful");
-                    response.json().then(data => {
-                            setCurrentUser({
-                            ...currentUser,
-                            userID: data.result._id,
-                            name: data.result.name,
-                            email: data.result.email,
-                            address: data.result.address,
-                            coords: data.result.coordinates
-                        })
-                        createDriver(data.result._id);
-                    });
-                    setLoggedIn(true);
-                } else {
-                    console.log("Registration failed");
-                    response.json().then(data => console.log(data));
-                }
-            })
-            .catch((error) => { console.error(error); })
-        }
+        fetch(`${BACKEND_URL}/api/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                password: password,
+                address: address,
+                coordinates: coords
+            }),
+        })
+        .then((response) => {
+            if (response.ok) {
+                console.log("Registration successful");
+                response.json().then(data => {
+                    setCurrentUser({
+                        ...currentUser,
+                        userID: data.result._id,
+                        name: data.result.name,
+                        email: data.result.email,
+                        address: data.result.address,
+                        coords: data.result.coordinates
+                    })
+                })
+                setLoggedIn(true);
+            } else {
+                console.log("Registration failed");
+                response.json().then(data => console.log(data));
+            }
+        })
+        .catch((error) => { console.error(error); });
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
                 <TextInputField label="Name" onChangeText={text => setName(text)} />
+                {name.length > 0 && !name.match(/^[a-zA-Z0-9 ,.]{3,}$/) ? <HelperText type="info">Name must be longer than 3 characters</HelperText> : null}
+
                 <TextInputField label="Email" type="email-address" onChangeText={text => setEmail(text)} />
+                {email.length > 0 && !email.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i) ? <HelperText type="info">Email is invalid</HelperText> : null}
+
                 <TextInputField label="Password" secureText={true} onChangeText={text => setPassword(text)} />
+                {password.length < 8 ? <HelperText type="info" >Password must be at least 8 characters</HelperText> : null}
+
                 <TextInputField label="Address" onChangeText={text => setAddress(text)} />
+                {address.length > 0 && !address.match(/^[a-zA-Z0-9 ,.]{3,}$/)? <HelperText type="info">Address is required</HelperText> : null}
+                {invalidAddress ? <HelperText type="error">Address is invalid</HelperText> : null}
+
                 <View style={{alignItems: "center"}}>
                     <Button
                         style= {{marginTop: 20, width: 200}}

@@ -25,7 +25,7 @@ router.post("/register", (req, res) => {
 
         user.save()
         .then(result => {
-            Driver.create({ userID: result._id, acceptedPassengers: [] })
+            Driver.create({ userID: result._id, acceptedPassengers: [], name: result.name })
             res.status(201).send({ message: "User registered successfully", result })
         })
         .catch(error => {

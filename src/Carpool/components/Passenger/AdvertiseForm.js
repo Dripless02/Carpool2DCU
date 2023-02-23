@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "@env";
 import React, { useContext, useEffect, useState } from 'react'
 import { View, SafeAreaView, StyleSheet, Alert } from 'react-native'
-import { Button, SegmentedButtons, Text } from 'react-native-paper'
+import { Button, HelperText, SegmentedButtons, Text } from 'react-native-paper'
 import TextInputField from "../TextInputField"
 import { TimePickerModal } from 'react-native-paper-dates';
 import { CurrentUserContext } from "../Context";
@@ -73,6 +73,7 @@ const AdvertiseForm = ({navigation, route}) => {
     return (
         <SafeAreaView style={styles.container}>
             <TextInputField label="Name" onChangeText={text => setName(text)} value={name}/>
+            <HelperText type="info" visible={true}>Only change if you wish to use a different name</HelperText>
             <View style={{ paddingVertical: 10, alignItems: "center" }}>
                 <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Number of Passengers</Text>
                 <InputSpinner
@@ -85,6 +86,7 @@ const AdvertiseForm = ({navigation, route}) => {
                     rounded={false}
                     style={{ marginBottom: 10 }}
                 />
+                <HelperText type="info" visible={true}>Maximum of 4 passengers</HelperText>
             </View>
             <View style={{ marginHorizontal: 20, marginVertical: 10, alignItems: "center"}}>
                 <Text variant="displayLarge" >{departureTime}</Text>
