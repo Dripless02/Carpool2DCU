@@ -7,17 +7,23 @@ import DriverRating from "./DriverRating";
 
 const HomePage = ({ navigation }) => {
     const [currentUser, setCurrentUser] = useContext(CurrentUserContext);
-    const [acceptedModalVisible, setAcceptedModalVisible] = useState(false);
-    const [completedModalVisible, setCompletedModalVisible] = useState(false);
+
     const [currentRides, setCurrentRides] = useState([]);
     const [acceptedRides, setAcceptedRides] = useState([]);
     const [completedRides, setCompletedRides] = useState([]);
+    const [acceptedModalVisible, setAcceptedModalVisible] = useState(false);
+    const [completedModalVisible, setCompletedModalVisible] = useState(false);
+
+    // Ref to check if this is the first render
     const isFirstRender = useRef(true);
+
     const showAcceptedModal = () => setAcceptedModalVisible(true);
     const hideAcceptedModal = () => { acknowledgeRides(acceptedRides); setAcceptedModalVisible(false) };
+
     const showCompletedModal = () => setCompletedModalVisible(true);
     const hideCompletedModal = () => { acknowledgeRides(completedRides); setCompletedModalVisible(false) };
 
+    // Function to get the user's current rides from the database and store them in the currentRides state
     const getRides = () => {
         fetch(`${BACKEND_URL}/api/passengers/get?userID=${currentUser.userID}`)
             .then((response) => response.json())
@@ -29,6 +35,7 @@ const HomePage = ({ navigation }) => {
             })
     }
 
+    // Function to check the status of the current rides and store them in the acceptedRides and completedRides states
     const checkStatus = () => {
         let accRides = [], compRides = [];
         for (let i = 0; i < currentRides.length; i++) {
@@ -42,6 +49,7 @@ const HomePage = ({ navigation }) => {
         setCompletedRides(compRides);
     }
 
+    // Function to acknowledge the rides in the acceptedRides and completedRides states
     const acknowledgeRides = (rides) => {
         rides.forEach((ride) => {
             fetch(`${BACKEND_URL}/api/passengers/acknowledge?passengerID=${ride._id}`, {
@@ -59,10 +67,13 @@ const HomePage = ({ navigation }) => {
                 })
         })
     }
+
+    // Get the user's current rides when the page loads
     useEffect(() => {
         getRides()
     }, [])
 
+    // Check the status of the current rides when the currentRides state changes
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false;
@@ -72,6 +83,7 @@ const HomePage = ({ navigation }) => {
         checkStatus()
     }, [currentRides])
 
+    // Show the accepted and completed modals when the acceptedRides and completedRides states change respectively
     useEffect(() => {
         if (isFirstRender.current) {
             isFirstRender.current = false;
@@ -85,14 +97,15 @@ const HomePage = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground} />
-            <Card style={{ marginTop: 120, shadowColor: "#000",shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5}}>
+            <Card style={{ marginTop: 120, shadowColor: "#000", shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5 }}>
                 <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
                     <Avatar.Icon icon="account" size={100} />
-                    <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>Welcome {currentUser.name}!</Text>
+                    <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>
+                        Welcome {currentUser.name}!
+                    </Text>
                 </Card.Content>
                 <Card.Cover style={{ marginHorizontal: 10 }} source={require('../../assets/passenger.png')} />
                 <Card.Content>
-
                     <Button
                         icon="map"
                         mode="contained"
@@ -111,13 +124,25 @@ const HomePage = ({ navigation }) => {
                         fontWeight: 'bold',
                         textAlign: 'center',
                         marginBottom: 5
-                    }}>Your Ride has been accepted by a driver</Text>
+                    }}>
+                        Your Ride has been accepted by a driver
+                    </Text>
+                    {/* For each accepted ride, render text that shows who has accepted your ride */}
                     {acceptedRides.map((ride, index) => {
                         return (<Text style={{ fontSize: 20, textAlign: 'center', marginBottom: 5 }} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>)
                     })}
                 </Modal>
                 <Modal visible={completedModalVisible} onDismiss={hideCompletedModal} contentContainerStyle={styles.contentContainerStyle} >
-                    <Text style={{ textAlign: "center", paddingBottom: 10 }} variant="titleLarge">Your Ride has been completed</Text>
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            paddingBottom: 10
+                        }}
+                        variant="titleLarge"
+                    >
+                        Your Ride has been completed
+                    </Text>
+                    {/* For each completed ride, show a rating menu for each driver */}
                     {completedRides.map((ride, index) => {
                         console.log("ride", ride)
                         return (<DriverRating key={index} ride={ride} send={!completedModalVisible} />)
@@ -126,7 +151,9 @@ const HomePage = ({ navigation }) => {
                         style={styles.button2}
                         buttonColor="#F10A4C"
                         mode='contained'
-                        onPress={hideCompletedModal}> Finish Rating
+                        onPress={hideCompletedModal}
+                    >
+                        Finish Rating
                     </Button>
                 </Modal>
             </Portal>
