@@ -20,13 +20,13 @@ const AdvertiseForm = ({navigation, route}) => {
 
     const onTimePickerConfirm = ({ hours, minutes }) => {
         setTimePickerVisible(false);
-        setDepartureTime(`${hours}:${Number(minutes) < 10 ? "0" + minutes : minutes}`);
-    }
-
-    const noOfPassengersChange = (text) => {
-        // replace all text except numbers with empty string
-        text = text.replace(/[^0-9]/g, "");
-        setNoOfPassengers(text)
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+        setDepartureTime(`${hours}:${minutes}`);
     }
 
     useEffect(() => {
