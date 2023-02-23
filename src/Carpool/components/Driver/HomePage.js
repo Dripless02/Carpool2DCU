@@ -146,7 +146,9 @@ const HomePage = ({ navigation, route }) => {
     return (
         <Provider>
             <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground}/>
-            <Card style={{marginTop: 90}}>
+            <Card style={{marginTop: 90, shadowColor: "#000",
+        shadowOffset: { width: 0, height: 5, },
+        shadowOpacity: 0.4,}}>
                 <Card.Content style={{ alignItems: "center" }}>
                         <Avatar.Icon icon="account" size={100} />
                         <Text style={{fontSize: 30, fontWeight: 'bold',textAlign: 'center', marginBottom: 5}}>Welcome {currentUser.name}!</Text>
@@ -268,11 +270,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 30,
         borderRadius: 20,
         marginLeft: 70,
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 4, },
+        shadowOpacity: 0.4,
     },
     button2: {
         borderRadius: 30,
         marginLeft: 300,
         marginTop: 20,
+        shadowColor: "#000",shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5,
     },
     containerH: {
         fontSize: 30,
@@ -290,6 +296,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         paddingVertical: 50,
         borderRadius: 20,
+        shadowColor: "#000",shadowOffset: { width: 0, height: 3, }, shadowOpacity: 0.3,
     },
     reviewT: {
         fontSize: 25,

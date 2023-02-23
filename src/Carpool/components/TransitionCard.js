@@ -20,7 +20,7 @@ const TransitionCard = ({ title, description, navigation }) => {
     }, [title]);
 
     return (
-        <Card style={{marginVertical: 10}} onPress={() => {
+        <Card style={{marginVertical: 10, shadowColor: "#000",shadowOffset: { width: 1, height: 5 }, shadowOpacity: 0.5}} onPress={() => {
                 console.log(`user on ${Platform.OS} pressed ${title} card`);
                 navigation.navigate(description);
             }}>

@@ -85,7 +85,7 @@ const HomePage = ({ navigation }) => {
     return (
         <View style={{ flex: 1 }}>
             <ImageBackground source={require('../../assets/dcu.png')} style={styles.ImageBackground} />
-            <Card style={{ marginTop: 120 }}>
+            <Card style={{ marginTop: 120, shadowColor: "#000",shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5}}>
                 <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
                     <Avatar.Icon icon="account" size={100} />
                     <Text style={{ fontSize: 30, fontWeight: 'bold', textAlign: 'center', marginBottom: 5 }}>Welcome {currentUser.name}!</Text>
