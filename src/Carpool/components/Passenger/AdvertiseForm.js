@@ -1,19 +1,20 @@
 import { BACKEND_URL } from "@env";
 import React, { useContext, useEffect, useState } from 'react'
 import { View, SafeAreaView, StyleSheet, Alert } from 'react-native'
-import { Button, SegmentedButtons, Text, TextInput } from 'react-native-paper'
+import { Button, SegmentedButtons, Text } from 'react-native-paper'
 import TextInputField from "../TextInputField"
 import { TimePickerModal } from 'react-native-paper-dates';
 import { CurrentUserContext } from "../Context";
+import InputSpinner from "react-native-input-spinner";
 
 const AdvertiseForm = ({navigation, route}) => {
+    const [currentUser] = useContext(CurrentUserContext);
     const [coords, setCoords] = useState(null);
-    const [name, setName] = useState(null);
+    const [name, setName] = useState(currentUser.name);
     const [departureTime, setDepartureTime] = useState("12:15");
     const [gender, setGender] = useState("");
     const [noOfPassengers, setNoOfPassengers] = useState(1);
     const [timePickerVisible, setTimePickerVisible] = useState(false);
-    const [currentUser] = useContext(CurrentUserContext);
 
     const onTimePickerDismiss = () => setTimePickerVisible(false);
 
@@ -71,16 +72,20 @@ const AdvertiseForm = ({navigation, route}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <TextInputField label="Name" onChangeText={text => setName(text)}/>
-            <TextInput
-                mode="outlined"
-                style={{marginBottom: 5}}
-                label="No. of Passengers"
-                keyboardType="numeric"
-                onChangeText={noOfPassengersChange}
-                maxLength={2}
-                value={noOfPassengers.toString()}
-            />
+            <TextInputField label="Name" onChangeText={text => setName(text)} value={name}/>
+            <View style={{ paddingVertical: 10, alignItems: "center" }}>
+                <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Number of Passengers</Text>
+                <InputSpinner
+                    min={1}
+                    max={4}
+                    step={1}
+                    value={noOfPassengers}
+                    onChange={setNoOfPassengers}
+                    skin="paper"
+                    rounded={false}
+                    style={{ marginBottom: 10 }}
+                />
+            </View>
             <View style={{ marginHorizontal: 20, marginVertical: 10, alignItems: "center"}}>
                 <Text variant="displayLarge" >{departureTime}</Text>
                 <Button mode="outlined" uppercase={false} onPress={() => setTimePickerVisible(true)} style={{width: 200}}>
@@ -96,7 +101,7 @@ const AdvertiseForm = ({navigation, route}) => {
                 />
             </View>
             <View style={{ marginHorizontal: 20, marginVertical: 10, alignItems: "center"}}>
-                <Text>Gender</Text>
+                <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Gender</Text>
                 <SegmentedButtons
                     value={gender}
                     onValueChange={setGender}

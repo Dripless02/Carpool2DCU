@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput } from 'react-native-paper';
 
-const TextInputField = ({ label="Label", type="default", onChangeText, secureText, autoCapitalize="sentences" }) => {
+const TextInputField = ({ label="Label", type="default", onChangeText, secureText, autoCapitalize="sentences", value }) => {
     return (
         <TextInput
             mode="outlined"
@@ -11,6 +11,7 @@ const TextInputField = ({ label="Label", type="default", onChangeText, secureTex
             onChangeText={onChangeText}
             secureTextEntry={secureText}
             autoCapitalize={autoCapitalize}
+            value={value}
         />
     )
 }
