@@ -1,0 +1,230 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PassengerRating renders correctly 1`] = `
+Array [
+  <Text
+    style={
+      Array [
+        Object {
+          "color": "rgba(28, 27, 31, 1)",
+          "fontFamily": "System",
+          "fontSize": 22,
+          "fontWeight": "400",
+          "letterSpacing": 0,
+          "lineHeight": 28,
+        },
+        Object {
+          "textAlign": "left",
+        },
+        Object {
+          "writingDirection": "ltr",
+        },
+        Object {
+          "marginVertical": 5,
+          "textAlign": "center",
+        },
+      ]
+    }
+  >
+    Rate 
+    test
+    !
+  </Text>,
+  <View
+    pointerEvents="auto"
+  >
+    <View
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "column",
+          "justifyContent": "center",
+          "paddingBottom": 5,
+        }
+      }
+    >
+      <View
+        style={
+          Object {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "paddingBottom": 5,
+          }
+        }
+      >
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#34495e",
+                "fontFamily": "Trebuchet MS",
+                "fontSize": 15,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "#f1c40f",
+              },
+            ]
+          }
+        >
+          Rating: 
+        </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "fontFamily": "Trebuchet MS",
+                "fontSize": 30,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "#f1c40f",
+              },
+            ]
+          }
+        >
+          3
+        </Text>
+        <Text
+          style={
+            Array [
+              Object {
+                "color": "#34495e",
+                "fontFamily": "Trebuchet MS",
+                "fontSize": 18,
+                "textAlign": "center",
+              },
+              Object {
+                "color": "#f1c40f",
+              },
+            ]
+          }
+        >
+          /
+          5
+        </Text>
+      </View>
+      <View />
+    </View>
+    <View
+      onMoveShouldSetResponder={[Function]}
+      onMoveShouldSetResponderCapture={[Function]}
+      onResponderEnd={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderReject={[Function]}
+      onResponderRelease={[Function]}
+      onResponderStart={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      onStartShouldSetResponderCapture={[Function]}
+      style={
+        Object {
+          "alignItems": "center",
+          "flexDirection": "row",
+          "justifyContent": "center",
+        }
+      }
+    >
+      <View
+        onLayout={[Function]}
+        style={
+          Object {
+            "alignItems": "center",
+            "bottom": 0,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          }
+        }
+      >
+        <View
+          collapsable={false}
+          style={
+            Object {
+              "backgroundColor": "#f1c40f",
+              "height": 70,
+              "width": 210,
+            }
+          }
+        />
+        <View
+          collapsable={false}
+          style={
+            Object {
+              "backgroundColor": "white",
+              "height": 70,
+              "width": 140,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={1}
+          style={
+            Object {
+              "height": 70,
+              "tintColor": undefined,
+              "width": 70,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={1}
+          style={
+            Object {
+              "height": 70,
+              "tintColor": undefined,
+              "width": 70,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={1}
+          style={
+            Object {
+              "height": 70,
+              "tintColor": undefined,
+              "width": 70,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={1}
+          style={
+            Object {
+              "height": 70,
+              "tintColor": undefined,
+              "width": 70,
+            }
+          }
+        />
+      </View>
+      <View>
+        <Image
+          source={1}
+          style={
+            Object {
+              "height": 70,
+              "tintColor": undefined,
+              "width": 70,
+            }
+          }
+        />
+      </View>
+    </View>
+  </View>,
+]
+`;
