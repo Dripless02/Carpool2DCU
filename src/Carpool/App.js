@@ -13,6 +13,7 @@ import RegisterScreen from "./components/RegisterScreen";
 import PassengerInfo from "./components/Driver/PassengerInfo";
 import PassengerMap from "./components/Passenger/Passenger";
 import PassengerAdvertise from "./components/Passenger/AdvertiseForm";
+import PassengerHistory from "./components/Passenger/History";
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ export default function App() {
                                     <Stack.Screen name="PassengerHomePage" component={PassengerHomePage} options={{ headerTitle: "Passenger Home" }} />
                                     <Stack.Screen name="PassengerMap" component={PassengerMap} options={{ headerTitle: "Passenger Map" }} />
                                     <Stack.Screen name="PassengerAdvertise" component={PassengerAdvertise} options={{ headerTitle: "Advertise Ride" }} />
+                                    <Stack.Screen name="PassengerHistory" component={PassengerHistory} options={{ headerTitle: "Previous Rides" }} />
                                 </Stack.Group>
                                 :
                                 <Stack.Group

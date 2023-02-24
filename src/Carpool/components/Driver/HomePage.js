@@ -38,6 +38,7 @@ const HomePage = ({ navigation, route }) => {
         });
         return passengers.reverse();
     };
+
     // Get accepted passengers from backend
     const getAcceptedPassengers = () => {
         fetch(`${BACKEND_URL}/api/driver/getPassengers/${currentUser.driverID}`, {
@@ -55,6 +56,7 @@ const HomePage = ({ navigation, route }) => {
                 console.error(error);
             });
     };
+
     // Add coords to array
     const addCoords = () => {
 
@@ -64,6 +66,7 @@ const HomePage = ({ navigation, route }) => {
         });
         coordinatesToSend.coordinates.push([-6.255083, 53.386343]);
     };
+
     // Get route from ORS
     const getRoute = (coords) => {
         fetch(`https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key=${ORS_API_KEY}`, {
@@ -80,6 +83,7 @@ const HomePage = ({ navigation, route }) => {
             })
             .catch((error) => { console.log(error); });
     };
+    
     // Delete passenger from driver
     const deletePassenger = (passengerID) => {
         //Fetch request to delete passenger from driver
@@ -157,7 +161,7 @@ const HomePage = ({ navigation, route }) => {
             <ImageBackground source={require("../../assets/dcu.png")} style={styles.ImageBackground}/>
             <Card style={{marginVertical: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 5, }, shadowOpacity: 0.4 }}>
                 <Card.Content style={{ alignItems: "center" }}>
-                    <Text style={{fontSize: 30, fontWeight: "bold",textAlign: "center", marginBottom: 5}}>Welcome {currentUser.name}!</Text>
+                    <Text style={{fontSize: 30, fontWeight: "bold",textAlign: "center", marginBottom: 15}}>Welcome {currentUser.name}!</Text>
                 </Card.Content>
                 <Card.Content>
                     <MapView

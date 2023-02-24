@@ -95,9 +95,9 @@ const HomePage = ({ navigation }) => {
     }, [acceptedRides, completedRides]);
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, justifyContent: "center" }}>
             <ImageBackground source={require("../../assets/dcu.png")} style={styles.ImageBackground} />
-            <Card style={{ marginTop: 120, shadowColor: "#000", shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5 }}>
+            <Card style={{ shadowColor: "#000", shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.5 }}>
                 <Card.Content style={{ alignItems: "center", marginBottom: 10 }}>
                     <Avatar.Icon icon="account" size={100} />
                     <Text style={{ fontSize: 30, fontWeight: "bold", textAlign: "center", marginBottom: 5 }}>
@@ -114,6 +114,15 @@ const HomePage = ({ navigation }) => {
                         contentStyle={{ padding: 25 }}>
                         Click here to start your journey
                     </Button>
+                    <Button
+                        icon="history"
+                        mode="contained-tonal"
+                        onPress={() => navigation.navigate("PassengerHistory")}
+                        style={styles.button}
+                        contentStyle={{ padding: 25 }}
+                    >
+                        Click here to view your ride history
+                    </Button>
                 </Card.Content>
             </Card>
 
@@ -127,7 +136,6 @@ const HomePage = ({ navigation }) => {
                     }}>
                         Your Ride has been accepted by a driver
                     </Text>
-                    {/* For each accepted ride, render text that shows who has accepted your ride */}
                     {acceptedRides.map((ride, index) => {
                         return (<Text style={{ fontSize: 20, textAlign: "center", marginBottom: 5 }} key={index} >{ride.acceptedDriverName} has accepted your ride for {ride.departureTime} to {ride.searchQuery}</Text>);
                     })}
@@ -142,7 +150,6 @@ const HomePage = ({ navigation }) => {
                     >
                         Your Ride has been completed
                     </Text>
-                    {/* For each completed ride, show a rating menu for each driver */}
                     {completedRides.map((ride, index) => {
                         console.log("ride", ride);
                         return (<DriverRating key={index} ride={ride} send={!completedModalVisible} />);
