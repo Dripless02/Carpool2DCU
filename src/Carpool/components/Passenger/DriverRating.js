@@ -3,7 +3,7 @@ import { Text } from "react-native-paper";
 import { Rating } from "react-native-ratings";
 import { BACKEND_URL } from "@env";
 
-const DriverRating = ({ key, ride, send }) => {
+const DriverRating = ({ ride, send }) => {
     // State to store the rating
     const [rating, setRating] = useState(3);
 
@@ -32,9 +32,8 @@ const DriverRating = ({ key, ride, send }) => {
     return (
         <>
             <Text style={{ marginVertical: 5, textAlign: "center" }} variant="titleMedium">{ride.acceptedDriverName}</Text>
-            <Text key={key} style={{ textAlign: "center" }}>{ride.acceptedDriverName} has completed your ride for {ride.departureTime} to {ride.searchQuery}</Text>
+            <Text style={{ textAlign: "center" }}>{ride.acceptedDriverName} has completed your ride for {ride.departureTime} to {ride.searchQuery}</Text>
             <Rating
-                key={key}
                 type='star'
                 ratingCount={5}
                 imageSize={70}

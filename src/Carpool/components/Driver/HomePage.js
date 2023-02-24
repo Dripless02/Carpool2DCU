@@ -229,7 +229,7 @@ const HomePage = ({ navigation, route }) => {
             </Card>
 
             {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >
-                {route.params.message === "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : `Passenger '${route.params.passengerName}' already added to your ride`}
+                {route.params.message !== "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : null}
             </Snackbar> : null}
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
