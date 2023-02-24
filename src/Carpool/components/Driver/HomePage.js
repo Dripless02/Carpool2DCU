@@ -16,6 +16,8 @@ const HomePage = ({ navigation, route }) => {
     const [snackBarVisible, setSnackBarVisible] = useState(false);
     const [routeGeoJSON, setRouteGeoJSON] = useState(null);
     const [bannerVisible, setBannerVisible] = useState(false);
+    const [routeDistance, setRouteDistance] = useState(0);
+    const [routeDuration, setRouteDuration] = useState(0);
     const isFirstRender = useRef(true);
     const mapRef = useRef(null);
 
@@ -78,6 +80,8 @@ const HomePage = ({ navigation, route }) => {
                 response.json()
                     .then((data) => {
                         setRouteGeoJSON(data);
+                        setRouteDistance((data.features[0].properties.summary.distance / 1000).toFixed(2));
+                        setRouteDuration((data.features[0].properties.summary.duration / 60).toFixed());
                     })
                     .catch((error) => { console.log(error); });
             })
@@ -230,6 +234,8 @@ const HomePage = ({ navigation, route }) => {
             <Portal>
                 <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
                     <Text style={styles.containerH}>My Ride</Text>
+                    {routeDistance ? <Text style={styles.info}>Estimated driving distance: {routeDistance} km</Text> : null}
+                    {routeDuration && routeDuration !== "NaN" ? <Text style={styles.info}>Estimated time: {routeDuration} minutes</Text> : null}
                     {acceptedPassengers ? acceptedPassengers.map((passenger) => {
                         return (
                             <List.Item
@@ -286,7 +292,7 @@ const styles = StyleSheet.create({
         paddingVertical: 30,
         paddingHorizontal: 30,
         borderRadius: 20,
-        marginLeft: 70,
+        marginHorizontal: 15,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4, },
         shadowOpacity: 0.4,
@@ -327,8 +333,11 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         position: "absolute",
-    }
-
+    },
+    info: {
+        textAlign: "center",
+        marginBottom: 10,
+    },
 });
 
 export default HomePage;

@@ -99,7 +99,6 @@ const PassengerInfo = ({ route, navigation }) => {
                     <Text style={styles.info}>{passenger.name} would like to be picked up at {passenger.departureTime}</Text>
                     <Text style={styles.info}>{description}</Text>
                     {passenger.searchQuery ? <Text style={styles.info}>Their search query: {passenger.searchQuery}</Text> : null}
-                    {console.log(JSON.stringify(passenger))}
                     {routeDistance ? <Text style={styles.info}>Estimated driving distance: {routeDistance} km</Text> : null}
                     {routeDuration && routeDuration !== "NaN" ? <Text style={styles.info}>Estimated time: {routeDuration} minutes</Text> : null}
                 </Card.Content>

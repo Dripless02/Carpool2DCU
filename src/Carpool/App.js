@@ -63,10 +63,10 @@ export default function App() {
                                 <Stack.Group
                                     screenOptions={{
                                         headerTransparent: true,
-                                        headerTitle: "",
+                                        headerTitle: "Carpool2DCU",
                                     }}
                                 >
-                                    <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}/>
+                                    <Stack.Screen name="Login" component={LoginScreen} />
                                     <Stack.Screen name="Register" component={RegisterScreen} />
                                 </Stack.Group>
                             }
