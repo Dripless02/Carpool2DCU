@@ -6,7 +6,7 @@ import MapView, {Geojson, Marker}from "react-native-maps";
 import { CurrentUserContext } from "../Context";
 import PassengerRating from "./PassengerRating";
 
-// Driver Homepage//
+// Driver Homepage
 const HomePage = ({ navigation, route }) => {
     const [visible, setVisible] = useState(false);
     const showModal = () => setVisible(true);
@@ -170,7 +170,7 @@ const HomePage = ({ navigation, route }) => {
                             longitudeDelta: 0.01,
                         }}
                         ref={mapRef}
-                    > {/** Map view for driver hompage */}
+                    >
                         <Marker
                             coordinate={{
                                 latitude: currentUser.coords.latitude,
@@ -180,7 +180,7 @@ const HomePage = ({ navigation, route }) => {
                             description="Driver's start location"
                             pinColor="blue"
                             identifier="driver"
-                        /> {/** Marker for driver's location */}
+                        />
                         <Marker
                             coordinate={{
                                 latitude: 53.386343,
@@ -189,7 +189,7 @@ const HomePage = ({ navigation, route }) => {
                             title="DCU"
                             pinColor="green"
                             identifier="dcu"
-                        /> {/** Marker for DCU */}
+                        />
                         {acceptedPassengers.map((passenger, index) => {
                             return (
 
@@ -203,7 +203,7 @@ const HomePage = ({ navigation, route }) => {
                                     description={"Passenger Count: " + passenger.noOfPassengers}
                                     pinColor="red"
                                     identifier="passenger"
-                                /> // Marker for passenger's location
+                                />
                             );
                         })}
                         {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />}
@@ -220,11 +220,11 @@ const HomePage = ({ navigation, route }) => {
                 </Card.Content>
             </Card>
 
-            {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >  {/** Snackbar for passenger added */}
-                {route.params.message === "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : `Passenger '${route.params.passengerName}' already added to your ride`}   {/** Snackbar message */}
-            </Snackbar> : null} {/** Snackbar for passenger not added */}
+            {snackBarVisible ? <Snackbar visible={snackBarVisible} onDismiss={onDismissSnackBar} duration={4000} onIconPress={() => { }} >
+                {route.params.message === "PassengerAdded" ? `Passenger '${route.params.passengerName}' added to your ride` : `Passenger '${route.params.passengerName}' already added to your ride`}
+            </Snackbar> : null}
             <Portal>
-                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>    {/** Modal for viewing driver's ride */}
+                <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={styles.container}>
                     <Text style={styles.containerH}>My Ride</Text>
                     {acceptedPassengers ? acceptedPassengers.map((passenger) => {
                         return (
@@ -234,7 +234,8 @@ const HomePage = ({ navigation, route }) => {
                                 title={passenger.name}
                                 description={`Departure Time: ${passenger.departureTime}`}
                                 left={props => <List.Icon {...props} icon="seat-passenger" />}
-                            /> // List item for passenger information
+                            />
+
                         );
                     }) : null}
                     <Button
@@ -246,16 +247,20 @@ const HomePage = ({ navigation, route }) => {
             </Portal>
 
             <Portal>
-                <Modal visible={bannerVisible}  contentContainerStyle={styles.review}>  {/** Modal for rating passengers */}
+                <Modal visible={bannerVisible}  contentContainerStyle={styles.review}>
                     <Text style={styles.reviewT}>Leave feedback for your passengers</Text>
                     {acceptedPassengers ? acceptedPassengers.map((passenger, index) => {
                         return (
-                            <PassengerRating key={index} index={index} passenger={passenger} send={!bannerVisible} />   // Passenger rating component
+                            <PassengerRating key={index} index={index} passenger={passenger} send={!bannerVisible} />
                         );
                     }): null}
-                    <Button style={styles.button3} buttonColor="#F10A4C" mode='contained'
-                        onPress={() => {hideBanner();}}> Finish Rating
-                    </Button>   {/** Button for finishing rating */}
+                    <Button
+                        style={styles.button3}
+                        buttonColor="#F10A4C"
+                        mode='contained'
+                        onPress={() => {hideBanner();}}>
+                        Finish Rating
+                    </Button>
                 </Modal>
             </Portal>
 

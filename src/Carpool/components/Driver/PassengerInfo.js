@@ -71,7 +71,7 @@ const PassengerInfo = ({ route, navigation }) => {
     if (passenger.noOfPassengers === 1) { description += "There is one passenger on this ride"; } // if there is only one passenger on the ride
     else { description += `There are ${passenger.noOfPassengers} passengers on this ride.`; }   // if there are multiple passengers on the ride
     return (
-        <View style={styles.container}> {/** Container for the page */}
+        <View style={styles.container}>
             <Card style={styles.card}>
                 <Text style={styles.title}>{passenger.name}</Text>
                 <Card.Content>
@@ -84,7 +84,7 @@ const PassengerInfo = ({ route, navigation }) => {
                             latitudeDelta: 0.01,
                             longitudeDelta: 0.01,
                         }}
-                    > {/** MapView component */}
+                    >
                         <Marker
                             coordinate={{
                                 latitude: passenger.location.latitude,
@@ -92,16 +92,16 @@ const PassengerInfo = ({ route, navigation }) => {
                             }}
                             title="Pickup Location"
                             description="User's pickup location"
-                        />  {/** Marker component */}
-                    </MapView>  {/** End of MapView component */}
+                        />
+                    </MapView>
                 </Card.Content>
                 <Card.Content>
-                    <Text style={styles.info}>{passenger.name} would like to be picked up at {passenger.departureTime}</Text>   {/** Display the passenger's departure time */}
-                    <Text style={styles.info}>{description}</Text>  {/** Display the number of passengers on the ride */}
-                    {passenger.searchQuery ? <Text style={styles.info}>Their search query: {passenger.searchQuery}</Text> : null}   {/** Display the passenger's search query */}
+                    <Text style={styles.info}>{passenger.name} would like to be picked up at {passenger.departureTime}</Text>
+                    <Text style={styles.info}>{description}</Text>
+                    {passenger.searchQuery ? <Text style={styles.info}>Their search query: {passenger.searchQuery}</Text> : null}
                     {console.log(JSON.stringify(passenger))}
-                    {routeDistance ? <Text style={styles.info}>Estimated driving distance: {routeDistance} km</Text> : null}    {/** Display the estimated driving distance */}
-                    {routeDuration && routeDuration !== "NaN" ? <Text style={styles.info}>Estimated time: {routeDuration} minutes</Text> : null}    {/** Display the estimated driving time */}
+                    {routeDistance ? <Text style={styles.info}>Estimated driving distance: {routeDistance} km</Text> : null}
+                    {routeDuration && routeDuration !== "NaN" ? <Text style={styles.info}>Estimated time: {routeDuration} minutes</Text> : null}
                 </Card.Content>
                 <Button style={styles.button} mode="contained" onPress={() => {
                     console.log(`Driver accepted ${passenger.name}'s ride`);

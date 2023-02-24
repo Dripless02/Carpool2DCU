@@ -33,7 +33,6 @@ const PassengerRating = ({ passenger, index, send }) => {
 
     return (
         <>
-
             <Text style={{ marginVertical: 5, textAlign: "center" }} variant="titleLarge">Rate {passenger.name}!</Text>
             <Rating
                 key={index}
@@ -44,7 +43,7 @@ const PassengerRating = ({ passenger, index, send }) => {
                 showRating
                 startingValue={3}
                 onFinishRating={rating => { setRating(rating); }}
-            />  {/*Rating Component*/}
+            />
         </>
     );
 };
