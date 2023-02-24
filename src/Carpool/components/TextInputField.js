@@ -12,6 +12,7 @@ const TextInputField = ({ label = "Label", type = "default", onChangeText, secur
             secureTextEntry={secureText}
             autoCapitalize={autoCapitalize}
             value={value}
+            testID={label}
         />
     );
 };
