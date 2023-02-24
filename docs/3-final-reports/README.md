@@ -4,15 +4,7 @@ This includes your Video Walkthrough and your Final documentation (Technical Spe
 
 #### Video Walkthrough
 
-Instructions:
-
-* Upload your video walk through to Google Drive.
-* Under sharing, allow anyone with the link to view the video.
-* Place a link to the video above, and uncomment those lines.
-* `git commit -a`, `git push`.
-* Using incognito mode on your browser, verify that the video is indeed accessible to anybody with the link.
-
-**Remember that your video duration is limited to an maximum of 5 minutes.**
+https://drive.google.com/file/d/13BZeP7AVUG8CJCC2XpsFI_nEIylFqgYY/view?usp=sharing
 
 #### Final documentation (in PDF) 
 The final documentation includes:
