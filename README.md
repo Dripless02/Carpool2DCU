@@ -1,28 +1,30 @@
-# CA326 template repo
+# Carpool2DCU 
 
-This is a template for CA326 projects.
+Carpool2DCU is a mobile carpooling application that is operational on both Android and IOS devices. It aims at getting DCU students to campus while reducing their digital footprint, as well as decreasing transportation costs throughout the university. The application was developed with ease of use in mind as well as respect for individual constraints, which is why students can filter their ideal partner out of available ones.
 
-## 1. Create your repo
+The application works by allowing registered students to create a profile, which includes their name, email address, and preferences such as the preferred route and time of travel. Drivers can then offer rides to other students who have matching preferences.
 
-One person from your project team should fork this repo, then add other teammates as project members on GitLab.
-
-## 2. Name your repo appropriately
-
-The name of your repo must be of the form `2023-ca326-XXXXXXX`, where "`XXXXXXX`"
-should be replaced with your usernames (e.g. `2023-ca326-sblott-pclarke`).
-
-**Note** that the year should be set as appropriate to your year of study. For example, in the
-2023/2024 academic year this would change to `2024-ca326-sblott-pclarke`),
-in the 2024/2025 academic year this would change to `2025-ca326-sblott-pclarke`), etc.
-
-It is the *name of your repo* which matters (not the name of your project).
-
-You can change the name of your repo on GitLab under:
-
-- Settings / General / Advanced / Change path
-
-It looks like this:
-
-![change-repo-path](./res/repo-change-path.png "Change repo path.")
-
-You should replace all of this file with a README describing your own project.
+## Contributors
+Adrian Irwin (20415624)  
+Afolabi Fatogun (20409054)  
+## Install Guide
+### Prerequisites
+- NodeJS LTS + npm  
+- Expo Go mobile application from either the IOS or Android store.  
+- Two terminals  
+### Step 1
+Clone this repo
+### Step 2
+In one terminal, go to the frontend folder: `cd src/Carpool` and run `npm i`
+### Step 3
+Create a ‘.env’ file using ‘.env.example’ and fill in the environment variables.
+### Step 4
+Run the frontend using `npm start`
+### Step 5
+In a second terminal, go to the backend folder: `cd src/backend` and run `npm i`
+### Step 6
+Create a ‘.env’ file using ‘.env.example’ and fill in the environment variables.
+### Step 7
+Run the backend using `npm start`
+### Step 8
+Scan the QR code in the first terminal using your camera to open the application.
