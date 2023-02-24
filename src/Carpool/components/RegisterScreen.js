@@ -1,6 +1,6 @@
 import { BACKEND_URL, GEOCODE_API_KEY } from "@env";
 import React, { useContext, useState } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
@@ -107,7 +107,10 @@ const RegisterScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+        >
             <View style={{width: "80%"}}>
                 <TextInputField label="Name" onChangeText={text => setName(text)} />
                 {name.length > 0 && !name.match(/^[\w ,.]{3,}$/i) ? <HelperText type="info">Name must be longer than 3 characters</HelperText> : null}
@@ -132,7 +135,7 @@ const RegisterScreen = () => {
                     </Button>
                 </View>
             </View>
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 };
 

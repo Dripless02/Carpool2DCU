@@ -1,6 +1,6 @@
 import { BACKEND_URL } from "@env";
 import React, { useContext, useState } from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from "react-native";
 import { Button, HelperText } from "react-native-paper";
 import { LoginContext, CurrentUserContext } from "./Context";
 import TextInputField from "./TextInputField";
@@ -94,7 +94,10 @@ function LoginScreen({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.container}
+        >
             <View style={{ width: "80%" }}>
 
                 <TextInputField
@@ -140,7 +143,7 @@ function LoginScreen({ navigation }) {
                     </Button>
                 </View>
             </View>
-        </SafeAreaView>
+        </KeyboardAvoidingView>
     );
 }
 
