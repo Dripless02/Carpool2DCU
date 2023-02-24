@@ -109,7 +109,6 @@ const RegisterScreen = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{width: "80%"}}>
-                {/* If the name, email, password or address are invalid, show a helper text for what is invalid */}
                 <TextInputField label="Name" onChangeText={text => setName(text)} />
                 {name.length > 0 && !name.match(/^[\w ,.]{3,}$/i) ? <HelperText type="info">Name must be longer than 3 characters</HelperText> : null}
 

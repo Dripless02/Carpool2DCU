@@ -83,7 +83,7 @@ const HomePage = ({ navigation, route }) => {
             })
             .catch((error) => { console.log(error); });
     };
-    
+
     // Delete passenger from driver
     const deletePassenger = (passengerID) => {
         //Fetch request to delete passenger from driver

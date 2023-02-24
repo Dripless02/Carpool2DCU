@@ -78,7 +78,6 @@ const PassengerList = ({ navigation }) => {
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
         >
-            {/* Dialog for sorting passengers */}
             {isLoading ? null :
                 <View style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
                     <SegmentedButtons
@@ -120,7 +119,7 @@ const PassengerList = ({ navigation }) => {
                             descriptionNumberOfLines={2}
                             left={props => <List.Icon {...props} icon="seat-passenger" />}
                             style={{ marginBottom: 10, borderRadius: 10, borderWidth: .6, borderColor: "#000" }}
-                        /> // list of passengers
+                        />
                     );
                 })
             )}
@@ -132,17 +131,17 @@ const PassengerList = ({ navigation }) => {
                             title="Distance from you"
                             onPress={() => { setPassengers(sortPassengersOnDistanceToDriver(passengers)); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="map-marker-distance" />}
-                        />  {/*List of distance*/}
+                        />
                         <List.Item
                             title="Name"
                             onPress={() => { setPassengers(passengers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="account" />}
-                        /> {/*List of names*/}
+                        />
                         <List.Item
                             title="Departure time"
                             onPress={() => { setPassengers(passengers.sort((a, b) => a.departureTime.localeCompare(b.departureTime))); hideSortDialog(); }}
                             left={props => <List.Icon {...props} icon="clock" />}
-                        /> {/*List of depature time*/}
+                        />
                         <Dialog.Actions>
                             <Button onPress={hideSortDialog}>Cancel</Button>
                         </Dialog.Actions>
@@ -159,7 +158,7 @@ const PassengerList = ({ navigation }) => {
                                 value={genderButtonValue}
                                 onValueChange={setGenderButtonValue}
                                 buttons={[{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }, { value: "Other", label: "Other" }]}
-                            />  {/*Input for gender*/}
+                            />
                         </View>
                         <View style={{ paddingVertical: 10, alignItems: "center" }}>
                             <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Max number of passengers</Text>
@@ -171,7 +170,7 @@ const PassengerList = ({ navigation }) => {
                                 onChange={setMaxPassengersButtonValue}
                                 skin="paper"
                                 rounded={false}
-                            />  {/*Input for max number of passengers*/}
+                            />
                         </View>
                         <View style={{ paddingVertical: 10, alignItems: "center" }}>
                             <Text variant="titleMedium" style={{ paddingBottom: 5 }}>Radius (km)</Text>
@@ -183,7 +182,7 @@ const PassengerList = ({ navigation }) => {
                                 onChange={setDistanceButtonValue}
                                 skin="paper"
                                 rounded={false}
-                            />  {/*Input for radius*/}
+                            />
                         </View>
                         <Dialog.Actions>
                             <Button onPress={resetFilters}>Remove Filters</Button>

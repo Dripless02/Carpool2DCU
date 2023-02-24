@@ -121,7 +121,6 @@ function LoginScreen({ navigation }) {
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ width: "80%" }}>
-                {/* If email or password are invalid, show a helper text for what is invalid  */}
 
                 <TextInputField
                     label="Email"
@@ -144,7 +143,6 @@ function LoginScreen({ navigation }) {
                 ) : null}
 
                 <View style={{ alignItems: "center" }}>
-                    {/* if the login fails, show error text to the user */}
                     {failedLogin ? (
                         <HelperText type="error">Incorrect Email or Password</HelperText>
                     ) : null}
