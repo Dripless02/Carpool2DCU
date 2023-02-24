@@ -9,21 +9,25 @@ Adrian Irwin (20415624)
 Afolabi Fatogun (20409054)  
 ## Install Guide
 ### Prerequisites
-- NodeJS LTS + npm  
-- Expo Go mobile application from either the IOS or Android store.  
-- Two terminals  
+- NodeJS LTS + npm
+- Expo Go mobile application from either the IOS or Android store.
+- Two terminals
+- MongoDB connection string
+- OpenRouteService API Key
+- Bing Maps API Key
+
 ### Step 1
 Clone this repo
 ### Step 2
 In one terminal, go to the frontend folder: `cd src/Carpool` and run `npm i`
 ### Step 3
-Create a ‘.env’ file using ‘.env.example’ and fill in the environment variables.
+Create a ‘.env’ file using ‘.env.example’ and fill in the API key environment variables.
 ### Step 4
 Run the frontend using `npm start`
 ### Step 5
 In a second terminal, go to the backend folder: `cd src/backend` and run `npm i`
 ### Step 6
-Create a ‘.env’ file using ‘.env.example’ and fill in the environment variables.
+Create a ‘.env’ file using ‘.env.example’ and fill in the MongoDB connection string environment variable.
 ### Step 7
 Run the backend using `npm start`
 ### Step 8
