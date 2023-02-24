@@ -93,31 +93,6 @@ function LoginScreen({ navigation }) {
         }
     };
 
-    const devLogin = () => {
-        fetch(`${BACKEND_URL}/api/login`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: "test@gmail.com", password: "password" }),
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log("ok");
-                    console.log(JSON.stringify(response));
-                    response.json().then(data => {
-                        getUserDetails(data.id);
-                        console.log(`User ID: ${data.id}`);
-                    });
-                    console.log("Login successful");
-                    setLoggedIn(true);
-                } else {
-                    console.log("Login failed");
-                }
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    };
-
     return (
         <SafeAreaView style={styles.container}>
             <View style={{ width: "80%" }}>
@@ -138,7 +113,7 @@ function LoginScreen({ navigation }) {
                     onChangeText={text => setPassword(text)}
                     autoCapitalize="none"
                 />
-                {password.length < 8 ? (
+                {password.length > 1 && password.length < 8 ? (
                     <HelperText type="info">Password must be at least 8 characters</HelperText>
                 ) : null}
 
@@ -162,16 +137,6 @@ function LoginScreen({ navigation }) {
                         onPress={() => navigation.navigate("Register")}
                     >
                         Register
-                    </Button>
-                    <Button
-                        style={styles.button}
-                        mode="text"
-                        textColor="#1d1a29"
-                        onPress={() => {
-                            devLogin();
-                        }}
-                    >
-                        Login as Test
                     </Button>
                 </View>
             </View>
