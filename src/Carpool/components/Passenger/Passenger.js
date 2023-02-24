@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Dimensions, SafeAreaView, StyleSheet } from "react-native";
-import MapView, { Geojson, Marker } from "react-native-maps";
+import MapView, { Geojson } from "react-native-maps";
 import { Button, Card, Searchbar } from "react-native-paper";
 import { ORS_API_KEY, GEOCODE_API_KEY } from "@env";
+import MapMarker from "../Map/MapMarker";
 
 const Passenger = ({ navigation }) => {
     const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -143,8 +144,8 @@ const Passenger = ({ navigation }) => {
                         }}
                         ref={mapRef}
                     >
-                        <Marker coordinate={coordinates.dcu} identifier="dcu" />
-                        {coordinates.query.latitude === 0 && coordinates.query.longitude === 0 ? null : <Marker coordinate={coordinates.query} identifier="query" pinColor="blue"/>}
+                        <MapMarker long={coordinates.dcu.longitude} lat={coordinates.dcu.latitude} id="dcu" />
+                        {coordinates.query.latitude === 0 && coordinates.query.longitude === 0 ? null : <MapMarker long={coordinates.query.longitude} lat={coordinates.query.latitude} id="query" colour="blue"/>}
                         {!geojson.features ? null : <Geojson geojson={geojson} lineCap="round" strokeWidth={3} />}
                     </MapView>
                     <Button

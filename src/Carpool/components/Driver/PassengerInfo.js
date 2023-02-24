@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Card, Text } from "react-native-paper";
 import { StyleSheet, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import { CurrentUserContext } from "../Context";
 import { BACKEND_URL, ORS_API_KEY } from "@env";
+import MapMarker from "../Map/MapMarker";
 
 // PassengerInfo component
 const PassengerInfo = ({ route, navigation }) => {
@@ -85,14 +86,7 @@ const PassengerInfo = ({ route, navigation }) => {
                             longitudeDelta: 0.01,
                         }}
                     >
-                        <Marker
-                            coordinate={{
-                                latitude: passenger.location.latitude,
-                                longitude: passenger.location.longitude,
-                            }}
-                            title="Pickup Location"
-                            description="User's pickup location"
-                        />
+                        <MapMarker long={passenger.location.longitude} lat={passenger.location.latitude} title="Pickup Location" desc="User's pickup location" colour="red" id="1" />
                     </MapView>
                 </Card.Content>
                 <Card.Content>

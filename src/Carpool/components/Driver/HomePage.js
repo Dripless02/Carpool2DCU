@@ -2,9 +2,10 @@ import { StyleSheet, ImageBackground, View, Platform } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, IconButton, List, Modal, Portal, Card, Snackbar, Text } from "react-native-paper";
 import { BACKEND_URL, ORS_API_KEY } from "@env";
-import MapView, {Geojson, Marker}from "react-native-maps";
+import MapView, { Geojson }from "react-native-maps";
 import { CurrentUserContext } from "../Context";
 import PassengerRating from "./PassengerRating";
+import MapMarker from "../Map/MapMarker";
 
 // Driver Homepage
 const HomePage = ({ navigation, route }) => {
@@ -179,45 +180,17 @@ const HomePage = ({ navigation, route }) => {
                         }}
                         ref={mapRef}
                     >
-                        <Marker
-                            coordinate={{
-                                latitude: currentUser.coords.latitude,
-                                longitude: currentUser.coords.longitude,
-                            }}
-                            title="Drivers Location"
-                            description="Driver's start location"
-                            pinColor="blue"
-                            identifier="driver"
-                        />
-                        <Marker
-                            coordinate={{
-                                latitude: 53.386343,
-                                longitude: -6.255083,
-                            }}
-                            title="DCU"
-                            pinColor="green"
-                            identifier="dcu"
-                        />
+                        <MapMarker long={currentUser.coords.longitude} lat={currentUser.coords.latitude} title="Drivers Location" desc="Driver's start location" colour="blue" id="driver" />
+                        <MapMarker long={-6.255083} lat={53.386343} title="DCU" colour="green" id="dcu" />
                         {acceptedPassengers.map((passenger, index) => {
                             return (
-
-                                <Marker
-                                    key={index}
-                                    coordinate={{
-                                        latitude: passenger.location.latitude,
-                                        longitude: passenger.location.longitude,
-                                    }}
-                                    title={`${index + 1}: ${passenger.name}`}
-                                    description={"Passenger Count: " + passenger.noOfPassengers}
-                                    pinColor="red"
-                                    identifier="passenger"
-                                />
+                                <MapMarker key={index} long={passenger.location.longitude} lat={passenger.location.latitude} title={`${index + 1}: ${passenger.name}`} desc={"Passenger Count: " + passenger.noOfPassengers} colour="red" id="passenger" />
                             );
                         })}
                         {!routeGeoJSON ? null : <Geojson geojson={routeGeoJSON} strokeColor="#000" fillColor="blue" strokeWidth={2} />}
                     </MapView>
                     <Button icon="seat-passenger" mode='contained' onPress={() => navigation.navigate("PassengerList")} style={styles.button} contentStyle={{ padding: 25 }}>
-                    View Passenger List
+                        View Passenger List
                     </Button>
 
                     {acceptedPassengers.length > 0 ?
