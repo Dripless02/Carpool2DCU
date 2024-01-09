@@ -1,15 +1,4 @@
-All of your documentation should be placed in subdirectories of this directory.
+## Carpool2DCU
+aims to create a Carpooling software specifically designed for DCU students, enhancing their commuting experience to and from campus. The software prioritizes speed and efficiency, offering a user-friendly interface accessible on all mobile devices through a mobile web application.
 
-* Use the `1-proposal` sub-directory for your project proposal.
-* Use the `2-functional-specification` sub-directory for your functional specification.
-* Use the `3-final-reports` sub-directory for your video walk through, user manual and technical documentation.
-
-There are additional instructions in each of those sub-directories.  Please read them.
-
-Excluding the proposal document (and the video walkthrough), the general rule of thumb that you should
-adopt is that documents should be converted to PDF when finalised - and
-available for collection from your repo in time for the appropriate deadlines.
-
-While templates are provided in MS Word format, individual students may select
-whichever editing software they prefer - the only constraint is that
-the final revision of these documents should be converted to PDF.
+The primary function of the software is to streamline communication between drivers and passengers based on predefined constraints, which will be detailed further in the document. It is important to note that the application exclusively caters to DCU students, ensuring a targeted and relevant user base.
