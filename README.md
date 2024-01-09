@@ -5,8 +5,8 @@ Carpool2DCU is a mobile carpooling application that is operational on both Andro
 The application works by allowing registered students to create a profile, which includes their name, email address, and preferences such as the preferred route and time of travel. Drivers can then offer rides to other students who have matching preferences.
 
 ## Contributors
-Adrian Irwin (20415624)
-Afolabi Fatogun (20409054)
+Adrian Irwin 
+Afolabi Fatogun
 ## Install Guide
 ### Prerequisites
 - NodeJS LTS + npm
